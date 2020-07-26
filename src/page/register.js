@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "../static/logo.png";
-import { CssBaseline, Container, Card, CardContent, Typography, TextField, Link, Button, Grid } from "@material-ui/core";
+import { CssBaseline, Container, Card, CardContent, Typography, TextField, Link, Button, Grid, FormControlLabel, Checkbox } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Setting from "../config/config.js";
 import "./register.css";
@@ -19,15 +19,13 @@ const theme = createMuiTheme({
 class Register extends React.Component {
 	constructor() {
 		super();
-
-		console.log(document.body.clientWidth);
 	}
 
 	render() {
 		return (
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<Container maxWidth="xs" className="container">
+				<Container maxWidth="sm" className="container">
 					<div>
 						<Card variant="outlined">
 							<CardContent className="login-card">
