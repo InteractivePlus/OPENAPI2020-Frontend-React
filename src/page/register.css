@@ -1,0 +1,55 @@
+.container {
+	display: flex !important;
+	height: 100vh;
+	justify-content: center;
+	align-items: center;
+}
+
+.logo {
+	width: 80px;
+	height: 80px;
+}
+
+.login-card {
+	width: 100%;
+	padding: 48px 40px 36px !important;
+}
+
+.register-tip {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.register-tip-text {
+	display: inline;
+	font-size: 24px !important;
+	font-weight: 400 !important;
+	line-height: 32px !important;
+	margin: 0 0 0 0.5em !important;
+}
+
+.project-tip-text {
+	color: rgba(0, 0, 0, 0.45);
+	font-size: 14px;
+}
+
+.input {
+	width: 100%;
+	margin-bottom: 0.6em !important;
+}
+
+.email-tip-text {
+	font-size: 12px;
+	text-align: left;
+	margin-bottom: 1.5em;
+}
+
+.password-tip-text {
+	font-size: 12px;
+	text-align: left;
+}
+
+.options-right {
+	text-align: right;
+}
