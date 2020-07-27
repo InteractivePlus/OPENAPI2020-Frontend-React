@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "../static/logo.png";
-import { CssBaseline, Container, CardContent, Card, Typography, TextField, Link, Button, Grid, FormControlLabel, Checkbox } from "@material-ui/core";
+import { CssBaseline, Container, CardContent, Typography, TextField, Link, Button, Grid, FormControlLabel, Checkbox } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import FlexCard from "../component/flex_card.js";
 import Setting from "../config/config.js";
@@ -44,8 +44,8 @@ function Register() {
 									<Typography className="register-tip-text" variant="h1">
 										注册您的形随意动账号
 									</Typography>
+									<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
 								</div>
-								<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
 
 								<div>
 									<TextField className="input" label="用户名" />
@@ -60,9 +60,11 @@ function Register() {
 								</div>
 
 								<FormControlLabel
-									control={<Checkbox checked={protocol} onChange={handleProtocolChange} name="protocol" color="primary" />}
+									control={
+										<Checkbox checked={protocol} size="small" onChange={handleProtocolChange} name="protocol" color="primary" />
+									}
 									label={
-										<div>
+										<div style={{ fontSize: "0.8em" }}>
 											我已阅读并同意<Link href="#">《用户协议》</Link>
 										</div>
 									}

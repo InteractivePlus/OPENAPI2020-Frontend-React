@@ -8,6 +8,8 @@
 .logo {
 	width: 80px;
 	height: 80px;
+	text-align: center;
+	margin-bottom: 0.7em;
 }
 
 .login-card {
@@ -16,13 +18,11 @@
 }
 
 .register-tip {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	text-align: center;
 }
 
 .register-tip-text {
-	display: inline;
+	display: block;
 	font-size: 24px !important;
 	font-weight: 400 !important;
 	line-height: 32px !important;
@@ -52,4 +52,9 @@
 
 .options-right {
 	text-align: right;
+}
+
+/*有个老哥想让input更粗一点*/
+.MuiInput-underline:before {
+	border-bottom: 2px solid rgba(0, 0, 0, 0.3) !important;
 }
