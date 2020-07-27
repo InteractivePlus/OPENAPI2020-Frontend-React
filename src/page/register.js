@@ -1,9 +1,10 @@
 import React from "react";
 import Logo from "../static/logo.png";
-import { CssBaseline, Container, Card, CardContent, Typography, TextField, Link, Button, Grid, FormControlLabel, Checkbox } from "@material-ui/core";
+import { CssBaseline, Container, CardContent, Card, Typography, TextField, Link, Button, Grid, FormControlLabel, Checkbox } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import FlexCard from "../component/flex_card.js";
 import Setting from "../config/config.js";
-import "./register.css";
+import "../static/css/register.css";
 
 const theme = createMuiTheme({
 	palette: {
@@ -18,18 +19,25 @@ const theme = createMuiTheme({
 
 function Register() {
 	let [protocol, setProtocol] = React.useState(false);
+	let [clientWidth, setClientWidth] = React.useState(document.body.clientWidth);
+
+	let handleResize = () => {
+		setClientWidth(document.body.clientWidth);
+	};
 
 	let handleProtocolChange = (event) => {
 		setProtocol(event.target.checked);
 	};
 
+	window.addEventListener("resize", handleResize);
+
 	return (
 		<>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<Container maxWidth="sm" className="container">
+				<Container maxWidth={clientWidth <= 600 ? false : "sm"} className={clientWidth <= 600 ? "" : "container"}>
 					<div>
-						<Card variant="outlined">
+						<FlexCard size={clientWidth <= 600 ? "small" : "large"}>
 							<CardContent className="login-card">
 								<div className="register-tip">
 									<img className="logo" src={Logo} alt="Logo" />
@@ -70,7 +78,7 @@ function Register() {
 									</Grid>
 								</Grid>
 							</CardContent>
-						</Card>
+						</FlexCard>
 					</div>
 				</Container>
 			</ThemeProvider>
