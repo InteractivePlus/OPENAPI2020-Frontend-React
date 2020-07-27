@@ -16,13 +16,15 @@ const theme = createMuiTheme({
 	},
 });
 
-class Register extends React.Component {
-	constructor() {
-		super();
-	}
+function Register() {
+	let [protocol, setProtocol] = React.useState(false);
 
-	render() {
-		return (
+	let handleProtocolChange = (event) => {
+		setProtocol(event.target.checked);
+	};
+
+	return (
+		<>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
 				<Container maxWidth="sm" className="container">
@@ -48,6 +50,15 @@ class Register extends React.Component {
 										使用{Setting.PASSWORD_MINLEN}个~{Setting.PASSWORD_MAXLEN}个字符（字母、数字和符号的组合）
 									</p>
 								</div>
+
+								<FormControlLabel
+									control={<Checkbox checked={protocol} onChange={handleProtocolChange} name="protocol" color="primary" />}
+									label={
+										<div>
+											我已阅读并同意<Link href="#">《用户协议》</Link>
+										</div>
+									}
+								/>
 								<Grid container justify="center" alignItems="center">
 									<Grid item xs={6}>
 										<Link href="/#/login">登录账号</Link>
@@ -63,8 +74,8 @@ class Register extends React.Component {
 					</div>
 				</Container>
 			</ThemeProvider>
-		);
-	}
+		</>
+	);
 }
 
 export default Register;
