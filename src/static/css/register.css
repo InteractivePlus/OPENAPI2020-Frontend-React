@@ -9,13 +9,13 @@
 	width: 80px;
 	height: 80px;
 	text-align: center;
-	margin-bottom: 0.7em;
+	margin-bottom: 0.3em;
 }
 
 .register-card,
 .validation-card {
 	width: 100%;
-	padding: 48px 40px 36px !important;
+	padding: 20px 40px 36px !important;
 }
 
 .register-card-none,
@@ -32,7 +32,6 @@
 	font-size: 24px !important;
 	font-weight: 400 !important;
 	line-height: 32px !important;
-	margin: 0 0 0 0.5em !important;
 }
 
 .project-tip-text {
@@ -42,13 +41,13 @@
 
 .input {
 	width: 100%;
-	margin-bottom: 0.6em !important;
+	margin-bottom: 0.3em !important;
 }
 
 .email-tip-text {
 	font-size: 12px;
 	text-align: left;
-	margin-bottom: 1.5em;
+	margin-bottom: 0.5em;
 }
 
 .password-tip-text {
@@ -66,5 +65,5 @@
 
 /*有个老哥想让input更粗一点*/
 .MuiInput-underline:before {
-	border-bottom: 2px solid rgba(0, 0, 0, 0.3) !important;
+	border-bottom: 1.5px solid rgba(0, 0, 0, 0.3) !important;
 }

@@ -76,7 +76,7 @@ function Register() {
 				<Collapse in={loading}>
 					<LinearProgress />
 				</Collapse>
-				<Container maxWidth={clientWidth <= 600 ? false : "sm"} className={clientWidth <= 600 ? "" : "container"}>
+				<Container maxWidth={clientWidth <= 600 ? false : "xs"} className={clientWidth <= 600 ? "" : "container"}>
 					<div>
 						<FlexCard size={clientWidth <= 600 ? "small" : "large"}>
 							<Collapse in={page === 2}>
@@ -84,7 +84,7 @@ function Register() {
 									<div className="register-tip">
 										<img className="logo" src={Logo} alt="Logo" />
 										<Typography className="register-tip-text" variant="h1">
-											注册您的电子邮箱或手机
+											验证您的电子邮箱或手机
 										</Typography>
 										<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
 										<Tabs
@@ -94,8 +94,8 @@ function Register() {
 											textColor="primary"
 											variant="fullWidth"
 										>
-											<Tab label="验证您的手机" />
-											<Tab label="验证您的邮箱" />
+											<Tab label="使用手机注册" />
+											<Tab label="使用邮箱注册" />
 										</Tabs>
 										<SwipeableViews
 											axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -103,11 +103,9 @@ function Register() {
 											onChangeIndex={handleChangeIndex}
 										>
 											<TabPanel value={tabs} index={0} dir={theme.direction}>
-												aaa
+												<TextField className="input" label="手机号码" />
 											</TabPanel>
-											<TabPanel value={tabs} index={1} dir={theme.direction}>
-												bbb
-											</TabPanel>
+											<TabPanel value={tabs} index={1} dir={theme.direction}></TabPanel>
 										</SwipeableViews>
 									</div>
 								</CardContent>
@@ -117,7 +115,7 @@ function Register() {
 									<div className="register-tip">
 										<img className="logo" src={Logo} alt="Logo" />
 										<Typography className="register-tip-text" variant="h1">
-											验证您的形随意动账号
+											注册您的形随意动账号
 										</Typography>
 										<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
 									</div>
