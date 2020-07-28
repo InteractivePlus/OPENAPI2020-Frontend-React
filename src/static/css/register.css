@@ -1,6 +1,6 @@
 .container {
 	display: flex !important;
-	height: 100vh;
+	height: calc(100vh - 4px);
 	justify-content: center;
 	align-items: center;
 }
@@ -12,9 +12,15 @@
 	margin-bottom: 0.7em;
 }
 
-.login-card {
+.register-card,
+.validation-card {
 	width: 100%;
 	padding: 48px 40px 36px !important;
+}
+
+.register-card-none,
+.validation-card-none {
+	display: none;
 }
 
 .register-tip {
@@ -52,6 +58,10 @@
 
 .options-right {
 	text-align: right;
+}
+
+.progress-hidden {
+	visibility: hidden;
 }
 
 /*有个老哥想让input更粗一点*/
