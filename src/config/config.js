@@ -46,4 +46,5 @@ let _Setting = {
 	DEBUG_MODE: true,
 };
 
+
 export default _Setting;

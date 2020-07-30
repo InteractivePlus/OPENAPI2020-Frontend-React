@@ -1,3 +1,16 @@
+.container {
+	display: flex !important;
+	height: calc(100vh - 4px);
+	justify-content: center;
+	align-items: center;
+}
+
+.logo {
+	width: 80px;
+	height: 80px;
+	text-align: center;
+	margin-bottom: 0.3em;
+}
 
 .register-card,
 .validation-card {
@@ -42,6 +55,24 @@
 	text-align: left;
 }
 
+.options-right {
+	text-align: right;
+}
+
+.options-left {
+	text-align: left;
+}
+
 .progress-hidden {
 	visibility: hidden;
+}
+
+/*有个老哥想让input更粗一点*/
+.MuiInput-underline:before {
+	border-bottom: 1.4px solid rgba(0, 0, 0, 0.3) !important;
+}
+
+/*重置focus，不然感觉不好看*/
+.MuiButton-containedPrimary:focus {
+    background-color: #1890FF !important;
 }

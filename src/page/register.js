@@ -1,6 +1,7 @@
 import React from "react";
 import SwipeableViews from "react-swipeable-views";
 import Logo from "../static/logo.png";
+
 import {
 	CssBaseline,
 	Container,
@@ -18,15 +19,18 @@ import {
 	Tab,
 } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+
 import FlexCard from "../component/flex_card.js";
 import TabPanel from "../component/tab_panel.js";
 import Setting from "../config/config.js";
+import "../static/css/logcommon.css";
 import "../static/css/register.css";
+
 
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: "#1e88e5",
+			main: "#1890FF",
 		},
 		secondary: {
 			main: "#64b5f6",
@@ -56,7 +60,7 @@ function Register() {
 		setTimeout(() => {
 			setLoading(false);
 			setPage(2);
-		}, 3000);
+		}, 1000);
 	};
 
 	let handleChangeTab = (event, newValue) => {
@@ -79,12 +83,12 @@ function Register() {
 				<Container maxWidth={clientWidth <= 600 ? false : "xs"} className={clientWidth <= 600 ? "" : "container"}>
 					<div>
 						<FlexCard size={clientWidth <= 600 ? "small" : "large"}>
-							<Collapse in={page === 2}>
+							<Collapse in={page === 2} >
 								<CardContent className={page === 2 ? "validation-card" : "validation-card-none"}>
 									<div className="register-tip">
 										<img className="logo" src={Logo} alt="Logo" />
 										<Typography className="register-tip-text" variant="h1">
-											验证您的电子邮箱或手机
+											验证您的账号
 										</Typography>
 										<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
 										<Tabs
@@ -153,7 +157,7 @@ function Register() {
 											<Link href="/#/login">登录账号</Link>
 										</Grid>
 										<Grid item xs={6} className="options-right">
-											<Button variant="contained" color="primary" onClick={handleNextPage}>
+											<Button variant="contained" color="primary" onClick={handleNextPage}  disableElevation>
 												下一步
 											</Button>
 										</Grid>
