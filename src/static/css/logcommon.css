@@ -33,22 +33,6 @@
 	display: none;
 }
 
-.register-tip {
-	text-align: center;
-}
-
-.register-tip-text {
-	display    : block;
-	font-size  : 24px !important;
-	font-weight: 400 !important;
-	line-height: 32px !important;
-}
-
-.project-tip-text {
-	color    : rgba(0, 0, 0, 0.45);
-	font-size: 14px;
-}
-
 .input {
 	width        : 100%;
 	margin-bottom: 0.3em !important;

@@ -22,6 +22,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import FlexCard from "../component/flex_card.js";
 import TabPanel from "../component/tab_panel.js";
+import XsydCardContainer from "../component/xsyd_card_container.js";
 import Setting from "../config/config.js";
 import "../static/css/logcommon.css";
 import "../static/css/login.css";
@@ -86,12 +87,7 @@ function Login() {
 						<FlexCard size={clientWidth <= 600 ? "small" : "large"}>
 							<Collapse in={page === 1}>
 								<CardContent className={page === 1 ? "validation-card" : "validation-card-none"}>
-									<div className="register-tip">
-										<img className="logo" src={Logo} alt="Logo" />
-										<Typography className="register-tip-text" variant="h1">
-											登录
-										</Typography>
-										<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
+									<XsydCardContainer title="登录" subtitle="一个账号，畅享BlueAirLive所有服务">
 										<Tabs
 											value={tabs}
 											onChange={handleChangeTab}
@@ -103,20 +99,20 @@ function Login() {
 											<Tab label="短信验证码登录" />
 										</Tabs>
 										<div className="space-justify-view">
-										<SwipeableViews
-											axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-											index={tabs}
-											onChangeIndex={handleChangeIndex}
-										>
-											<TabPanel value={tabs} index={0} dir={theme.direction}>
-												<TextField className="input" label="邮箱或手机号码" />
-												<TextField className="input" label="密码" />
-											</TabPanel>
-											<TabPanel value={tabs} index={1} dir={theme.direction}>
-												<TextField className="input" label="手机号码" />
-												<TextField className="input" label="验证码" />
-											</TabPanel>
-										</SwipeableViews>
+											<SwipeableViews
+												axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+												index={tabs}
+												onChangeIndex={handleChangeIndex}
+											>
+												<TabPanel value={tabs} index={0} dir={theme.direction}>
+													<TextField className="input" label="邮箱或手机号码" />
+													<TextField className="input" label="密码" />
+												</TabPanel>
+												<TabPanel value={tabs} index={1} dir={theme.direction}>
+													<TextField className="input" label="手机号码" />
+													<TextField className="input" label="验证码" />
+												</TabPanel>
+											</SwipeableViews>
 										</div>
 
 										<Grid container justify="center" alignItems="center">
@@ -129,20 +125,16 @@ function Login() {
 											</Button>
 											</Grid>
 										</Grid>
-									</div>
+
+									</XsydCardContainer>
+
 								</CardContent>
 							</Collapse>
 							<Collapse in={page === 2}>
 								<CardContent className={page === 2 ? "register-card" : "register-card-none"}>
-									<div className="register-tip">
-										<img className="logo" src={Logo} alt="Logo" />
-										<Typography className="register-tip-text" variant="h1">
-											登录验证
-										</Typography>
-										<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
-									</div>
-									请手动返回
-
+									<XsydCardContainer title="登录验证" subtitle="一个账号，畅享BlueAirLive所有服务">
+										请手动返回
+									</XsydCardContainer>
 								</CardContent>
 							</Collapse>
 						</FlexCard>
