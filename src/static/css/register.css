@@ -1,15 +1,4 @@
 
-.register-card,
-.validation-card {
-	width: 100%;
-	padding: 20px 40px 36px !important;
-}
-
-.register-card-none,
-.validation-card-none {
-	display: none;
-}
-
 .register-tip {
 	text-align: center;
 }
