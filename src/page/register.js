@@ -127,7 +127,7 @@ function Register() {
 											<Link href="/#/login">登录账号</Link>
 										</Grid>
 										<Grid item xs={6} className="options-right">
-											<Button variant="contained" color="primary" onClick={handleNextPage} disableElevation>
+											<Button variant="contained" color="primary" onClick={handleNextPage} disabled={!protocol} disableElevation>
 												下一步
 											</Button>
 										</Grid>
