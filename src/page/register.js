@@ -22,6 +22,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import FlexCard from "../component/flex_card.js";
 import TabPanel from "../component/tab_panel.js";
+import XsydCardContainer from "../component/xsyd_card_container.js";
 import Setting from "../config/config.js";
 import "../static/css/logcommon.css";
 import "../static/css/register.css";
@@ -89,79 +90,67 @@ function Register() {
 
 							<Collapse in={page === 1}>
 								<CardContent className={page === 1 ? "register-card" : "register-card-none"}>
-									<div className="register-tip">
-										<img className="logo" src={Logo} alt="Logo" />
-										<Typography className="register-tip-text" variant="h1">
-											注册您的形随意动账号
-										</Typography>
-										<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
-									</div>
+									<XsydCardContainer title="注册您的形随意动账号" subtitle="一个账号，畅享BlueAirLive所有服务">
+										<div>
+											<TextField className="input" label="用户名" />
+											<TextField className="input" label="电子邮箱" />
+											<p className="email-tip-text">您需要证实此电子邮件地址属于你</p>
 
-									<div>
-										<TextField className="input" label="用户名" />
-										<TextField className="input" label="电子邮箱" />
-										<p className="email-tip-text">您需要证实此电子邮件地址属于你</p>
+											<TextField className="input" label="密码" />
+											<TextField className="input" label="确认密码" />
+											<p className="password-tip-text">
+												使用{Setting.PASSWORD_MINLEN}个~{Setting.PASSWORD_MAXLEN}个字符（必须包含字母和数字）
+											</p>
+										</div>
 
-										<TextField className="input" label="密码" />
-										<TextField className="input" label="确认密码" />
-										<p className="password-tip-text">
-											使用{Setting.PASSWORD_MINLEN}个~{Setting.PASSWORD_MAXLEN}个字符（必须包含字母和数字）
-										</p>
-									</div>
-
-									<FormControlLabel
-										control={
-											<Checkbox
-												checked={protocol}
-												size="small"
-												onChange={handleProtocolChange}
-												name="protocol"
-												color="primary"
-											/>
-										}
-										label={
-											<div style={{ fontSize: "0.8em" }}>
-												我已阅读并同意<Link href="#">《用户协议》</Link>
-											</div>
-										}
-									/>
-									<Grid container justify="center" alignItems="center">
-										<Grid item xs={6}>
-											<Link href="/#/login">登录账号</Link>
-										</Grid>
-										<Grid item xs={6} className="options-right">
-											<Button variant="contained" color="primary" onClick={handleNextPage} disabled={!protocol} disableElevation>
-												下一步
+										<FormControlLabel
+											control={
+												<Checkbox
+													checked={protocol}
+													size="small"
+													onChange={handleProtocolChange}
+													name="protocol"
+													color="primary"
+												/>
+											}
+											label={
+												<div style={{ fontSize: "0.8em" }}>
+													我已阅读并同意<Link href="#">《用户协议》</Link>
+												</div>
+											}
+										/>
+										<Grid container justify="center" alignItems="center">
+											<Grid item xs={6}>
+												<Link href="/#/login">登录账号</Link>
+											</Grid>
+											<Grid item xs={6} className="options-right">
+												<Button variant="contained" color="primary" onClick={handleNextPage} disabled={!protocol} disableElevation>
+													下一步
 											</Button>
+											</Grid>
 										</Grid>
-									</Grid>
+									</XsydCardContainer>
 								</CardContent>
 							</Collapse>
 
 							<Collapse in={page === 2} >
 								<CardContent className={page === 2 ? "validation-card" : "validation-card-none"}>
-									<div className="register-tip">
-										<img className="logo" src={Logo} alt="Logo" />
-										<Typography className="register-tip-text" variant="h1">
-											验证您的账号
-										</Typography>
-										<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
+									<XsydCardContainer title="注册验证" subtitle="一个账号，畅享BlueAirLive所有服务">
+										<div className="space-justify-view">
+											<TextField className="input" label="验证码" />
+										</div>
 
-									</div>
-									<div className="space-justify-view">
-										<TextField className="input" label="验证码" />
-									</div>
-
-									<Grid container justify="center" alignItems="center">
-										<Grid item xs={6}>
-											<Link href="">重新发送</Link>
-										</Grid>
-										<Grid item xs={6} className="options-right">
-											<Button variant="contained" color="primary" onClick={handleNextPage} disableElevation>
-												下一步
+										<Grid container justify="center" alignItems="center">
+											<Grid item xs={6}>
+												<Link href="">重新发送</Link>
+											</Grid>
+											<Grid item xs={6} className="options-right">
+												<Button variant="contained" color="primary" onClick={handleNextPage} disableElevation>
+													下一步
 											</Button>
+											</Grid>
 										</Grid>
-									</Grid>
+									</XsydCardContainer>
 								</CardContent>
 							</Collapse>
 						</FlexCard>

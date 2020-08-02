@@ -1,0 +1,17 @@
+
+.xsyd-card-container-tip {
+	text-align: center;
+}
+
+.xsyd-card-container-title {
+	display    : block;
+	font-size  : 24px !important;
+	font-weight: 400 !important;
+	line-height: 32px !important;
+}
+
+.xsyd-card-container-subtitle {
+	color    : rgba(0, 0, 0, 0.45);
+	font-size: 14px;
+}
+
