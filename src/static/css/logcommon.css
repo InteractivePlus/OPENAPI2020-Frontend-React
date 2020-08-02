@@ -1,6 +1,6 @@
 .container {
 	display        : flex !important;
-	height         : calc(100vh - 4px);
+	height         : calc(100vh - 2*4px);
 	justify-content: center;
 	align-items    : center;
 }
@@ -85,4 +85,10 @@
 /*重置focus，不然感觉不好看*/
 .MuiButton-containedPrimary:focus {
 	background-color: #1890FF !important;
+}
+
+/*加个进度条占位符，否则出现手机页面抖动*/
+.progress-placeholder {
+	/*进度条高度*/
+	height: 4px;
 }
