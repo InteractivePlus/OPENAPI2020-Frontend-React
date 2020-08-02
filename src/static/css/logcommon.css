@@ -1,21 +1,31 @@
 .container {
-	display: flex !important;
-	height: calc(100vh - 4px);
+	display        : flex !important;
+	height         : calc(100vh - 4px);
 	justify-content: center;
-	align-items: center;
+	align-items    : center;
 }
 
 .logo {
-	width: 80px;
-	height: 80px;
-	text-align: center;
+	width        : 80px;
+	height       : 80px;
+	text-align   : center;
 	margin-bottom: 0.3em;
 }
 
 .register-card,
 .validation-card {
-	width: 100%;
-	padding: 20px 40px 36px !important;
+	width  : 100% !important;
+	padding: 2rem 2.5rem 2rem !important;
+}
+
+/*调整一下手机版的左右边框*/
+@media screen and (max-width: 600px) {
+
+	.register-card,
+	.validation-card {
+		width  : 100%;
+		padding: 2rem 1rem 2rem !important;
+	}
 }
 
 .register-card-none,
@@ -28,30 +38,30 @@
 }
 
 .register-tip-text {
-	display: block;
-	font-size: 24px !important;
+	display    : block;
+	font-size  : 24px !important;
 	font-weight: 400 !important;
 	line-height: 32px !important;
 }
 
 .project-tip-text {
-	color: rgba(0, 0, 0, 0.45);
+	color    : rgba(0, 0, 0, 0.45);
 	font-size: 14px;
 }
 
 .input {
-	width: 100%;
+	width        : 100%;
 	margin-bottom: 0.3em !important;
 }
 
 .email-tip-text {
-	font-size: 12px;
-	text-align: left;
+	font-size    : 12px;
+	text-align   : left;
 	margin-bottom: 0.5em;
 }
 
 .password-tip-text {
-	font-size: 12px;
+	font-size : 12px;
 	text-align: left;
 }
 
@@ -74,5 +84,5 @@
 
 /*重置focus，不然感觉不好看*/
 .MuiButton-containedPrimary:focus {
-    background-color: #1890FF !important;
+	background-color: #1890FF !important;
 }

@@ -100,7 +100,7 @@ function Login() {
 											<Tab label="密码登录" />
 											<Tab label="短信验证码登录" />
 										</Tabs>
-										<div className="tab-view">
+										<div className="space-justify-view">
 										<SwipeableViews
 											axis={theme.direction === "rtl" ? "x-reverse" : "x"}
 											index={tabs}

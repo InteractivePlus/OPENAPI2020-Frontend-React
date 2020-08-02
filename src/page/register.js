@@ -83,37 +83,7 @@ function Register() {
 				<Container maxWidth={clientWidth <= 600 ? false : "xs"} className={clientWidth <= 600 ? "" : "container"}>
 					<div>
 						<FlexCard size={clientWidth <= 600 ? "small" : "large"}>
-							<Collapse in={page === 2} >
-								<CardContent className={page === 2 ? "validation-card" : "validation-card-none"}>
-									<div className="register-tip">
-										<img className="logo" src={Logo} alt="Logo" />
-										<Typography className="register-tip-text" variant="h1">
-											验证您的账号
-										</Typography>
-										<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
-										<Tabs
-											value={tabs}
-											onChange={handleChangeTab}
-											indicatorColor="primary"
-											textColor="primary"
-											variant="fullWidth"
-										>
-											<Tab label="使用手机注册" />
-											<Tab label="使用邮箱注册" />
-										</Tabs>
-										<SwipeableViews
-											axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-											index={tabs}
-											onChangeIndex={handleChangeIndex}
-										>
-											<TabPanel value={tabs} index={0} dir={theme.direction}>
-												<TextField className="input" label="手机号码" />
-											</TabPanel>
-											<TabPanel value={tabs} index={1} dir={theme.direction}></TabPanel>
-										</SwipeableViews>
-									</div>
-								</CardContent>
-							</Collapse>
+
 							<Collapse in={page === 1}>
 								<CardContent className={page === 1 ? "register-card" : "register-card-none"}>
 									<div className="register-tip">
@@ -132,7 +102,7 @@ function Register() {
 										<TextField className="input" label="密码" />
 										<TextField className="input" label="确认密码" />
 										<p className="password-tip-text">
-											使用{Setting.PASSWORD_MINLEN}个~{Setting.PASSWORD_MAXLEN}个字符（字母、数字和符号的组合）
+											使用{Setting.PASSWORD_MINLEN}个~{Setting.PASSWORD_MAXLEN}个字符（必须包含字母和数字）
 										</p>
 									</div>
 
@@ -157,7 +127,34 @@ function Register() {
 											<Link href="/#/login">登录账号</Link>
 										</Grid>
 										<Grid item xs={6} className="options-right">
-											<Button variant="contained" color="primary" onClick={handleNextPage}  disableElevation>
+											<Button variant="contained" color="primary" onClick={handleNextPage} disableElevation>
+												下一步
+											</Button>
+										</Grid>
+									</Grid>
+								</CardContent>
+							</Collapse>
+
+							<Collapse in={page === 2} >
+								<CardContent className={page === 2 ? "validation-card" : "validation-card-none"}>
+									<div className="register-tip">
+										<img className="logo" src={Logo} alt="Logo" />
+										<Typography className="register-tip-text" variant="h1">
+											验证您的账号
+										</Typography>
+										<p className="project-tip-text">一个账号，畅享BlueAirLive所有服务</p>
+
+									</div>
+									<div className="space-justify-view">
+										<TextField className="input" label="验证码" />
+									</div>
+
+									<Grid container justify="center" alignItems="center">
+										<Grid item xs={6}>
+											<Link href="">重新发送</Link>
+										</Grid>
+										<Grid item xs={6} className="options-right">
+											<Button variant="contained" color="primary" onClick={handleNextPage} disableElevation>
 												下一步
 											</Button>
 										</Grid>
