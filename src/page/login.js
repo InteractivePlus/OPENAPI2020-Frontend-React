@@ -76,9 +76,11 @@ function Login() {
 		<>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<Collapse in={loading}>
-					<LinearProgress />
-				</Collapse>
+				<div className="progress-placeholder">
+					<Collapse in={loading}>
+						<LinearProgress />
+					</Collapse>
+				</div>
 				<Container maxWidth={clientWidth <= 600 ? false : "xs"} className={clientWidth <= 600 ? "" : "container"}>
 					<div>
 						<FlexCard size={clientWidth <= 600 ? "small" : "large"}>
