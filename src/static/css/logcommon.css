@@ -90,5 +90,8 @@
 /*加个进度条占位符，否则出现手机页面抖动*/
 .progress-placeholder {
 	/*进度条高度*/
-	height: 4px;
+	height  : 4px;
+	/*虽然这个属性ie不支持，但是只会用ie也不是目标用户*/
+	position: sticky;
+	top: 0;
 }
