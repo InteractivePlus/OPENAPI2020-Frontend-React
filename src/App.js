@@ -1,28 +1,13 @@
 import React from "react";
 import "./App.css";
-import { HashRouter, Route } from "react-router-dom";
-import { createBrowserHistory } from 'history';
+//import { HashRouter, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-
+import Routes from './Routes';
 
 import {
 	CssBaseline
 } from "@material-ui/core";
 
-import {
-	Home,
-	SignIn,
-	SignUp,
-	Dashboard
-  } from './page';
-  
-
-/*import Home from "./page/home/home";
-import Login from "./page/signin/signin";
-import Register from "./page/signup/signup";
-import Dashboard from "./page/dashboard/dashboard"
-*/
-const browserHistory = createBrowserHistory();
 
 const theme = createMuiTheme({
 	palette: {
@@ -40,13 +25,16 @@ class App extends React.Component {
 		return (
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-			
-			<HashRouter>
-				<Route exact path="/" component={Home} />
-				<Route path="/signin" component={SignIn} />
-				<Route path="/signup" component={SignUp} />
-				<Route path="/dashboard" component={Dashboard} />
-			</HashRouter>
+				{/* 				
+				<HashRouter>
+					<Route exact path="/" component={Home} />
+					<Route path="/signin" component={SignIn} />
+					<Route path="/signup" component={SignUp} />
+					<Route path="/dashboard" component={Dashboard} />
+				</HashRouter>
+				 */}
+				<Routes />
+
 			</ThemeProvider>
 		);
 	}

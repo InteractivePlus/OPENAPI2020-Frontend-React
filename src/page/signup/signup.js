@@ -1,22 +1,5 @@
 import React from "react";
-/*
-import {
-	CssBaseline,
-	Container,
-	CardContent,
-	Typography,
-	TextField,
-	Link,
-	Button,
-	Grid,
-	FormControlLabel,
-	Checkbox,
-	LinearProgress,
-	Collapse,
-	Tabs,
-	Tab,
-} from "@material-ui/core";
-*/
+
 import {
 	Container,
 	CardContent,
@@ -31,8 +14,7 @@ import {
 	Collapse,
 } from "@material-ui/core";
 
-import FlexCard from "../../component/flex_card.js";
-import XsydCardContainer from "../../component/xsyd_card_container.js";
+import { FlexCard, XsydCardContainer } from '../../components';
 import Setting from "../../config/config.js";
 import "../../static/css/logcommon.css";
 import "../../static/css/register.css";
@@ -145,7 +127,7 @@ function Register(props) {
 
 								<Grid container justify="center" alignItems="center">
 									<Grid item xs={6}>
-										<Link href="/#/register" onClick={handlePreviousPage}>返回</Link>
+										<Link href="/#/signup" onClick={handlePreviousPage}>返回</Link>
 									</Grid>
 									<Grid item xs={6} className="options-right">
 										<Button variant="contained" color="primary" onClick={handleNextPage} disableElevation>
@@ -168,7 +150,7 @@ function Register(props) {
 
 								<Grid container justify="center" alignItems="center">
 									<Grid item xs={6}>
-										<Link href="/#/register" onClick={handlePreviousPage}>返回</Link>
+										<Link href="/#/signup" onClick={handlePreviousPage}>返回</Link>
 									</Grid>
 									<Grid item xs={6} className="options-right">
 										<Button variant="contained" color="primary" onClick={handleNextPage} disableElevation>

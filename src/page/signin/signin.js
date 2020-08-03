@@ -10,16 +10,13 @@ import {
 	Button,
 	Grid,
 	FormControlLabel,
-	Checkbox,
 	LinearProgress,
 	Collapse,
 	Tabs,
 	Tab,
 } from "@material-ui/core";
 
-import FlexCard from "../../component/flex_card.js";
-import TabPanel from "../../component/tab_panel.js";
-import XsydCardContainer from "../../component/xsyd_card_container.js";
+import { FlexCard, TabPanel, XsydCardContainer } from '../../components';
 import Setting from "../../config/config.js";
 import "../../static/css/logcommon.css";
 import "../../static/css/login.css";
@@ -126,7 +123,7 @@ function Login(props) {
 								此处暂无
 								<Grid container justify="center" alignItems="center">
 									<Grid item xs={6} className="options-left">
-										<Link href="/#/login" onClick={handlePreviousPage}>返回</Link>
+										<Link href="/#/signin" onClick={handlePreviousPage}>返回</Link>
 									</Grid>
 									<Grid item xs={6} className="options-right">
 										<Button variant="contained" color="primary" onClick={handleEnterDashboard} disableElevation>

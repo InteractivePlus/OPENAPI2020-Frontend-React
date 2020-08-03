@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Logo from "../static/logo.png";
-import "../static/css/xsyd_card_container.css";
+import Logo from "../../static/logo.png";
+import "../../static/css/xsyd_card_container.css";
 
 import {
 	Typography,
