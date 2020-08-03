@@ -1,3 +1,16 @@
 body{
     background-color: #ffffff !important;
 }
+
+.logo {
+	width        : 80px;
+	height       : 80px;
+	text-align   : center;
+	margin-bottom: 0.3em;
+}
+
+.logo-topbar {
+	width        : 40px;
+	height       : 40px;
+	text-align   : center;
+}
