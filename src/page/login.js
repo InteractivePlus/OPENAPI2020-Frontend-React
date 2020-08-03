@@ -1,6 +1,5 @@
 import React from "react";
 import SwipeableViews from "react-swipeable-views";
-import Logo from "../static/logo.png";
 
 import {
 	CssBaseline,
@@ -38,7 +37,7 @@ const theme = createMuiTheme({
 	},
 });
 
-function Login() {
+function Login(props) {
 	let [protocol, setProtocol] = React.useState(false);
 	let [clientWidth, setClientWidth] = React.useState(document.body.clientWidth);
 	let [page, setPage] = React.useState(1);
@@ -63,12 +62,24 @@ function Login() {
 		}, 1000);
 	};
 
+	let handlePreviousPage = (event) => {
+		setPage(1);
+	};
+
 	let handleChangeTab = (event, newValue) => {
 		setTabs(newValue);
 	};
 
 	let handleChangeIndex = (index) => {
 		setTabs(index);
+	};
+
+	let handleEnterDashboard = (event) => {
+		setLoading(true);
+		setTimeout(() => {
+			setLoading(false);
+			props.history.push('/dashboard')
+		}, 1000);
 	};
 
 	window.addEventListener("resize", handleResize);
@@ -122,7 +133,7 @@ function Login() {
 											<Grid item xs={6} className="options-right">
 												<Button variant="contained" color="primary" onClick={handleNextPage} disableElevation>
 													下一步
-											</Button>
+												</Button>
 											</Grid>
 										</Grid>
 
@@ -133,7 +144,18 @@ function Login() {
 							<Collapse in={page === 2}>
 								<CardContent className={page === 2 ? "register-card" : "register-card-none"}>
 									<XsydCardContainer title="登录验证" subtitle="一个账号，畅享BlueAirLive所有服务">
-										请手动返回
+										此处暂无
+
+										<Grid container justify="center" alignItems="center">
+											<Grid item xs={6} className="options-left">
+												<Link href="/#/login" onClick={handlePreviousPage}>返回</Link>
+											</Grid>
+											<Grid item xs={6} className="options-right">
+												<Button variant="contained" color="primary" onClick={handleEnterDashboard} disableElevation>
+													下一步
+												</Button>
+											</Grid>
+										</Grid>
 									</XsydCardContainer>
 								</CardContent>
 							</Collapse>
