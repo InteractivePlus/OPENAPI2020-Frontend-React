@@ -5,13 +5,6 @@
 	align-items    : center;
 }
 
-.logo {
-	width        : 80px;
-	height       : 80px;
-	text-align   : center;
-	margin-bottom: 0.3em;
-}
-
 .register-card,
 .validation-card {
 	width  : 100% !important;

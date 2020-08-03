@@ -1,3 +1,4 @@
-export { default as FlexCard } from './flex_card';
-export { default as TabPanel } from './tab_panel';
-export { default as XsydCardContainer } from './xsyd_card_container';
+export { default as FlexCard } from './FlexCard';
+export { default as TabPanel } from './TabPanel';
+export { default as XsydCardContainer } from './XsydCardContainer';
+export { default as RouteWithLayout } from './RouteWithLayout';
