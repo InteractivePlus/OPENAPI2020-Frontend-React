@@ -1,6 +1,5 @@
 import React from "react";
 import SwipeableViews from "react-swipeable-views";
-import Logo from "../static/logo.png";
 
 import {
 	CssBaseline,
@@ -39,12 +38,14 @@ const theme = createMuiTheme({
 	},
 });
 
-function Register() {
+function Register(props) {
 	let [protocol, setProtocol] = React.useState(false);
 	let [clientWidth, setClientWidth] = React.useState(document.body.clientWidth);
 	let [page, setPage] = React.useState(1);
 	let [loading, setLoading] = React.useState(false);
 	let [tabs, setTabs] = React.useState(0);
+
+	let pageMaxCount = 4;//增加新collapse时记得调整最大页数
 
 	let handleResize = () => {
 		setClientWidth(document.body.clientWidth);
@@ -60,9 +61,16 @@ function Register() {
 		setLoading(true);
 		setTimeout(() => {
 			setLoading(false);
-			setPage(2);
+			if (page < pageMaxCount) {
+				setPage(page + 1);
+			}
 		}, 1000);
 	};
+
+	let handlePreviousPage = (event) => {
+		setPage(1);
+	};
+
 
 	let handleChangeTab = (event, newValue) => {
 		setTabs(newValue);
@@ -70,6 +78,14 @@ function Register() {
 
 	let handleChangeIndex = (index) => {
 		setTabs(index);
+	};
+
+	let handleGoLogin = (event) => {
+		setLoading(true);
+		setTimeout(() => {
+			setLoading(false);
+			props.history.push('/login')
+		}, 1000);
 	};
 
 	window.addEventListener("resize", handleResize);
@@ -126,7 +142,7 @@ function Register() {
 											<Grid item xs={6} className="options-right">
 												<Button variant="contained" color="primary" onClick={handleNextPage} disabled={!protocol} disableElevation>
 													下一步
-											</Button>
+												</Button>
 											</Grid>
 										</Grid>
 									</XsydCardContainer>
@@ -142,13 +158,52 @@ function Register() {
 
 										<Grid container justify="center" alignItems="center">
 											<Grid item xs={6}>
-												<Link href="">重新发送</Link>
+												<Link href="/#/register" onClick={handlePreviousPage}>返回</Link>
 											</Grid>
 											<Grid item xs={6} className="options-right">
 												<Button variant="contained" color="primary" onClick={handleNextPage} disableElevation>
 													下一步
-											</Button>
+												</Button>
 											</Grid>
+										</Grid>
+									</XsydCardContainer>
+								</CardContent>
+							</Collapse>
+
+							<Collapse in={page === 3} >
+								<CardContent className={page === 3 ? "validation-card" : "validation-card-none"}>
+									<XsydCardContainer title="完善信息" subtitle="一个账号，畅享BlueAirLive所有服务">
+										<div className="space-justify-view">
+											<TextField className="input" label="手机号" />
+											<TextField className="input" label="国家/地区" />
+											<TextField className="input" label="语言选择" />
+										</div>
+
+										<Grid container justify="center" alignItems="center">
+											<Grid item xs={6}>
+												<Link href="/#/register" onClick={handlePreviousPage}>返回</Link>
+											</Grid>
+											<Grid item xs={6} className="options-right">
+												<Button variant="contained" color="primary" onClick={handleNextPage} disableElevation>
+													下一步
+												</Button>
+											</Grid>
+										</Grid>
+									</XsydCardContainer>
+								</CardContent>
+							</Collapse>
+
+							<Collapse in={page === 4} >
+								<CardContent className={page === 4 ? "validation-card" : "validation-card-none"}>
+									<XsydCardContainer title="完善信息" subtitle="一个账号，畅享BlueAirLive所有服务">
+										<div className="space-justify-view">
+											恭喜您，注册完成
+											
+										</div>
+										<Grid container justify="center" alignItems="center">
+											<Button variant="contained" color="primary" onClick={handleGoLogin} disableElevation>
+												去登陆
+											</Button>
 										</Grid>
 									</XsydCardContainer>
 								</CardContent>
