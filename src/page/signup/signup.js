@@ -81,8 +81,8 @@ function Register(props) {
 									<TextField className="input" label="电子邮箱" />
 									<p className="email-tip-text">您需要证实此电子邮件地址属于你</p>
 
-									<TextField className="input" label="密码" />
-									<TextField className="input" label="确认密码" />
+									<TextField className="input" type="password" label="密码" />
+									<TextField className="input" type="password" label="确认密码" />
 									<p className="password-tip-text">
 										使用{Setting.PASSWORD_MINLEN}个~{Setting.PASSWORD_MAXLEN}个字符（必须包含字母和数字）
 											</p>
