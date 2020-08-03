@@ -93,7 +93,7 @@ function Login(props) {
 									>
 										<TabPanel value={tabs} index={0} >
 											<TextField className="input" label="邮箱或手机号码" />
-											<TextField className="input" label="密码" />
+											<TextField className="input" type="password" label="密码" />
 										</TabPanel>
 										<TabPanel value={tabs} index={1} >
 											<TextField className="input" label="手机号码" />
