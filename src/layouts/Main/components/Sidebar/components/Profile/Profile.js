@@ -28,7 +28,7 @@ const Profile = props => {
 
   const user = {
     name: '老秋风',
-    avatar: '/images/avatars/avatar_1.jpg',
+    avatar: './images/avatars/avatar_1.jpg',
     bio: '马桶将军'
   };
 
