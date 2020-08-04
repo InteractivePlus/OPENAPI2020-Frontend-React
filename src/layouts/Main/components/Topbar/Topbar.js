@@ -8,11 +8,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 
-import Logo from "../../../../static/logotopbar.png";
+import Logo from "../../../../static/logo.png";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    boxShadow: 'none'
+    boxShadow: 'none',
+    border: '1px solid',
+    backgroundColor:'#ffffff',
+    borderBottomColor:' rgba(0, 0, 0, 0.12)'
   },
   flexGrow: {
     flexGrow: 1
@@ -44,7 +47,7 @@ const Topbar = props => {
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>
-          <IconButton color="inherit">
+          <IconButton color="black">
             <Badge
               badgeContent={notifications.length}
               color="primary"
@@ -55,14 +58,14 @@ const Topbar = props => {
           </IconButton>
           <IconButton
             className={classes.signOutButton}
-            color="inherit"
+            color="black"
           >
             <InputIcon />
           </IconButton>
         </Hidden>
         <Hidden lgUp>
           <IconButton
-            color="inherit"
+            color="black"
             onClick={onSidebarOpen}
           >
             <MenuIcon />
