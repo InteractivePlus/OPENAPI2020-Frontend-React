@@ -1,34 +1,25 @@
-import React from 'react';
-import { Router, Route } from 'react-router';
-import { createHashHistory } from 'history';
+import React from "react";
+import { Router, Route } from "react-router";
+import { createHashHistory } from "history";
 
-import {
-    Home,
-    SignIn,
-    SignUp,
-    Dashboard
-} from './page';
+import { Home, SignIn, SignUp } from "./page";
 
-import { RouteWithLayout } from './components';
-import { Main as MainLayout } from './layouts';
+import { RouteWithLayout } from "./components";
+import { Main as MainLayout } from "./layouts";
+
+import { Dashboard } from "./page";
 
 const appHistory = createHashHistory();
 
 const Routes = () => {
-    return (
-        <Router history={appHistory}>
-            <Route exact path="/" component={Home} />
-            <Route path="/signin" component={SignIn} />
-            <Route path="/signup" component={SignUp} />
-            {/* <Route path="/dashboard" component={Dashboard} /> */}
-            <RouteWithLayout
-                component={SignIn}
-                exact
-                layout={MainLayout}
-                path="/dashboard"
-            />
-        </Router>
-    );
+	return (
+		<Router history={appHistory}>
+			<Route exact path="/" component={Home} />
+			<Route path="/signin" component={SignIn} />
+			<Route path="/signup" component={SignUp} />
+			<RouteWithLayout component={Dashboard} exact layout={MainLayout} path="/dashboard" />
+		</Router>
+	);
 };
 
 export default Routes;

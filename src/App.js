@@ -1,13 +1,9 @@
 import React from "react";
 import "./App.css";
-//import { HashRouter, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import Routes from './Routes';
+import Routes from "./Routes";
 
-import {
-	CssBaseline
-} from "@material-ui/core";
-
+import { CssBaseline } from "@material-ui/core";
 
 const theme = createMuiTheme({
 	palette: {
@@ -25,16 +21,7 @@ class App extends React.Component {
 		return (
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				{/* 				
-				<HashRouter>
-					<Route exact path="/" component={Home} />
-					<Route path="/signin" component={SignIn} />
-					<Route path="/signup" component={SignUp} />
-					<Route path="/dashboard" component={Dashboard} />
-				</HashRouter>
-				 */}
 				<Routes />
-
 			</ThemeProvider>
 		);
 	}

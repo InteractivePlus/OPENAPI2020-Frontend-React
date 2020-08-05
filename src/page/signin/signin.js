@@ -1,26 +1,13 @@
 import React from "react";
 import SwipeableViews from "react-swipeable-views";
 
-import {
-	Container,
-	CardContent,
-	Typography,
-	TextField,
-	Link,
-	Button,
-	Grid,
-	FormControlLabel,
-	LinearProgress,
-	Collapse,
-	Tabs,
-	Tab,
-} from "@material-ui/core";
+import { Container, CardContent, TextField, Link, Button, Grid, LinearProgress, Collapse, Tabs, Tab } from "@material-ui/core";
 
-import { FlexCard, TabPanel, XsydCardContainer } from '../../components';
+import { FlexCard, TabPanel, XsydCardContainer } from "../../components";
+// eslint-disable-next-line
 import Setting from "../../config/config.js";
 import "../../static/css/logcommon.css";
 import "../../static/css/login.css";
-
 
 function Login(props) {
 	let [clientWidth, setClientWidth] = React.useState(document.body.clientWidth);
@@ -58,7 +45,7 @@ function Login(props) {
 		setLoading(true);
 		setTimeout(() => {
 			setLoading(false);
-			props.history.push('/dashboard')
+			props.history.push("/dashboard");
 		}, 1000);
 	};
 
@@ -76,26 +63,17 @@ function Login(props) {
 					<Collapse in={page === 1}>
 						<CardContent className={page === 1 ? "validation-card" : "validation-card-none"}>
 							<XsydCardContainer title="登录" subtitle="一个账号，畅享BlueAirLive所有服务">
-								<Tabs
-									value={tabs}
-									onChange={handleChangeTab}
-									indicatorColor="primary"
-									textColor="primary"
-									variant="fullWidth"
-								>
+								<Tabs value={tabs} onChange={handleChangeTab} indicatorColor="primary" textColor="primary" variant="fullWidth">
 									<Tab label="密码登录" />
 									<Tab label="短信验证码登录" />
 								</Tabs>
 								<div className="space-justify-view">
-									<SwipeableViews
-										index={tabs}
-										onChangeIndex={handleChangeIndex}
-									>
-										<TabPanel value={tabs} index={0} >
+									<SwipeableViews index={tabs} onChangeIndex={handleChangeIndex}>
+										<TabPanel value={tabs} index={0}>
 											<TextField className="input" label="邮箱或手机号码" />
 											<TextField className="input" type="password" label="密码" />
 										</TabPanel>
-										<TabPanel value={tabs} index={1} >
+										<TabPanel value={tabs} index={1}>
 											<TextField className="input" label="手机号码" />
 											<TextField className="input" label="验证码" />
 										</TabPanel>
@@ -112,9 +90,7 @@ function Login(props) {
 										</Button>
 									</Grid>
 								</Grid>
-
 							</XsydCardContainer>
-
 						</CardContent>
 					</Collapse>
 					<Collapse in={page === 2}>
@@ -123,7 +99,9 @@ function Login(props) {
 								此处暂无
 								<Grid container justify="center" alignItems="center">
 									<Grid item xs={6} className="options-left">
-										<Link href="/#/signin" onClick={handlePreviousPage}>返回</Link>
+										<Link href="/#/signin" onClick={handlePreviousPage}>
+											返回
+										</Link>
 									</Grid>
 									<Grid item xs={6} className="options-right">
 										<Button variant="contained" color="primary" onClick={handleEnterDashboard} disableElevation>
@@ -139,6 +117,5 @@ function Login(props) {
 		</>
 	);
 }
-
 
 export default Login;
