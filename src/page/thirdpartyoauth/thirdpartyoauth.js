@@ -28,7 +28,7 @@ function ThirdPartyOAuth(props) {
             setAuthorized(rtn);
             if (rtn) {
                 // ToDo: 跳转到第三方页面
-                window.location = "/#/dashboard";
+                props.history.push("/dashboard");
             } else {
                 // ToDo: 更新授权失败原因
                 setAuthReason("加冰逃跑了!");
