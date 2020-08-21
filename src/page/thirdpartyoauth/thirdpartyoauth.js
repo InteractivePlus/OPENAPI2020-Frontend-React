@@ -13,9 +13,10 @@ function ThirdPartyOAuth(props) {
     let [authorized, setAuthorized] = React.useState(true);             // 授权成功与否
     let [authErrReason, setAuthReason] = React.useState("");            // 授权失败原因
     let [appName, setAppName] = React.useState("");                     // 第三方应用名称
+    let [appIcon, setAppIcon] = React.useState("");                     // 第三方应用图标路径
 
     let handleResize = () => {
-		setClientWidth(document.body.clientWidth);
+        setClientWidth(document.body.clientWidth);
     };
     
     let handleContinue = (event) => {
@@ -36,38 +37,39 @@ function ThirdPartyOAuth(props) {
         }, 1000);
     };
 
-    let retrieveAppName = () => {
+    let retrieveAppInfo = () => {
         // ToDo: 获取第三方应用信息
 
         setRetrieving(true);
         setTimeout(() => {
             setRetrieving(false);
             setAppName("阳光加冰");
+            setAppIcon("https://avatars0.githubusercontent.com/u/47358542?s=460");
         }, 1000);
     }
 
     window.addEventListener("resize", handleResize);
-    window.addEventListener("load", retrieveAppName);
+    window.addEventListener("load", retrieveAppInfo);
 
     return (
         <>
             <div className="progress-placeholder">
-				<Collapse in={authorizing | retrievingAppName}>
-					<LinearProgress />
-				</Collapse>
-			</div>
+                <Collapse in={authorizing | retrievingAppName}>
+                    <LinearProgress />
+                </Collapse>
+            </div>
 
             <Container maxWidth={clientWidth <= 600 ? false : "xs"} className={clientWidth <= 600 ? "" : "container"}>
                 <FlexCard size={clientWidth <= 600 ? "small" : "large"}>
                     <Collapse in={retrievingAppName}>
                         <CardContent className={ retrievingAppName ? "validation-card" : "validation-card-none"}>
-							<XsydCardContainer title="第三方应用授权" subtitle="正在获取第三方应用信息..."></XsydCardContainer>
-						</CardContent>
-					</Collapse>
+                            <XsydCardContainer title="第三方应用授权" subtitle="正在获取第三方应用信息..."></XsydCardContainer>
+                        </CardContent>
+                    </Collapse>
 
                     <Collapse in={!retrievingAppName && !authorizing}>
                         <CardContent className={ !retrievingAppName && !authorizing ? "validation-card" : "validation-card-none"}>
-                            <XsydCardContainer title="第三方应用授权" subtitle={'授权"' + appName + '"访问您的形随意动账号' }>
+                            <XsydCardContainer title="第三方应用授权" subtitle={'授权"' + appName + '"访问您的形随意动账号'} appImage={appIcon}>
                                 <div className="space-justify-view">
                                     <TextField className="input" label="用户名或电子邮箱" />
                                     <TextField className="input" type="password" label="密码" />
@@ -97,13 +99,13 @@ function ThirdPartyOAuth(props) {
                                 }
                             </XsydCardContainer>
                         </CardContent>
-					</Collapse>
+                    </Collapse>
 
                     <Collapse in={!retrievingAppName && authorizing}>
                         <CardContent className={ !retrievingAppName && authorizing ? "validation-card" : "validation-card-none"}>
-							<XsydCardContainer title="第三方应用授权" subtitle="正在验证..."></XsydCardContainer>
-						</CardContent>
-					</Collapse>
+                            <XsydCardContainer title="第三方应用授权" subtitle="正在验证..." appImage={appIcon}></XsydCardContainer>
+                        </CardContent>
+                    </Collapse>
                 </FlexCard>
             </Container>
         </>
