@@ -29,7 +29,7 @@ const Profile = props => {
   const user = {
     name: '老秋风',
     avatar: './images/avatars/avatar_1.jpg',
-    bio: '马桶将军'
+    bio: 'PHP是最好的语言'
   };
 
   return (
