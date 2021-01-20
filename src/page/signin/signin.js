@@ -1,4 +1,5 @@
 import React from "react";
+import axios from 'axios'
 import SwipeableViews from "react-swipeable-views";
 
 import { Container, CardContent, TextField, Link, Button, Grid, LinearProgress, Collapse, Tabs, Tab } from "@material-ui/core";
@@ -68,7 +69,8 @@ function Login(props) {
 									<Tab label="短信验证码登录" />
 								</Tabs>
 								<div className="space-justify-view">
-									<SwipeableViews index={tabs} onChangeIndex={handleChangeIndex}>
+									{/*这里是这个组件原本就有第一次动画无法播放的bug，参考https://github.com/oliviertassinari/react-swipeable-views/issues/599 */}
+									<SwipeableViews index={tabs} onChangeIndex={handleChangeIndex} containerStyle={{transition: 'transform 0.35s cubic-bezier(0.15, 0.3, 0.25, 1) 0s'}}>
 										<TabPanel value={tabs} index={0}>
 											<TextField className="input" label="邮箱或手机号码" />
 											<TextField className="input" type="password" label="密码" />

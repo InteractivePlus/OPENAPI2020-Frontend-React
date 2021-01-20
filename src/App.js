@@ -3,6 +3,11 @@ import "./App.css";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Routes from "./Routes";
 
+
+//挂载 Mock
+import './mock/data2.js'
+
+
 import { CssBaseline } from "@material-ui/core";
 
 const theme = createMuiTheme({

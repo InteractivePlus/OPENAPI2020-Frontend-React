@@ -9,6 +9,9 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "axios": "^0.21.1",
+    "json-server": "^0.16.3",
+    "mockjs": "^1.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
@@ -20,7 +23,8 @@
     "build": "set GENERATE_SOURCEMAP=false&& react-scripts build",
     "build-linux": "export GENERATE_SOURCEMAP=false && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "mock": "json-server ./src/mock/mock.js -p 9000 --watch"
   },
   "eslintConfig": {
     "extends": "react-app"
