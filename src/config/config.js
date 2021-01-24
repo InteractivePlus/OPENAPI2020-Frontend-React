@@ -1,4 +1,4 @@
-let _Setting = {
+export let Setting = {
 	USER_SYSTEM_NAME: {
 		zh_CN: "幽径",
 		en_US: "Solitary Trail",
@@ -46,5 +46,17 @@ let _Setting = {
 	DEBUG_MODE: true,
 };
 
+export let ErrCode = {
+    NO_ERROR: 0,
+    UNKNOWN_INNER_ERROR: 1,
+    STORAGE_ENGINE_ERROR: 2,
+    INNER_ARGUMENT_ERROR: 3,
+    SENDER_SERVICE_ERROR: 4,
+    ITEM_NOT_FOUND_ERROR: 10,
+    ITEM_ALREADY_EXIST_ERROR: 11,
+    ITEM_EXPIRED_OR_USED_ERROR: 12,
+    PERMISSION_DENIED: 13,
+    CREDENTIAL_NOT_MATCH: 20,
+};
 
-export default _Setting;
+//export default _Setting;

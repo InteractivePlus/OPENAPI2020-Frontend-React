@@ -72,3 +72,10 @@
 	position: sticky;
 	top: 0;
 }
+
+.captcha-img{
+	margin: 0 auto;
+	display: flex;
+	height: 40px;
+	width: 150px;
+}
