@@ -19,24 +19,26 @@ npm install
 ```
 
 ### 开发模式
-```
-npm run start
-```
-或
-```
-yarn start
-```
+`npm run start` 或 `yarn start`
 
 ### 生产模式
-```
-npm run build
-```
-或
-```
-yarn build
-```
+`npm run build` 或 `yarn build`
 
 ### 补充
 该项目前后端分离，因为浏览器默认不支持跨域访问，所以本地调试时需要做些调整。  
 Chrome用户可参考 https://www.cnblogs.com/duchaoqun/p/12792451.html
 
+vscode用户可参考以下配置，修改`launch.json`实现Chrome跨域调试启动
+```
+"configurations": [
+        
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}",
+            "runtimeArgs": ["--disable-web-security"]
+        }
+    ]
+```
