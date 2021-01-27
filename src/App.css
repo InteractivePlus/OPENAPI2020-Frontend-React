@@ -3,8 +3,8 @@ body{
 }
 
 .logo {
-	width        : 80px;
-	height       : 80px;
+	width        : 60px;
+	height       : 60px;
 	text-align   : center;
 	margin-bottom: 0.3em;
 }
@@ -13,4 +13,10 @@ body{
 	width        : 40px;
 	height       : 40px;
 	text-align   : center;
+}
+
+
+*:not(input,textarea) { 
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none; 
 }

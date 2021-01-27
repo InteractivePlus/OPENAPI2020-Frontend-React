@@ -74,7 +74,8 @@
 }
 
 .captcha-img{
-	margin: 0 auto;
+	margin: 12px auto;
+	/* margin-bottom: ; */
 	display: flex;
 	height: 40px;
 	width: 150px;

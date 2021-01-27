@@ -1,0 +1,47 @@
+.codebox-container {
+  /* 指定文本框内容不可选中 */
+  -webkit-user-select: none;
+  /*谷歌 /Chrome*/
+  -moz-user-select: none;
+  /*火狐/Firefox*/
+  -ms-user-select: none;
+  /*IE 10+*/
+  user-select: none;
+  display: block;
+  text-align: center;
+}
+
+.codebox-container .codebox-field-wrap {
+  display: inline-block;
+  margin: 0.4rem;
+  width: 2.8125rem;
+  height: 2.8125rem;
+}
+
+/* iphone SE */
+@media (max-width: 320px) {
+  .codebox-container .codebox-field-wrap {
+    margin: 0.4rem;
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.codebox-container .codebox-field-wrap input {
+  width: inherit;
+  height: inherit;
+  line-height: inherit;
+  font-size: 1.6rem;
+  text-align: center;
+  vertical-align: baseline;
+  border: none;
+  outline: none;
+  color: #494949;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+}
+
+
+.codebox-container .codebox-field-wrap input:focus {
+	border-color: #1890FF !important;
+}

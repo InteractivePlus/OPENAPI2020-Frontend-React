@@ -1,8 +1,11 @@
 import React from "react";
 import axios from 'axios'
-import { Container, CardContent, TextField, Link, Button, Grid, FormControlLabel, Checkbox, LinearProgress, Collapse } from "@material-ui/core";
-
-import { FlexCard, XsydCardContainer } from "../../components";
+import { Container, CardContent, TextField, Link,
+	 Button, Grid, FormControlLabel, Checkbox,
+	  LinearProgress, Collapse,Snackbar } from "@material-ui/core";
+// import Snackbar from '@material-ui/core/Snackbar';
+// import MuiAlert from '@material-ui/lab/Alert';
+import { FlexCard, XsydCardContainer,CodeInput } from "../../components";
 import { Setting, ErrCode } from "../../config/config.js";
 import "../../static/css/logcommon.css";
 import "../../static/css/register.css";
@@ -15,14 +18,20 @@ class Register extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			//是否同意用户协议
 			protocol: false,
 			clientWidth: 0,
 			page: 1,
-			loading: false,
+			isLoading: false,
 			captchaId: '',
-			captchaImg: '',
-			firstpwdBlur: false,
-			secondpwdBlur: false,
+			//captchaFlag: false,
+			//图片验证码base64
+			captchaImgBase64: '',
+			//两个密码框是否有过失去焦点，借此判断是否触发输入规则检验
+			isFirstPwdBlur: false,
+			isSecondpwdBlur: false,
+			//第一步注册完成标志
+			isFirstStepSignUpOk: false,
 
 			//用一个集合表示表单数据
 			form: {
@@ -60,8 +69,7 @@ class Register extends React.Component {
 		this.emailInputRef = React.createRef();
 		this.passwordInput1Ref = React.createRef();
 		this.passwordInput2Ref = React.createRef();
-		this.captchaInputRef = React.createRef();
-		//this.InputRef = React.createRef();
+		//this.captchaInputRef = React.createRef();
 	}
 
 	getInputFromMUIField = (target) => {
@@ -69,18 +77,8 @@ class Register extends React.Component {
 		return target.current.childNodes[1].childNodes[0].value
 	}
 
-
-	handlefirstpwdChange = (event) => {
-		this.setState({ firstpwd: event.target.value });
-	};
-	handlesecondpwdChange = (event) => {
-		this.setState({ secondpwd: event.target.value });
-
-	};
-
 	handleResize = () => {
 		this.setState({ clientWidth: document.body.clientWidth });
-		//console.log(this.state.clientWidth)
 	};
 
 	handleProtocolChange = (event) => {
@@ -92,7 +90,7 @@ class Register extends React.Component {
 		// 传入的其实是page，表明是第几页上的下一步按钮
 		// 开始加载动画
 		let flagTurnNext = false;//是否跳转下一页
-		this.setState({ loading: true });
+		this.setState({ isLoading: true });
 		//表单状态引用
 		const { form } = this.state;
 		// 根据第几页执行特定逻辑
@@ -108,8 +106,7 @@ class Register extends React.Component {
 			});
 
 			// 判断两次密码是否一样+输入框是否空白
-			if (this.state.firstpwd === this.state.secondpwd
-				&& this.state.secondpwd != '') {
+			if (this.state.form.password.value !== '') {
 				//设置textfield的error状态
 				// this.setState({ 
 				// 	form: {
@@ -122,28 +119,28 @@ class Register extends React.Component {
 				flagTurnNext = true;
 			}
 			else {
-				//this.setState({ pwdInvalid: true });
-				// await this.setState({
-				// 	form: {
-				// 		...form,
-				// 		username: { value: this.state.form.username.value, invalid: true, error: '' },
-				// 		email: { value: this.getInputFromMUIField(this.emailInputRef), invalid: true, error: '' },
-				// 		password: { value: this.getInputFromMUIField(this.passwordInput2Ref), invalid: true, error: '' },
-				// 	}
-				// });
 				//不一致就停在这一页
 				flagTurnNext = false;
 			}
 		}
 		else if (index === 2) {
 			await this.hadnleDoSignUp();
+			if(this.state.isFirstStepSignUpOk===true){
+				//初步注册完成，可以翻页
+				flagTurnNext = true;
+			}
+		}
+		else if (index===3){
+			flagTurnNext = true;
+		}
+		else if (index===4){
+
 		}
 		// 结束加载动画
-		this.setState({ loading: false });
+		this.setState({ isLoading: false });
 		if (flagTurnNext && this.state.page < this.pageMaxCount) {
 			this.setState({ page: this.state.page + 1 });
 		}
-		//console.log(index)
 	};
 
 	hadnleDoSignUp = async (event) => {
@@ -159,7 +156,7 @@ class Register extends React.Component {
 				username: { value: this.getInputFromMUIField(this.userNameInputRef), invalid: false, error: '' },
 				email: { value: this.getInputFromMUIField(this.emailInputRef), invalid: false, error: '' },
 				password: { value: this.getInputFromMUIField(this.passwordInput2Ref), invalid: false, error: '' },
-				captchaInput: { value: this.getInputFromMUIField(this.captchaInputRef), invalid: false, error: '' }
+				//captchaInput: { value: this.getInputFromMUIField(this.captchaInputRef), invalid: false, error: '' }
 			}
 		});
 
@@ -205,29 +202,35 @@ class Register extends React.Component {
 			.then((response) => {
 				console.log(response.data);
 				if (response.data.errorCode === ErrCode.NO_ERROR) {
-					console.log('signup ok')
-
+					console.log('初步注册完成，需继续进行验证')
+					this.setState({ isFirstStepSignUpOk:true });
 				}
 			})
 			.catch((error) => {
-				console.log(error);
+				// console.log(error);
 				console.log(error.response);
-				// if (response.data.errorCode == ErrCode.SENDER_SERVICE_ERROR) {
-				// 	console.log('Please check email')
-
-				// }
+				if (error.response.data.errorCode === ErrCode.ITEM_ALREADY_EXIST_ERROR) {
+					console.log('用户已存在')
+				}
+				else if (error.response.data.errorCode === '') {
+					//我赌老秋风这里没写验证
+					console.log('密码不规范')
+				}
+				else if (error.response.data.errorCode === ErrCode.SENDER_SERVICE_ERROR) {
+					console.log('邮箱验证发送失败，请检查邮箱是否正确')
+				}
 			})
 			.then(() => {
 				//无论有没有成功都在执行完成后打印id看看
 				console.log(this.state.captchaId)
 			});
-
 	}
 
-	// 输入框失去焦点事件https://www.cnblogs.com/crazycode2/p/8462248.html
-	handleInputBlur=async(field, value, type = 'string')=> {
-		// 由于表单的值都是字符串,我们可以根据传入type为number来手动转换value的类型为number类型
+	// 输入框失去焦点事件
+	handleInputBlur = async (field, value, type = 'string') => {
+		// 可以根据传入type为number来手动转换value的类型为number类型
 		if (type === 'number') {
+			//js是弱类型，通过加号运算转成数字类型
 			value = + value;
 		}
 		// 定义常量
@@ -249,22 +252,22 @@ class Register extends React.Component {
 				}
 				break;
 			}
-			//因为两个密码框最后共享一个判断逻辑，就没break，那个'password'case只是标记，不会跳过前两个就进入的
+			//因为两个密码框最后共享一个判断逻辑，就没break，那个'password'case只是标记，不会前两个都跳过就进入的
 			case 'password1': {
-				if(field==='password1'){
-					console.log('p1')
-					await this.setState({ firstpwdBlur: true });
+				if (field === 'password1') {
+					//console.log('p1')
+					await this.setState({ isFirstPwdBlur: true });
 				}
 			}
 			case 'password2': {
-				if(field==='password2'){
-					console.log('p2')
-					await this.setState({ secondpwdBlur: true });
+				if (field === 'password2') {
+					//console.log('p2')
+					await this.setState({ isSecondpwdBlur: true });
 				}
 			}
 			case 'password': {
 				//先判断用户是否点过了两个文本框，再进行规则检查
-				if (this.state.firstpwdBlur === true && this.state.secondpwdBlur === true) {
+				if (this.state.isFirstPwdBlur === true && this.state.isSecondpwdBlur === true) {
 					//文本框规则
 					if ((value.length === 0
 						|| this.getInputFromMUIField(this.passwordInput1Ref) !== this.getInputFromMUIField(this.passwordInput2Ref))) {
@@ -290,7 +293,7 @@ class Register extends React.Component {
 	}
 
 	// 输入框获取焦点事件，这里只用来清除错误提示，为了美观
-	handleInputFocus=async(field, value)=> {
+	handleInputFocus = async (field, value) => {
 		// 定义常量
 		const { form } = this.state;
 		const newFieldObj = { value, invalid: false, error: '' };
@@ -316,7 +319,7 @@ class Register extends React.Component {
 
 					this.setState({
 						captchaId: response.data.data.captcha_id,
-						captchaImg: 'data:image/jpeg;base64,' + response.data.data.captcha_data.jpegBase64
+						captchaImgBase64: 'data:image/jpeg;base64,' + response.data.data.captcha_data.jpegBase64
 					});
 				}
 			})
@@ -336,12 +339,7 @@ class Register extends React.Component {
 	};
 
 	handleGoLogin = (event) => {
-		// setLoading(true);
 		this.props.history.push("/signin");
-		setTimeout(() => {
-			// setLoading(false);
-			//props.history.push("/signin");
-		}, 1000);
 	};
 
 	componentDidMount() {
@@ -355,10 +353,16 @@ class Register extends React.Component {
 		return (
 			<>
 				<div className="progress-placeholder">
-					<Collapse in={this.state.loading}>
+					<Collapse in={this.state.isLoading}>
 						<LinearProgress />
 					</Collapse>
 				</div>
+
+				{/* <Snackbar
+        anchorOrigin={ 'top', 'center' }
+        message="I love snacks"
+        
+      /> */}
 
 				<Container maxWidth={this.state.clientWidth <= 600 ? false : "xs"} className={this.state.clientWidth <= 600 ? "" : "container"}>
 					<FlexCard size={this.state.clientWidth <= 600 ? "small" : "large"}>
@@ -375,7 +379,7 @@ class Register extends React.Component {
 										<TextField error={this.state.form.password.invalid} ref={this.passwordInput2Ref} className="input" type="password" label="确认密码"  onFocus={(e) => this.handleInputFocus('password', e.target.value)} onBlur={(e) => this.handleInputBlur('password2', e.target.value)}/>
 										<p className="password-tip-text">
 											使用{Setting.PASSWORD_MINLEN}个~{Setting.PASSWORD_MAXLEN}个字符（必须包含字母和数字）
-									</p>
+										</p>
 									</div>
 
 									<FormControlLabel
@@ -406,11 +410,24 @@ class Register extends React.Component {
 							<CardContent className={this.state.page === 2 ? "validation-card" : "validation-card-none"}>
 								<XsydCardContainer title="注册验证" subtitle="一个账号，畅享BlueAirLive所有服务">
 									<div className="space-justify-view">
-										<div style={{display: 'block'}}>
-										<img style={{ verticalAlign: "middle" }} className="captcha-img" src={this.state.captchaImg} alt="captcha img" />
-										
+										<p className="email-tip-text">输入验证码（区分大小写）</p>
+										<div style={{ display: 'block' }}>
+											<img style={{ verticalAlign: "middle" }} className="captcha-img" src={this.state.captchaImgBase64} alt="captcha img" />
 										</div>
-										<TextField ref={this.captchaInputRef} className="input" label="验证码（区分大小写）" onChange={value => this.handleChange('username', value)} />
+										{/*<TextField ref={this.captchaInputRef} className="input" label="验证码（区分大小写）" />*/}
+										{/*onChange={value => this.handleChange('username', value)}*/}
+										{/*指定数字属性 validator={(input, index) => {return /\d/.test(input); }} */}
+										<CodeInput type="text" length={5} onChange={userInput => { 
+											console.log(userInput);
+											const {form} = this.state;
+											this.setState({
+												form: {
+													...form,
+													captchaInput: { value: userInput, invalid: false, error: '' }
+												}
+											});
+										}} />
+
 									</div>
 
 									<Grid container justify="center" alignItems="center">
@@ -420,7 +437,7 @@ class Register extends React.Component {
 										</Link>
 										</Grid>
 										<Grid item xs={6} className="options-right">
-											<Button variant="contained" color="primary" onClick={ this.handleNextPage.bind(this, this.state.page) } disableElevation>
+											<Button variant="contained" color="primary" onClick={this.handleNextPage.bind(this, this.state.page)} disableElevation>
 												下一步
 										</Button>
 										</Grid>
@@ -445,7 +462,7 @@ class Register extends React.Component {
 										</Link>
 										</Grid>
 										<Grid item xs={6} className="options-right">
-											<Button variant="contained" color="primary" onClick={this.handleNextPage} disableElevation>
+											<Button variant="contained" color="primary" onClick={this.handleNextPage.bind(this, this.state.page)} disableElevation>
 												下一步
 										</Button>
 										</Grid>
@@ -457,7 +474,10 @@ class Register extends React.Component {
 						<Collapse in={this.state.page === 4}>
 							<CardContent className={this.state.page === 4 ? "validation-card" : "validation-card-none"}>
 								<XsydCardContainer title="完成注册" subtitle="一个账号，畅享BlueAirLive所有服务">
-									<div className="space-justify-view">恭喜您，注册完成</div>
+									<div className="space-justify-view">恭喜您，注册完成。</div>
+									<div className="space-justify-view">
+										验证邮件已发送，完成验证后账户方可用。
+									</div>
 									<Grid container justify="center" alignItems="center">
 										<Button variant="contained" color="primary" onClick={this.handleGoLogin} disableElevation>
 											去登陆
