@@ -35,3 +35,8 @@ npm run build
 ```
 yarn build
 ```
+
+### 补充
+该项目前后端分离，因为浏览器默认不支持跨域访问，所以本地调试时需要做些调整。  
+Chrome用户可参考 https://www.cnblogs.com/duchaoqun/p/12792451.html
+
