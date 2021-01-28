@@ -125,15 +125,15 @@ class Register extends React.Component {
 		}
 		else if (index === 2) {
 			await this.hadnleDoSignUp();
-			if(this.state.isFirstStepSignUpOk===true){
+			if (this.state.isFirstStepSignUpOk === true) {
 				//初步注册完成，可以翻页
 				flagTurnNext = true;
 			}
 		}
-		else if (index===3){
+		else if (index === 3) {
 			flagTurnNext = true;
 		}
-		else if (index===4){
+		else if (index === 4) {
 
 		}
 		// 结束加载动画
@@ -203,7 +203,7 @@ class Register extends React.Component {
 				console.log(response.data);
 				if (response.data.errorCode === ErrCode.NO_ERROR) {
 					console.log('初步注册完成，需继续进行验证')
-					this.setState({ isFirstStepSignUpOk:true });
+					this.setState({ isFirstStepSignUpOk: true });
 				}
 			})
 			.catch((error) => {
