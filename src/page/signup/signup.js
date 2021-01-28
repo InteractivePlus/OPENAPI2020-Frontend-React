@@ -169,7 +169,7 @@ class Register extends React.Component {
 			.then((response) => {
 				console.log(response.data);
 				if (response.data.errorCode === ErrCode.NO_ERROR) {
-					console.log('captcha ok')
+					console.log('验证通过')
 					flagCaptcha = true;
 
 				}
@@ -315,7 +315,7 @@ class Register extends React.Component {
 			.then((response) => {
 				console.log(response.data);
 				if (response.data.errorCode === ErrCode.NO_ERROR) {
-					console.log('captcha get')
+					console.log('获取到验证码')
 
 					this.setState({
 						captchaId: response.data.data.captcha_id,
@@ -357,12 +357,6 @@ class Register extends React.Component {
 						<LinearProgress />
 					</Collapse>
 				</div>
-
-				{/* <Snackbar
-        anchorOrigin={ 'top', 'center' }
-        message="I love snacks"
-        
-      /> */}
 
 				<Container maxWidth={this.state.clientWidth <= 600 ? false : "xs"} className={this.state.clientWidth <= 600 ? "" : "container"}>
 					<FlexCard size={this.state.clientWidth <= 600 ? "small" : "large"}>
@@ -410,7 +404,7 @@ class Register extends React.Component {
 							<CardContent className={this.state.page === 2 ? "validation-card" : "validation-card-none"}>
 								<XsydCardContainer title="注册验证" subtitle="一个账号，畅享BlueAirLive所有服务">
 									<div className="space-justify-view">
-										<p className="email-tip-text">输入验证码（区分大小写）</p>
+										
 										<div style={{ display: 'block' }}>
 											<img style={{ verticalAlign: "middle" }} className="captcha-img" src={this.state.captchaImgBase64} alt="captcha img" />
 										</div>
