@@ -118,10 +118,6 @@ class Register extends React.Component {
 				//没有问题，可以翻页了
 				flagTurnNext = true;
 			}
-			else {
-				//不一致就停在这一页
-				flagTurnNext = false;
-			}
 		}
 		else if (index === 2) {
 			await this.hadnleDoSignUp();
