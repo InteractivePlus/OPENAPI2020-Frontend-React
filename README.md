@@ -28,7 +28,7 @@ npm install
 该项目前后端分离，因为浏览器默认不支持跨域访问，所以本地调试时需要做些调整。  
 Chrome用户可参考 https://www.cnblogs.com/duchaoqun/p/12792451.html
 
-vscode用户可参考以下配置，修改`launch.json`实现Chrome跨域调试启动
+vscode用户可参考以下配置，修改`launch.json`实现Chrome跨域调试启动（本repo已经包含了这一配置，在.vscode文件夹下）
 ```
 "configurations": [
         
@@ -42,3 +42,4 @@ vscode用户可参考以下配置，修改`launch.json`实现Chrome跨域调试�
         }
     ]
 ```
+在vscode启动调试前需要先进入开发模式。
