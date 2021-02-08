@@ -21,8 +21,7 @@ function Register(props) {
 
 	//是否同意用户协议
 	let [protocol, setProtocol] = React.useState(false);
-	//客户端宽度，准备hook重构
-	let [clientWidth, setClientWidth] = React.useState(document.body.clientWidth);
+	//原准备获取客户端宽度，现直接拿isMobile
 	const { isMobile } = useViewSize();
 	//控制页面切换
 	let [page, setPage] = React.useState(1);
