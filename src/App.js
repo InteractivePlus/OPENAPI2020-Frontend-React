@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Routes from "./Routes";
-//import { useViewport,ViewportProvider } from "./components/UseViewPort";
+import {ViewSizeProvider} from "./helpers/viewContext";
 
 // import {viewportContext} from "./components/UseViewPort/UseViewport.js"
 //挂载 Mock
@@ -48,13 +48,12 @@ const theme = createMuiTheme({
 class App extends React.Component {
 	render() {
 		return (
-			// <ViewportProvider>
-    
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<Routes />
+					<ViewSizeProvider>
+						<Routes />
+					</ViewSizeProvider>
 			</ThemeProvider>
-			// </ViewportProvider>
 		);
 	}
 }
