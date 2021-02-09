@@ -13,8 +13,6 @@ import { Setting, ErrCode } from "../../config/config.js";
 import "../../static/css/logcommon.css";
 import "../../static/css/register.css";
 
-// import {viewportContext,useViewport} from "../../components/UseViewPort/UseViewport.js"
-
 
 function Register(props) {
 	//注意useState有异步问题，await无效，所以通过直接赋值（仅在函数内作用）来缓解

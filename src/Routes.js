@@ -12,6 +12,7 @@ import { Dashboard } from "./page";
 const appHistory = createHashHistory();
 
 const Routes = () => {
+	
 	return (
 		<Router history={appHistory}>
 			<Route exact path="/" component={Home} />
