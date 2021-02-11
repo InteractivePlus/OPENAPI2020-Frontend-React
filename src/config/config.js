@@ -59,4 +59,14 @@ export let ErrCode = {
     CREDENTIAL_NOT_MATCH: 20,
 };
 
+//http://pdk.xsyds.cn:8899/
+const serviceRootUrl = 'http://81.71.84.198:8899/'
+
+export const apiUrl = {
+	captchaApi:serviceRootUrl+'captcha', //验证码接口
+	userApi:serviceRootUrl+'user' //用户接口
+	
+}
+
+
 //export default _Setting;

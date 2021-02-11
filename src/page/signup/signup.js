@@ -9,7 +9,7 @@ import { FlexCard, XsydCardContainer,CodeInput } from "../../components";
 
 import {useViewSize} from "../../helpers/viewContext";
 
-import { Setting, ErrCode } from "../../config/config.js";
+import { Setting, ErrCode, apiUrl } from "../../config/config.js";
 import "../../static/css/logcommon.css";
 import "../../static/css/register.css";
 
@@ -127,14 +127,13 @@ function Register(props) {
 	};
 
 	let hadnleDoSignUp = async () => {
-		//http://pdk.xsyds.cn:8899/
 		//验证码判定标志
 		let flagCaptcha = false;
 		//第一步注册通过标志
 		let flagFirstSignUp = false;
 
 		//验证码判断
-		await axios.get('http://81.71.84.198:8899/captcha/' + captchaId + '/submitResult', {
+		await axios.get(apiUrl.captchaApi + captchaId + '/submitResult', {
 			params: {
 				phrase: form.captchaInput.value
 			}
@@ -167,7 +166,7 @@ function Register(props) {
 		console.log(form.password2.value);
 		console.log(form.captchaInput.value);
 		//发送请求
-		await axios.post('http://81.71.84.198:8899/user', {
+		await axios.post(apiUrl.userApi, {
 			username: form.username.value,
 			password: form.password2.value,
 			email: form.email.value,
@@ -288,7 +287,7 @@ function Register(props) {
 
 	//获得验证id和验证码图片base64
 	let handleGetCaptcha = async (event) => {
-		await axios.get('http://81.71.84.198:8899/captcha', {
+		await axios.get(apiUrl.captchaApi, {
 			width: 150,
 			height: 40
 		})
@@ -375,7 +374,7 @@ function Register(props) {
 									</div>
 									{/*指定数字属性 validator={(input, index) => {return /\d/.test(input); }} */}
 									<CodeInput type="text" length={5} onChange={userInput => { 
-										console.log(userInput);
+										// console.log(userInput);
 										setForm({
 											...form,
 											captchaInput: { value: userInput, invalid: false, error: '' }
