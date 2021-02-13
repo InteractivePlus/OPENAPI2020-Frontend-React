@@ -46,7 +46,7 @@ export let Setting = {
 	DEBUG_MODE: true,
 };
 
-export let ErrCode = {
+export const ErrCode = {
     NO_ERROR: 0,
     UNKNOWN_INNER_ERROR: 1,
     STORAGE_ENGINE_ERROR: 2,
@@ -56,7 +56,8 @@ export let ErrCode = {
     ITEM_ALREADY_EXIST_ERROR: 11,
     ITEM_EXPIRED_OR_USED_ERROR: 12,
     PERMISSION_DENIED: 13,
-    CREDENTIAL_NOT_MATCH: 20,
+    CREDENTIAL_NOT_MATCH: 14,
+	REQUEST_PARAM_FORMAT_ERROR: 20
 };
 
 //http://pdk.xsyds.cn:8899/

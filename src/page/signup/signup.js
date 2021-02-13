@@ -2,9 +2,7 @@ import React from "react";
 import axios from 'axios'
 import { Container, CardContent, TextField, Link,
 	 Button, Grid, FormControlLabel, Checkbox,
-	  LinearProgress, Collapse,Snackbar } from "@material-ui/core";
-// import Snackbar from '@material-ui/core/Snackbar';
-// import MuiAlert from '@material-ui/lab/Alert';
+	  LinearProgress, Collapse } from "@material-ui/core";
 import { FlexCard, XsydCardContainer,CodeInput } from "../../components";
 
 import {useViewSize} from "../../helpers/viewContext";
@@ -13,9 +11,19 @@ import { Setting, ErrCode, apiUrl } from "../../config/config.js";
 import "../../static/css/logcommon.css";
 import "../../static/css/register.css";
 
+//普通按需加载，会有样式污染
+//但真的比materialui的消息框好看
+//那个太难看了而且使用、自定义还烦，和审美、正常的编程逻辑严重不符
+import { message } from 'antd';
+
+//指定按需加载，可避免样式污染，但是会没有动画
+//import message from 'antd/lib/message'
+//import 'antd/lib/message/style/index.css'
 
 function Register(props) {
 	//注意useState有异步问题，await无效，所以通过直接赋值（仅在函数内作用）来缓解
+
+	const pageMaxCount = 4; //增加新collapse时记得调整最大页数
 
 	//是否同意用户协议
 	let [protocol, setProtocol] = React.useState(false);
@@ -68,8 +76,7 @@ function Register(props) {
 			error: ''
 		}
 	});
-
-	const pageMaxCount = 4; //增加新collapse时记得调整最大页数
+	
 	//MaterialUI的textfield很神奇，先用ref代替吧
 	//防止usestate异步问题，直接用ref拿value
 	let passwordInput1Ref = React.createRef();
@@ -101,6 +108,10 @@ function Register(props) {
 					//没有问题，可以翻页了
 					flagTurnNext = true;
 				}
+				else{
+					message.error('请检查信息是否正确')
+				}
+
 				break;
 			}
 			case 2: {
@@ -133,7 +144,7 @@ function Register(props) {
 		let flagFirstSignUp = false;
 
 		//验证码判断
-		await axios.get(apiUrl.captchaApi + captchaId + '/submitResult', {
+		await axios.get(apiUrl.captchaApi +'/' + captchaId + '/submitResult', {
 			params: {
 				phrase: form.captchaInput.value
 			}
@@ -141,12 +152,14 @@ function Register(props) {
 			.then((response) => {
 				console.log(response.data);
 				if (response.data.errorCode === ErrCode.NO_ERROR) {
+					
 					console.log('验证通过')
 					flagCaptcha = true;
 
 				}
 			})
 			.catch((error) => {
+				message.error('验证码有误')
 				console.log(error);
 			})
 			.then(() => {
@@ -175,22 +188,38 @@ function Register(props) {
 			.then((response) => {
 				console.log(response.data);
 				if (response.data.errorCode === ErrCode.NO_ERROR) {
-					console.log('初步注册完成，需继续进行验证');
+					message.success('初步注册成功')
+					console.log('初步注册成功，需继续进行验证');
 					flagFirstSignUp=true;
 				}
 			})
 			.catch((error) => {
-				// console.log(error);
 				console.log(error.response);
-				if (error.response.data.errorCode === ErrCode.ITEM_ALREADY_EXIST_ERROR) {
-					console.log('用户已存在')
-				}
-				else if (error.response.data.errorCode === '') {
-					//我赌老秋风这里没写验证
-					console.log('密码不规范')
-				}
-				else if (error.response.data.errorCode === ErrCode.SENDER_SERVICE_ERROR) {
-					console.log('邮箱验证发送失败，请检查邮箱是否正确')
+				switch (error.response.data.errorCode) {
+					case ErrCode.ITEM_ALREADY_EXIST_ERROR: {
+						console.log('用户已存在');
+						message.error('用户已存在');
+						break;
+					}
+					case ErrCode.SENDER_SERVICE_ERROR: {
+						console.log('邮箱验证发送失败，请检查邮箱是否正确');
+						message.error('邮箱验证发送失败，请检查邮箱是否正确');
+						break;
+					}
+					case -1: {
+						//我赌老秋风这里没写验证
+						console.log('密码不规范');
+						message.error('密码不规范');
+						break;
+					}
+					case ErrCode.REQUEST_PARAM_FORMAT_ERROR: {
+						console.log('无法注册，请检查输入');
+						message.error('无法注册，请检查输入');
+						break;
+					}
+					default: {
+						message.error('未知错误，请联系开发者');
+					}
 				}
 			})
 			.then(() => {
@@ -301,6 +330,7 @@ function Register(props) {
 				}
 			})
 			.catch((error) => {
+				message.error('验证码获取失败')
 				console.log(error);
 			})
 			.then(() => {
@@ -373,8 +403,7 @@ function Register(props) {
 										<img style={{ verticalAlign: "middle" }} className="captcha-img" src={captchaImgBase64} alt="captcha img" />
 									</div>
 									{/*指定数字属性 validator={(input, index) => {return /\d/.test(input); }} */}
-									<CodeInput type="text" length={5} onChange={userInput => { 
-										// console.log(userInput);
+									<CodeInput type="text" length={5} onChange={userInput => {
 										setForm({
 											...form,
 											captchaInput: { value: userInput, invalid: false, error: '' }
@@ -401,8 +430,6 @@ function Register(props) {
 							<XsydCardContainer title="完善信息" subtitle="一个账号，畅享BlueAirLive所有服务">
 								<div className="space-justify-view">
 									<TextField className="input" label="手机号" />
-									<TextField className="input" label="国家/地区" />
-									<TextField className="input" label="语言选择" />
 								</div>
 								<Grid container justify="center" alignItems="center">
 									<Grid item xs={6}>

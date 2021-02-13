@@ -34,7 +34,7 @@ export const ViewSizeProvider = ({ children }) => {
 //自定义Hook，作为和width,height两个状态绑定的“行为”，它通过context接收新封装的provider中的数据
 export const useViewSize = () => {
     // const context = React.useContext(viewSizeContext);
-    const { width, height } = React.useContext(viewSizeContext);
+    const { width } = React.useContext(viewSizeContext);
     const breakpoint = 600;
     const isMobile = width > breakpoint ? false : true;
     return { width, isMobile };

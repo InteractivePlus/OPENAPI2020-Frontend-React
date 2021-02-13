@@ -4,14 +4,11 @@ import { createHashHistory } from "history";
 
 import { Home, SignIn, SignUp, ThirdPartyOAuth } from "./page";
 
-import { RouteWithLayout } from "./components";
-import { Main as MainLayout } from "./layouts";
-
-import { Dashboard } from "./page";
 
 const appHistory = createHashHistory();
 
-const Routes = () => {
+const Routes = (props) => {
+
 	
 	return (
 		<Router history={appHistory}>
@@ -19,7 +16,6 @@ const Routes = () => {
 			<Route path="/signin" component={SignIn} />
 			<Route path="/signup" component={SignUp} />
 			<Route path="/thirdpartyoauth" component={ThirdPartyOAuth} />
-			<RouteWithLayout component={Dashboard} exact layout={MainLayout} path="/dashboard" />
 		</Router>
 	);
 };
