@@ -4,6 +4,7 @@
 使用React进行开发，Material-UI作为基础界面库。  
 目前为单页面应用。  
 
+接口文档：https://github.com/InteractivePlus/InteractivePDK2021-DesignDoc/blob/master/Backend/API.md
 开发者：Zhelearn, Wey, SweetIceLolly  
 
 ---
