@@ -1,10 +1,10 @@
 # OPENAPI2020-Frontend-React
 
 此项目是形随意动OpenAPI前端页面。  
-使用React进行开发，Material-UI作为基础界面库。  
+使用React进行开发，Material-UI作为基础界面库。同时引用了antd的消息框。  
 目前为单页面应用。  
 
-接口文档：https://github.com/InteractivePlus/InteractivePDK2021-DesignDoc/blob/master/Backend/API.md
+接口文档：https://github.com/InteractivePlus/InteractivePDK2021-DesignDoc/blob/master/Backend/API.md  
 开发者：Zhelearn, Wey, SweetIceLolly  
 
 ---
