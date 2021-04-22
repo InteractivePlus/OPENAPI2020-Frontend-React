@@ -1,24 +1,32 @@
 import React from "react";
 import axios from 'axios'
 import SwipeableViews from "react-swipeable-views";
+import { Container, CardContent, TextField, Link,
+	 Button, Grid, FormControlLabel, Checkbox,
+	  LinearProgress, Collapse, Tabs, Tab } from "@material-ui/core";
+import { FlexCard, TabPanel, XsydCardContainer, CodeInput } from "../../components";
 
-import { Container, CardContent, TextField, Link, Button, Grid, LinearProgress, Collapse, Tabs, Tab } from "@material-ui/core";
+import {useViewSize} from "../../helpers/viewContext";
+import { Setting, ErrCode, ApiUrl } from "../../config/config.js";
 
-import { FlexCard, TabPanel, XsydCardContainer } from "../../components";
+import { message } from 'antd';
+
 // eslint-disable-next-line
-import Setting from "../../config/config.js";
 import "../../static/css/logcommon.css";
 import "../../static/css/login.css";
 
 function Login(props) {
-	let [clientWidth, setClientWidth] = React.useState(document.body.clientWidth);
+	//原准备获取客户端宽度，现直接拿isMobile
+	const { isMobile } = useViewSize();
+	//控制页面切换
 	let [page, setPage] = React.useState(1);
-	let [loading, setLoading] = React.useState(false);
+	//控制进度条显示
+	let [isLoading, setLoading] = React.useState(false);
+	//当前会话验证id
+	let [captchaId, setCaptchaId] = React.useState('0');
+
 	let [tabs, setTabs] = React.useState(0);
 
-	let handleResize = () => {
-		setClientWidth(document.body.clientWidth);
-	};
 
 	let handleNextPage = (event) => {
 		// 验证表单
@@ -30,9 +38,50 @@ function Login(props) {
 		}, 1000);
 	};
 
+
 	let handlePreviousPage = (event) => {
 		setPage(1);
 	};
+
+	// let hadnleDoSignIn = async () => {
+	// 	//验证码判定标志
+	// 	let flagCaptcha = false;
+	// 	//第一步注册通过标志
+	// 	let flagFirstSignUp = false;
+
+	// 	//登录
+	// 	await axios.post(ApiUrl.userSignInApi, {
+	// 		// username: form.username.value,
+	// 		password: form.password2.value,
+	// 		email: form.email.value,
+	// 		captcha_id: captchaId
+	// 	})
+	// 		.then((response) => {
+	// 			console.log(response.data);
+	// 			if (response.data.errorCode === ErrCode.NO_ERROR) {
+					
+	// 				console.log('登录成功')
+	// 				flagCaptcha = true;
+
+	// 			}
+	// 		})
+	// 		.catch((error) => {
+	// 			message.error('登录失败')
+	// 			console.log(error);
+	// 		})
+	// 		.then(() => {
+	// 			//无论有没有成功都在执行完成后打印id看看
+	// 			console.log(captchaId)
+	// 		});
+
+	// 	//如果没有通过验证，那么刷新重来
+	// 	if (flagCaptcha === false) {
+	// 		handleGetCaptcha();
+	// 		return;
+	// 	}
+
+	// 	return flagFirstSignUp;
+	// };
 
 	let handleChangeTab = (event, newValue) => {
 		setTabs(newValue);
@@ -50,17 +99,15 @@ function Login(props) {
 		}, 1000);
 	};
 
-	window.addEventListener("resize", handleResize);
-
 	return (
 		<>
 			<div className="progress-placeholder">
-				<Collapse in={loading}>
+				<Collapse in={isLoading}>
 					<LinearProgress />
 				</Collapse>
 			</div>
-			<Container maxWidth={clientWidth <= 600 ? false : "xs"} className={clientWidth <= 600 ? "" : "container"}>
-				<FlexCard size={clientWidth <= 600 ? "small" : "large"}>
+			<Container maxWidth={isMobile ? false : "xs"} className={isMobile ? "" : "container"}>
+				<FlexCard size={isMobile ? "small" : "large"}>
 					<Collapse in={page === 1}>
 						<CardContent className={page === 1 ? "validation-card" : "validation-card-none"}>
 							<XsydCardContainer title="登录" subtitle="一个账号，畅享BlueAirLive所有服务">

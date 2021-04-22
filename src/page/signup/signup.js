@@ -4,17 +4,18 @@ import { Container, CardContent, TextField, Link,
 	 Button, Grid, FormControlLabel, Checkbox,
 	  LinearProgress, Collapse } from "@material-ui/core";
 import { FlexCard, XsydCardContainer,CodeInput } from "../../components";
-
 import {useViewSize} from "../../helpers/viewContext";
-
-import { Setting, ErrCode, apiUrl } from "../../config/config.js";
-import "../../static/css/logcommon.css";
-import "../../static/css/register.css";
+import { Setting, ErrCode, ApiUrl } from "../../config/config.js";
 
 //普通按需加载，会有样式污染
 //但真的比materialui的消息框好看
 //那个太难看了而且使用、自定义还烦，和审美、正常的编程逻辑严重不符
 import { message } from 'antd';
+
+import "../../static/css/logcommon.css";
+import "../../static/css/register.css";
+
+
 
 //指定按需加载，可避免样式污染，但是会没有动画
 //import message from 'antd/lib/message'
@@ -40,6 +41,12 @@ function Register(props) {
 	//两个密码框是否有过失去焦点，借此判断是否触发输入规则检验
 	let [isFirstPwdBlur, setFirstPwdBlur] = React.useState(false);
 	let [isSecondPwdBlur, setSecondPwdBlur] = React.useState(false);
+
+	//hook版forceupdate实现
+	const [,updateState]=React.useState();
+	const forceUpdate=React.useCallback(()=>updateState({}),[]);
+	//使用
+	// forceUpdate();
 
 	//用一个集合表示表单数据
 	let [form, setForm] = React.useState({
@@ -144,7 +151,7 @@ function Register(props) {
 		let flagFirstSignUp = false;
 
 		//验证码判断
-		await axios.get(apiUrl.captchaApi +'/' + captchaId + '/submitResult', {
+		await axios.get(ApiUrl.captchaApi +'/' + captchaId + '/submitResult', {
 			params: {
 				phrase: form.captchaInput.value
 			}
@@ -179,7 +186,7 @@ function Register(props) {
 		console.log(form.password2.value);
 		console.log(form.captchaInput.value);
 		//发送请求
-		await axios.post(apiUrl.userApi, {
+		await axios.post(ApiUrl.userApi, {
 			username: form.username.value,
 			password: form.password2.value,
 			email: form.email.value,
@@ -266,6 +273,7 @@ function Register(props) {
 				}
 			}
 			case 'password': {
+				forceUpdate();
 				//先判断用户是否点过了两个文本框，再进行规则检查
 				if (isFirstPwdBlur === true && isSecondPwdBlur === true) {
 					//文本框规则
@@ -313,10 +321,10 @@ function Register(props) {
 			[field.value]: value
 		});
 	};
-
+	
 	//获得验证id和验证码图片base64
 	let handleGetCaptcha = async (event) => {
-		await axios.get(apiUrl.captchaApi, {
+		await axios.get(ApiUrl.captchaApi, {
 			width: 150,
 			height: 40
 		})
@@ -428,9 +436,9 @@ function Register(props) {
 					<Collapse in={page === 3}>
 						<CardContent className={page === 3 ? "validation-card" : "validation-card-none"}>
 							<XsydCardContainer title="完善信息" subtitle="一个账号，畅享BlueAirLive所有服务">
-								<div className="space-justify-view">
+								{/* <div className="space-justify-view">
 									<TextField className="input" label="手机号" />
-								</div>
+								</div> */}
 								<Grid container justify="center" alignItems="center">
 									<Grid item xs={6}>
 										<Link href="/#/signup" onClick={handlePreviousPage}>

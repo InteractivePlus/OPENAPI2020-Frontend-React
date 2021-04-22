@@ -1,8 +1,15 @@
 import React from "react";
-import "./App.css";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import axios from 'axios'
 import Routes from "./Routes";
 import {ViewSizeProvider} from "./helpers/viewContext";
+import {getUrlParameter} from "./helpers/getUrlParameter";
+import {isEmpty} from "./helpers/utils";
+import { Setting, ErrCode, ApiUrl, URLPARAMETER } from "./config/config.js";
+
+import { message } from 'antd';
+
+import "./App.css";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 //挂载 Mock
 import './mock/data2.js'
@@ -24,27 +31,59 @@ const theme = createMuiTheme({
 
 function App(props) {
 
-
+	// 加载时就判断url参数
 	React.useEffect(() => {
 		let callBackUrl = '';
 		let appId = '';
-		console.log(window.location.href)
-		try {
-			const query = window.location.href.split('?')[1];// '?callback=www.baidu.com&appid=1'
-			const arr = query.split('&'); // ['callback=...', 'appid=...']
-			callBackUrl = arr[0].split('=')[1]; //获取回调url
-			appId = arr[1].split('=')[1]; //获取appid
+		let vericode = '';
+
+		vericode = getUrlParameter(URLPARAMETER.VERIFY);
+		// console.log(veriCode);
+		if (!isEmpty(vericode)) {
+			console.log("注册验证码：", vericode);
+			
+			//验证邮箱
+			let handleVerifyEmail = async (event) => {
+				await axios.get(ApiUrl.verifyEmailApi +'/' + vericode, {
+				})
+					.then((response) => {
+						console.log(response.data);
+						if (response.data.errorCode === ErrCode.NO_ERROR) {
+							console.log('邮箱验证成功');
+							props.history.push("/verify");
+						}
+					})
+					.catch((error) => {
+						message.error('邮箱验证失败');
+						console.log('邮箱验证失败');
+						console.log(error);
+					})
+					.then(() => {
+					});
+			};
+			handleVerifyEmail();
+
+			return;
 		}
-		catch (e) {
-			//先判断一下哪个参数有错
-			if (callBackUrl === '') {
-				console.log('无回调url')
-			}
-			if (appId === '') {
-				console.log('无appid')
-			}
-			//无参或者有错误跳转到控制面板
+		else
+			console.log('无注册验证');
+		
+		callBackUrl = getUrlParameter(URLPARAMETER.CALLBACK);
+		appId = getUrlParameter(URLPARAMETER.APPID);
+		
+		if (!isEmpty(callBackUrl) && !isEmpty(appId)) {
+			//处理第三方授权
+			return;
 		}
+
+		//判断一下哪个参数不行，方便调试
+		if (isEmpty(callBackUrl)) {
+			console.log('无回调url')
+		}
+		if (isEmpty(appId)) {
+			console.log('无appid')
+		}
+		//无参或者有错误跳转到控制面板
 
 	}, []); //带一个空参数，这样的useEffect相当于componentDidMount
 

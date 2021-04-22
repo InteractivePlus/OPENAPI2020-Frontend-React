@@ -6,7 +6,8 @@ class Home extends React.Component {
 		return (
 			<div>
 				<Link to="/signin">Sign In</Link> | 
-				<Link to="/signup">Sign Up</Link> | 
+				<Link to="/signup">Sign Up</Link> |
+				<Link to="/verify">Verify</Link> | 
 				<Link target="_blank" to="/thirdpartyoauth">OAuth</Link>
 			</div>
 		);

@@ -1,4 +1,4 @@
-export let Setting = {
+export const Setting = {
 	USER_SYSTEM_NAME: {
 		zh_CN: "幽径",
 		en_US: "Solitary Trail",
@@ -63,10 +63,18 @@ export const ErrCode = {
 //http://pdk.xsyds.cn:8899/
 const serviceRootUrl = 'http://81.71.84.198:8899/'
 
-export const apiUrl = {
-	captchaApi:serviceRootUrl+'captcha', //验证码接口
-	userApi:serviceRootUrl+'user' //用户接口
+export const ApiUrl = {
+	captchaApi:serviceRootUrl+'captcha',				//验证码接口
+	userApi: serviceRootUrl + 'user', 					//用户接口
+	userSignInApi: serviceRootUrl + 'user/token', 		//用户登录接口
+	verifyEmailApi: serviceRootUrl +'vericodes/verifyEmailResult' //邮箱验证接口
 	
+}
+
+export const URLPARAMETER = {
+	CALLBACK: 'callback',
+	APPID: 'appid',
+	VERIFY: 'veriCode'
 }
 
 
