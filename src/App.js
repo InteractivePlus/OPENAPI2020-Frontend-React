@@ -6,6 +6,12 @@ import {getUrlParameter} from "./helpers/getUrlParameter";
 import {isEmpty} from "./helpers/utils";
 import { Setting, ErrCode, ApiUrl, URLPARAMETER } from "./config/config.js";
 
+import { Provider } from 'react-redux';
+import { browserHistory, Router } from 'react-router';
+import { fromJS } from 'immutable';
+
+import {configureStore, store} from './store/configureStore';
+
 import { message } from 'antd';
 
 import "./App.css";
@@ -30,6 +36,8 @@ const theme = createMuiTheme({
 
 
 function App(props) {
+
+	// const store = configureStore();
 
 	// 加载时就判断url参数
 	React.useEffect(() => {
@@ -70,6 +78,7 @@ function App(props) {
 		else
 			console.log('无注册验证');
 		
+		//获取第三方授权参数
 		callBackUrl = getUrlParameter(URLPARAMETER.CALLBACK);
 		appId = getUrlParameter(URLPARAMETER.APPID);
 		
@@ -93,9 +102,11 @@ function App(props) {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<ViewSizeProvider>
-				<Routes />
-			</ViewSizeProvider>
+			<Provider store={store}>
+				<ViewSizeProvider>
+					<Routes />
+				</ViewSizeProvider>
+			</Provider>
 		</ThemeProvider>
 	);
 

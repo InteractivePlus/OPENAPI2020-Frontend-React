@@ -7,6 +7,17 @@ import { FlexCard, XsydCardContainer,CodeInput } from "../../components";
 import {useViewSize} from "../../helpers/viewContext";
 import { Setting, ErrCode, ApiUrl } from "../../config/config.js";
 
+import { connect } from 'react-redux';
+
+import { store } from '../../store/configureStore';
+
+import {
+	getCaptcha,
+	authStart,
+	setUser,
+  } from '../../actions';
+  
+
 //普通按需加载，会有样式污染
 //但真的比materialui的消息框好看
 //那个太难看了而且使用、自定义还烦，和审美、正常的编程逻辑严重不符
@@ -23,6 +34,7 @@ import "../../static/css/register.css";
 
 function Register(props) {
 	//注意useState有异步问题，await无效，所以通过直接赋值（仅在函数内作用）来缓解
+	const { onGetCaptcha } = props
 
 	const pageMaxCount = 4; //增加新collapse时记得调整最大页数
 
@@ -43,10 +55,10 @@ function Register(props) {
 	let [isSecondPwdBlur, setSecondPwdBlur] = React.useState(false);
 
 	//hook版forceupdate实现
+	//使用：forceUpdate();
 	const [,updateState]=React.useState();
 	const forceUpdate=React.useCallback(()=>updateState({}),[]);
-	//使用
-	// forceUpdate();
+	
 
 	//用一个集合表示表单数据
 	let [form, setForm] = React.useState({
@@ -111,7 +123,8 @@ function Register(props) {
 				// 判断两次密码是否一样+输入框是否空白
 				if (form.password2.value !== '' && form.password1.value === form.password2.value) {
 					//准备下一页的验证码
-					await handleGetCaptcha();
+					// await handleGetCaptcha();
+
 					//没有问题，可以翻页了
 					flagTurnNext = true;
 				}
@@ -360,8 +373,15 @@ function Register(props) {
 	// 这里加一个从0跳转到第1页，用来触发动画
 	React.useEffect(() => {
 		setPage(1);
+		onGetCaptcha();
 	}, []);
 
+	//监听验证id参数变化，并且更新本组件的状态
+	React.useEffect(() => {
+		// console.log('ffffff',props.captchaId,props.captchaImgBase64)
+		setCaptchaId(props.captchaId);
+		setCaptchaImgBase64(props.captchaImgBase64);
+	}, [props.captchaId,props.captchaImgBase64]);
 
 	return (
 		<>
@@ -483,4 +503,51 @@ function Register(props) {
 	);
 }
 
-export default Register;
+
+export default connect(
+	(state) => ({
+		email: state.getIn(['user', 'email']),
+		password: state.getIn(['user', 'password']),
+		captchaId: state.getIn(['user', 'captchaId']),
+		captchaImgBase64: state.getIn(['user', 'captchaImgBase64']),
+	}),
+	(dispatch) => ({
+		onChangeEmailInput: (event) => (
+			dispatch(setUser({
+				key: 'email',
+				value: event.target.value
+			}))
+		),
+		onChangePasswordInput: (event) => (
+			dispatch(setUser({
+				key: 'password',
+				value: event.target.value
+			}))
+		),
+		onLoginSubmit: (email, password) => () => {
+			dispatch(authStart(dispatch, email, password));
+		},
+		onGetCaptcha: () => () => {
+			dispatch(getCaptcha(dispatch));
+		},
+	}),
+	//必须要加这一段，对应mergeProps，否则无法执行，如何解决有待进一步研究
+	(stateProps, dispatchProps, ownProps) => {
+		const {
+			email,
+			password,
+			captchaId,
+			captchaImgBase64
+		} = stateProps;
+		const {
+			onLoginSubmit,
+			onGetCaptcha
+		} = dispatchProps;
+		return Object.assign({}, stateProps, dispatchProps, ownProps, {
+			onLoginSubmit: onLoginSubmit(email, password),
+			onGetCaptcha: onGetCaptcha()
+		});
+	}
+)(Register);
+
+// export default Register;

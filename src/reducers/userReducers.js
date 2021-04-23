@@ -1,27 +1,37 @@
 import { handleActions } from 'redux-actions';
+import { UserState } from '../models/models.js';
 
 import {
-    AUTH_START,
-    AUTH_COMPLETE,
-    AUTH_ERROR,
-    LOGOUT_START,
-    SET_USER,
-  } from '../actions';
-  
-  const userReducers = handleActions({
-    AUTH_START: (state) => (
+    ACTIONTYPES
+} from '../config/config.js';
+
+const userReducers = handleActions({
+    [ACTIONTYPES.GET_CAPTCHA]: (state) => (
+        // state.merge({
+        //     captchaId: state.getIn(['user', 'captchaId']),
+        // })
+        state.merge({
+            captchaId: state.get('captchaId'),
+            captchaImgBase64: state.get('captchaImgBase64')
+        })
+        // {
+        //     ...state,
+        //     captchaId: state.captchaId
+        // }
+    ),
+    [ACTIONTYPES.AUTH_START]: (state) => (
       state.merge({
         isAuthorized: false,      
       })
-    ),  
-    AUTH_COMPLETE: (state) => (
+    ),
+    [ACTIONTYPES.AUTH_COMPLETE]: (state) => (
       state.merge({
         email: '',
         password: '',
         isAuthorized: true,
       })
     ),  
-    AUTH_ERROR: (state) => (
+    [ACTIONTYPES.AUTH_ERROR]: (state) => (
       state.merge({
         username: '',
         email: '',
@@ -29,17 +39,18 @@ import {
         isAuthorized: false,
       })
     ),  
-    START_LOGOUT: (state) => (
+    [ACTIONTYPES.START_LOGOUT]: (state) => (
       state.merge({
         isAuthorized: false,      
       })
     ), 
-    CHECK_AUTH: (state) => (
+    [ACTIONTYPES.CHECK_AUTH]: (state) => (
       state.set('isAuthorized', true)
     ),
-    SET_USER: (state, { payload }) => (
+    [ACTIONTYPES.SET_USER]: (state, { payload }) => (
       state.set(payload.key, payload.value)
     ),
+    
   }, UserState);
-  
-  export default userReducers;
+
+export default userReducers;
