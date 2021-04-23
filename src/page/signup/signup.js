@@ -31,7 +31,7 @@ function Register(props) {
 	//原准备获取客户端宽度，现直接拿isMobile
 	const { isMobile } = useViewSize();
 	//控制页面切换
-	let [page, setPage] = React.useState(1);
+	let [page, setPage] = React.useState(0);
 	//控制进度条显示
 	let [isLoading, setLoading] = React.useState(false);
 	//当前会话验证id
@@ -356,6 +356,13 @@ function Register(props) {
 		props.history.push("/signin");
 	};
 
+	// 相当于componentDidMount
+	// 这里加一个从0跳转到第1页，用来触发动画
+	React.useEffect(() => {
+		setPage(1);
+	}, []);
+
+
 	return (
 		<>
 			<div className="progress-placeholder">
@@ -365,6 +372,7 @@ function Register(props) {
 			</div>
 			<Container maxWidth={isMobile ? false : "xs"} className={isMobile ? "" : "container"}>
 				<FlexCard size={isMobile ? "small" : "large"}>
+					<Collapse in={page === 0}></Collapse>
 					<Collapse in={page === 1}>
 						<CardContent className={page === 1 ? "register-card" : "register-card-none"}>
 							<XsydCardContainer title="注册您的形随意动账号" subtitle="一个账号，畅享BlueAirLive所有服务">

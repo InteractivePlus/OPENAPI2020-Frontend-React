@@ -49,14 +49,16 @@ function App(props) {
 					.then((response) => {
 						console.log(response.data);
 						if (response.data.errorCode === ErrCode.NO_ERROR) {
+							message.success('邮箱验证成功');
 							console.log('邮箱验证成功');
-							props.history.push("/verify");
+							window.location.href = '/#/verify';
 						}
 					})
 					.catch((error) => {
 						message.error('邮箱验证失败');
 						console.log('邮箱验证失败');
 						console.log(error);
+						window.location.href='/'
 					})
 					.then(() => {
 					});
