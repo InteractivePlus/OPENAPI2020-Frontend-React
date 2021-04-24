@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 // initstate model
 export const UiState = Immutable.fromJS({
     spinnerVisible: false,
+    loadingVisible: false,
     isEdit: false,
 });
 

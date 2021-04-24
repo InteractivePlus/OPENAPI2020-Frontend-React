@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux-immutable';
 import user from './userReducers';
-
+import ui from './uiReducers';
 
 const rootReducer = combineReducers({
-  user,
+    user,
+    ui,
 });
 
 export default rootReducer;

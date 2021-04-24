@@ -15,6 +15,8 @@ import {
 	getCaptcha,
 	authStart,
 	setUser,
+	showLoading,
+	hideLoading,
   } from '../../actions';
   
 
@@ -34,7 +36,7 @@ import "../../static/css/register.css";
 
 function Register(props) {
 	//注意useState有异步问题，await无效，所以通过直接赋值（仅在函数内作用）来缓解
-	const { onGetCaptcha } = props
+	const { onGetCaptcha, onNextPage, onNextPageOver } = props
 
 	const pageMaxCount = 4; //增加新collapse时记得调整最大页数
 
@@ -45,7 +47,7 @@ function Register(props) {
 	//控制页面切换
 	let [page, setPage] = React.useState(0);
 	//控制进度条显示
-	let [isLoading, setLoading] = React.useState(false);
+	// let [isLoading, setLoading] = React.useState(false);
 	//当前会话验证id
 	let [captchaId, setCaptchaId] = React.useState('0');
 	//图片验证码base64
@@ -115,7 +117,8 @@ function Register(props) {
 		// 传入的其实是page，表明是第几页上的下一步按钮
 		let flagTurnNext = false;//是否跳转下一页
 		// 开始加载动画
-		setLoading(true);
+		// setLoading(true);
+		onNextPage();
 
 		// 根据第几页执行特定逻辑
 		switch (index) {
@@ -150,7 +153,8 @@ function Register(props) {
 		}
 
 		// 结束加载动画
-		setLoading(false);
+		// setLoading(false);
+		onNextPageOver();
 		//可以翻页+在范围内就翻页
 		if (flagTurnNext && page < pageMaxCount) {
 			setPage(page + 1);
@@ -385,11 +389,12 @@ function Register(props) {
 
 	return (
 		<>
-			<div className="progress-placeholder">
+			{/* <div className="progress-placeholder">
 				<Collapse in={isLoading}>
 					<LinearProgress />
 				</Collapse>
-			</div>
+			</div> */}
+			
 			<Container maxWidth={isMobile ? false : "xs"} className={isMobile ? "" : "container"}>
 				<FlexCard size={isMobile ? "small" : "large"}>
 					<Collapse in={page === 0}></Collapse>
@@ -530,6 +535,14 @@ export default connect(
 		onGetCaptcha: () => () => {
 			dispatch(getCaptcha(dispatch));
 		},
+		onNextPage: () => () => {
+			dispatch(showLoading());
+			console.log('loading a a ')
+		},
+		onNextPageOver: () => () => {
+			dispatch(hideLoading());
+			console.log('end loading a a ')
+		},
 	}),
 	//必须要加这一段，对应mergeProps，否则无法执行，如何解决有待进一步研究
 	(stateProps, dispatchProps, ownProps) => {
@@ -541,11 +554,16 @@ export default connect(
 		} = stateProps;
 		const {
 			onLoginSubmit,
-			onGetCaptcha
+			onGetCaptcha,
+			onNextPage,
+			onNextPageOver,
+
 		} = dispatchProps;
 		return Object.assign({}, stateProps, dispatchProps, ownProps, {
 			onLoginSubmit: onLoginSubmit(email, password),
-			onGetCaptcha: onGetCaptcha()
+			onGetCaptcha: onGetCaptcha(),
+			onNextPage: onNextPage(),
+			onNextPageOver: onNextPageOver()
 		});
 	}
 )(Register);

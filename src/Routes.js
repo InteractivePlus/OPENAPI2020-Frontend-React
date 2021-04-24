@@ -4,21 +4,42 @@ import { createHashHistory } from "history";
 
 import { Home, SignIn, SignUp, ThirdPartyOAuth, Verify } from "./page";
 
+import { LinearProgress, Collapse } from "@material-ui/core";
+import { connect } from 'react-redux';
+
 
 const appHistory = createHashHistory();
 
 const Routes = (props) => {
-
 	
 	return (
-		<Router history={appHistory}>
-			<Route exact path="/" component={Home} />
-			<Route path="/signin" component={SignIn} />
-			<Route path="/signup" component={SignUp} />
-			<Route path="/thirdpartyoauth" component={ThirdPartyOAuth} />
-			<Route path="/verify" component={Verify} />
-		</Router>
+		<div>
+			{/* 在这里放了一个全局的进度条，可以发dispatch控制 */}
+			<div className="progress-placeholder">
+				<Collapse in={props.loadingVisible}>
+					<LinearProgress />
+				</Collapse>
+			</div>
+		
+			<Router history={appHistory}>
+				<Route exact path="/" component={Home} />
+				<Route path="/signin" component={SignIn} />
+				<Route path="/signup" component={SignUp} />
+				<Route path="/thirdpartyoauth" component={ThirdPartyOAuth} />
+				<Route path="/verify" component={Verify} />
+			</Router>
+		</div>
 	);
 };
 
-export default Routes;
+export default connect(
+	(state) => ({
+		spinnerVisible: state.getIn(['ui', 'spinnerVisible']),
+		loadingVisible: state.getIn(['ui', 'loadingVisible']),
+	}),
+	(dispatch) => ({
+	})
+)(Routes);
+
+
+//export default Routes;

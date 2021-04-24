@@ -6,9 +6,12 @@ import {getUrlParameter} from "./helpers/getUrlParameter";
 import {isEmpty} from "./helpers/utils";
 import { Setting, ErrCode, ApiUrl, URLPARAMETER } from "./config/config.js";
 
+
 import { Provider } from 'react-redux';
-import { browserHistory, Router } from 'react-router';
+
 import { fromJS } from 'immutable';
+
+
 
 import {configureStore, store} from './store/configureStore';
 
@@ -111,6 +114,8 @@ function App(props) {
 	);
 
 }
+
+
 
 export default App;
 

@@ -7,17 +7,10 @@ import {
 
 const userReducers = handleActions({
     [ACTIONTYPES.GET_CAPTCHA]: (state) => (
-        // state.merge({
-        //     captchaId: state.getIn(['user', 'captchaId']),
-        // })
         state.merge({
             captchaId: state.get('captchaId'),
             captchaImgBase64: state.get('captchaImgBase64')
         })
-        // {
-        //     ...state,
-        //     captchaId: state.captchaId
-        // }
     ),
     [ACTIONTYPES.AUTH_START]: (state) => (
       state.merge({
