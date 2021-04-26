@@ -3,9 +3,9 @@ import axios from 'axios'
 import { Container, CardContent, TextField, Link,
 	 Button, Grid, FormControlLabel, Checkbox,
 	  LinearProgress, Collapse } from "@material-ui/core";
-import { FlexCard, XsydCardContainer,CodeInput,CardBottomBar } from "../../components";
+import { FlexCard, XsydCardContainer,CodeInput } from "../../components";
 import {useViewSize} from "../../helpers/viewContext";
-import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNUPPAGE } from "../../config/config.js";
+import { Setting, ErrCode, ApiUrl, CAPTCHASTATE } from "../../config/config.js";
 
 import { connect } from 'react-redux';
 
@@ -13,15 +13,11 @@ import { store } from '../../store/configureStore';
 
 import {
 	getCaptcha,
-    verifyCaptcha,
-    startSignUp,
+	verifyCaptcha,
 	authStart,
 	setUser,
 	showLoading,
 	hideLoading,
-
-	setPage,
-	setSignUpForm
   } from '../../actions';
   
 
@@ -40,21 +36,31 @@ import "../../static/css/register.css";
 //import 'antd/lib/message/style/index.css'
 
 //注意useState有异步问题，await无效，所以通过直接赋值（仅在函数内作用）来缓解
-const Register = (props) => {
+const Register = (props) =>{
 	//从props中引入状态和方法
-	const { page, captchaId, captchaImgBase64, captchaValidState } = props;
-	const { onTurnToPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignUp } = props;
-    
+	const { captchaId, captchaImgBase64, captchaInputValue, captchaValidState } = props;
+	const { onChangecaptchaInputValue, onGetCaptcha, onVerifyCaptcha, onNextPage, onNextPageOver } = props;
+	// console.log(props)
+
+	const pageMaxCount = 4; //增加新collapse时记得调整最大页数
+
 	//是否同意用户协议
 	let [protocol, setProtocol] = React.useState(false);
 	//原准备获取客户端宽度，现直接拿isMobile
 	const { isMobile } = useViewSize();
+	//控制页面切换
+	let [page, setPage] = React.useState(0);
 	
 	//两个密码框是否有过失去焦点，借此判断是否触发输入规则检验
 	let [isFirstPwdBlur, setFirstPwdBlur] = React.useState(false);
 	let [isSecondPwdBlur, setSecondPwdBlur] = React.useState(false);
 
-    
+	//hook版forceupdate实现
+	//使用：forceUpdate();
+	const [,updateState]=React.useState();
+	const forceUpdate=React.useCallback(()=>updateState({}),[]);
+	
+
 	//用一个集合表示表单数据
 	let [form, setForm] = React.useState({
 		username: {
@@ -89,28 +95,128 @@ const Register = (props) => {
 			value: '',
 			error: ''
 		}
-    });
-    
-    
+	});
+	
 	//MaterialUI的textfield很神奇，先用ref代替吧
 	//防止usestate异步问题，直接用ref拿value
 	let passwordInput1Ref = React.createRef();
 	let passwordInput2Ref = React.createRef();
 
-	//hook版forceupdate实现
-	//使用：forceUpdate();
-	const [,updateState]=React.useState();
-	const forceUpdate = React.useCallback(() => updateState({}), []);
-	
-	//同意协议，就直接处理了
-	let handleProtocolChange = (event) => {
-		setProtocol(event.target.checked);
-    };
-    
-    // 获取MUI输入区域的值，dom出奇迹，输入参数是ref
-    let getValueFromMUIField = (target) => {
+
+	let getValueFromMUIField = (target) => {
+		// dom出奇迹
 		return target.current.childNodes[1].childNodes[0].value
 	}
+
+	let handleProtocolChange = (event) => {
+		setProtocol(event.target.checked);
+	};
+
+	let handleNextPage = async (index) => {
+		// 传入的其实是page，表明是第几页上的下一步按钮
+		let flagTurnNext = false;//是否跳转下一页
+		// 开始加载动画
+		onNextPage();
+
+		// 根据第几页执行特定逻辑
+		switch (index) {
+			case 1: {
+				// 判断两次密码是否一样+输入框是否空白
+				if (form.password2.value !== '' && form.password1.value === form.password2.value) {
+					//没有问题，可以翻页了
+					flagTurnNext = true;
+				}
+				else{
+					message.error('请检查信息是否正确')
+				}
+
+				break;
+			}
+			case 2: {
+				let result = await hadnleDoSignUp();
+				if (result === true) {
+					//初步注册完成，可以翻页
+					flagTurnNext = true;
+				}
+				break;
+			}
+			case 3: {
+				flagTurnNext = true;
+				break;
+			}
+			default: { }
+		}
+
+		//结束加载动画
+		onNextPageOver();
+		//可以翻页+在范围内就翻页
+		if (flagTurnNext && page < pageMaxCount) {
+			setPage(page + 1);
+		}
+	};
+
+	let hadnleDoSignUp = async () => {
+		//验证码判定标志
+		let flagCaptcha = false;
+		//第一步注册通过标志
+		let flagFirstSignUp = false;
+
+
+		//开始注册
+		console.log(form.username.value);
+		console.log(form.email.value);
+		console.log(form.password2.value);
+		console.log(form.captchaInput.value);
+		//发送请求
+		await axios.post(ApiUrl.userApi, {
+			username: form.username.value,
+			password: form.password2.value,
+			email: form.email.value,
+			captcha_id: captchaId
+		})
+			.then((response) => {
+				console.log(response.data);
+				if (response.data.errorCode === ErrCode.NO_ERROR) {
+					message.success('初步注册成功')
+					console.log('初步注册成功，需继续进行验证');
+					flagFirstSignUp=true;
+				}
+			})
+			.catch((error) => {
+				console.log(error.response);
+				switch (error.response.data.errorCode) {
+					case ErrCode.ITEM_ALREADY_EXIST_ERROR: {
+						console.log('用户已存在');
+						message.error('用户已存在');
+						break;
+					}
+					case ErrCode.SENDER_SERVICE_ERROR: {
+						console.log('邮箱验证发送失败，请检查邮箱是否正确');
+						message.error('邮箱验证发送失败，请检查邮箱是否正确');
+						break;
+					}
+					case -1: {
+						//我赌老秋风这里没写验证
+						console.log('密码不规范');
+						message.error('密码不规范');
+						break;
+					}
+					case ErrCode.REQUEST_PARAM_FORMAT_ERROR: {
+						console.log('无法注册，请检查输入');
+						message.error('无法注册，请检查输入');
+						break;
+					}
+					default: {
+						message.error('未知错误，请联系开发者');
+					}
+				}
+			})
+			.then(() => {
+				//无论有没有成功都在执行完成后打印id看看
+				console.log(captchaId)
+			});
+		return flagFirstSignUp;
+	};
 
 	// 输入框失去焦点事件
 	let handleInputBlur = async (event) => {
@@ -191,60 +297,37 @@ const Register = (props) => {
 		// String.prototype.trim.call(target.value);用于过滤
 		const value = event.target.value;
 		const field = event.target.name;
-		const newFieldObj = { value, invalid: false, error: '' };
-		// 重置指定文本框状态
+		//更新状态
 		setForm({
 			...form,
-			[field]: newFieldObj
+			[field.value]: value
 		});
 	};
-
-    //初步检查信息合法性
-    let handleCheckBasicInfo = () => {
-        // 判断两次密码是否一样+输入框是否空白
-        if (form.password2.value !== '' && form.password1.value === form.password2.value) {
-            //没有问题，可以翻页了
-            return true;
-        } else {
-            message.error('请检查信息是否正确')
-        }
-        return false;
-    };
 	
-    //开始注册
-    let hadnleDoSignUp = async () => {
-		//开始注册
-		console.log(form.username.value);
-		console.log(form.email.value);
-		console.log(form.password2.value);
-		console.log(form.captchaInput.value);
-		
-        onSignUp(form.username.value, form.email.value, form.password2.value, captchaId);
+	let handlePreviousPage = (event) => {
+		setPage(1);
 	};
-    
 
 	let handleGoLogin = (event) => {
 		props.history.push("/signin");
 	};
 
-    
-
 	// 相当于componentDidMount
 	// 这里加一个从0跳转到第1页，用来触发动画
-    React.useEffect(() => {
-        //跳转到填写信息页
-        onTurnToPage(SIGNUPPAGE.INFO_FORM);
-        //获取验证码
+	React.useEffect(() => {
+		setPage(1);
 		onGetCaptcha();
 	}, []);
 
-
 	//监听form.captchaInput的改变，当长度=配置中验证码长度触发验证
 	React.useEffect(() => {
+		// onChangecaptchaInputValue(form.captchaInput.value);
 		if (form.captchaInput.value.length === 5) {
+			
 			onVerifyCaptcha(captchaId, form.captchaInput.value);
 			console.log('验证码输入完成，触发验证',form.captchaInput.value);
 		}
+		
 	}, [form.captchaInput]);
 
 
@@ -252,9 +335,9 @@ const Register = (props) => {
 		<>
 			<Container maxWidth={isMobile ? false : "xs"} className={isMobile ? "" : "container"}>
 				<FlexCard size={isMobile ? "small" : "large"}>
-					<Collapse in={page === SIGNUPPAGE.EMPTY_PAGE}></Collapse>
-					<Collapse in={page === SIGNUPPAGE.INFO_FORM}>
-						<CardContent className={page === SIGNUPPAGE.INFO_FORM ? "register-card" : "register-card-none"}>
+					<Collapse in={page === 0}></Collapse>
+					<Collapse in={page === 1}>
+						<CardContent className={page === 1 ? "register-card" : "register-card-none"}>
 							<XsydCardContainer title="注册您的形随意动账号" subtitle="一个账号，畅享BlueAirLive所有服务">
 								<div>
 									{/*注意要取消拼写检查*/}
@@ -277,21 +360,21 @@ const Register = (props) => {
 										</div>
 									}
 								/>
-								<CardBottomBar
-									leftText='登录账号'
-									leftTextClickHandler={()=>{}}
-									buttonText='下一步'
-                                    buttonClickHandler={() => {
-                                        if(handleCheckBasicInfo())
-                                            onTurnToPage(SIGNUPPAGE.INFO_FORM + 1)
-                                    }}
-									buttonState={protocol}
-								/>
+								<Grid container justify="center" alignItems="center">
+									<Grid item xs={6}>
+										<Link href="/#/signin">登录账号</Link>
+									</Grid>
+									<Grid item xs={6} className="options-right">
+										<Button variant="contained" color="primary" onClick={ handleNextPage.bind(this, page) } disabled={!protocol} disableElevation>
+											下一步
+									</Button>
+									</Grid>
+								</Grid>
 							</XsydCardContainer>
 						</CardContent>
 					</Collapse>
-					<Collapse in={page === SIGNUPPAGE.CAPTCHA}>
-						<CardContent className={page === SIGNUPPAGE.CAPTCHA ? "validation-card" : "validation-card-none"}>
+					<Collapse in={page === 2}>
+						<CardContent className={page === 2 ? "validation-card" : "validation-card-none"}>
 							<XsydCardContainer title="注册验证" subtitle="一个账号，畅享BlueAirLive所有服务">
 								<div className="space-justify-view">
 									
@@ -300,43 +383,52 @@ const Register = (props) => {
 									</div>
 									{/*指定数字属性 validator={(input, index) => {return /\d/.test(input); }} */}
 									<CodeInput type="text" length={5} onChange={userInput => {
-										handleInputChange({
-                                            target: {
-                                                name: 'captchaInput',
-												value: userInput
-										}});
+										setForm({
+											...form,
+											captchaInput: { value: userInput, invalid: false, error: '' }
+										});
+										console.log('change ',userInput)
+										onChangecaptchaInputValue(userInput);
 									}} />
 								</div>
-								<CardBottomBar
-									leftText='返回'
-									leftTextClickHandler={()=>{}}
-									buttonText='下一步'
-                                    buttonClickHandler={() => {
-                                        hadnleDoSignUp();
-                                    }}
-									buttonState={captchaValidState===CAPTCHASTATE.OK}
-								/>
+								<Grid container justify="center" alignItems="center">
+									<Grid item xs={6}>
+										<Link href="/#/signup" onClick={handlePreviousPage}>
+											返回
+									</Link>
+									</Grid>
+									<Grid item xs={6} className="options-right">
+										<Button variant="contained" color="primary" onClick={handleNextPage.bind(this, page)} disabled={captchaValidState!==CAPTCHASTATE.OK} disableElevation>
+											下一步
+									</Button>
+									</Grid>
+								</Grid>
 							</XsydCardContainer>
 						</CardContent>
 					</Collapse>
-					<Collapse in={page === SIGNUPPAGE.MORE_INFO}>
-						<CardContent className={page === SIGNUPPAGE.MORE_INFO ? "validation-card" : "validation-card-none"}>
+					<Collapse in={page === 3}>
+						<CardContent className={page === 3 ? "validation-card" : "validation-card-none"}>
 							<XsydCardContainer title="完善信息" subtitle="一个账号，畅享BlueAirLive所有服务">
 								{/* <div className="space-justify-view">
 									<TextField className="input" label="手机号" />
 								</div> */}
-								<CardBottomBar
-									leftText='返回'
-									leftTextClickHandler={()=>{}}
-									buttonText='下一步'
-									buttonClickHandler={()=>{onTurnToPage(SIGNUPPAGE.MORE_INFO + 1)}}
-									buttonState={true}
-								/>
+								<Grid container justify="center" alignItems="center">
+									<Grid item xs={6}>
+										<Link href="/#/signup" onClick={handlePreviousPage}>
+											返回
+									</Link>
+									</Grid>
+									<Grid item xs={6} className="options-right">
+										<Button variant="contained" color="primary" onClick={handleNextPage.bind(this, page)} disableElevation>
+											下一步
+									</Button>
+									</Grid>
+								</Grid>
 							</XsydCardContainer>
 						</CardContent>
 					</Collapse>
-					<Collapse in={page === SIGNUPPAGE.COMPLETE}>
-						<CardContent className={page === SIGNUPPAGE.COMPLETE ? "validation-card" : "validation-card-none"}>
+					<Collapse in={page === 4}>
+						<CardContent className={page === 4 ? "validation-card" : "validation-card-none"}>
 							<XsydCardContainer title="完成注册" subtitle="一个账号，畅享BlueAirLive所有服务">
 								<div className="space-justify-view">恭喜您，注册完成。</div>
 								<div className="space-justify-view">
@@ -359,41 +451,85 @@ const Register = (props) => {
 
 export default connect(
 	(state) => ({
-		page: state.getIn(['userSignUp', 'page']),
-		// form: state.getIn(['userSignUp', 'form']),
+		email: state.getIn(['user', 'email']),
+		password: state.getIn(['user', 'password']),
 		captchaId: state.getIn(['user', 'captchaId']),
 		captchaImgBase64: state.getIn(['user', 'captchaImgBase64']),
-		captchaValidState: state.getIn(['user', 'captchaValidState'])
+		// captchaInputValue: state.getIn(['user', 'captchaInputValue']),
+		captchaValidState: state.getIn(['user', 'captchaValidState']),
 	}),
 	(dispatch) => ({
-		//转到指定页
-		onTurnToPage: (pageIndex) => {
-			// dispatch(showLoading());
-			dispatch(setPage({ key: 'page', value: pageIndex }));
+		onChangeEmailInput: (event) => (
+			dispatch(setUser({
+				key: 'email',
+				value: event.target.value
+			}))
+		),
+		onChangePasswordInput: (event) => (
+			dispatch(setUser({
+				key: 'password',
+				value: event.target.value
+			}))
+		),
+		onLoginSubmit: (email, password) => () => {
+			dispatch(authStart(dispatch, email, password));
 		},
-		//获取验证码
-		onGetCaptcha: () => {
+		onChangecaptchaInputValue: (value) => () => {
+			console.log('改变input！',value)
+			// dispatch(setUser({
+			// 	key: 'captchaInputValue',
+			// 	value: event.target.value
+			// }))
+			dispatch(setUser({
+				key: 'captchaInputValue',
+				value: value
+			}))
+		},
+		onGetCaptcha: () => () => {
 			dispatch(getCaptcha(dispatch));
 		},
-		//验证验证码
-		onVerifyCaptcha: (captchaId, captchaInputValue) => {
-			console.log('触发验证事件')
+		onVerifyCaptcha: (captchaId, captchaInputValue) => () => {
+			console.log('触发验证')
 			console.log(captchaId, captchaInputValue)
 			dispatch(verifyCaptcha(dispatch, captchaId, captchaInputValue));
-        },
-        //开始正式注册
-        onSignUp: (username, email, password, captchaId) => {
-            dispatch(startSignUp(dispatch, username, email, password, captchaId));
-        },
-		//输入改变
-		// onInputChange: (event) => {
-		// 	const newvalue = event.target.value;
-		// 	const field = event.target.name;
-		// 	//更新状态
-		// 	// setSignUpForm({ key: field, value: newvalue });
-		// },
-		
+		},
+		onNextPage: () => () => {
+			dispatch(showLoading());
+		},
+		onNextPageOver: () => () => {
+			dispatch(hideLoading());
+		},
 	}),
+	//必须要加这一段，对应mergeProps，否则无法执行，如何解决有待进一步研究
+	(stateProps, dispatchProps, ownProps) => {
+		const {
+			// email,
+			// password,
+			captchaId,
+			captchaImgBase64,
+			captchaInputValue,
+			captchaValidState,
+
+		} = stateProps;
+		const {
+			onLoginSubmit,
+			// onChangecaptchaInputValue,
+			onGetCaptcha,
+			onVerifyCaptcha,
+			onNextPage,
+			onNextPageOver,
+
+		} = dispatchProps;
+		return Object.assign({}, stateProps, dispatchProps, ownProps, {
+			onLoginSubmit: onLoginSubmit(email, password),
+			onGetCaptcha: onGetCaptcha(),
+			// onChangecaptchaInputValue: onChangecaptchaInputValue(captchaInputValue),
+			// onVerifyCaptcha: onVerifyCaptcha(captchaId, captchaInputValue),
+			onVerifyCaptcha: onVerifyCaptcha(),
+			onNextPage: onNextPage(),
+			onNextPageOver: onNextPageOver()
+		});
+	}
 )(Register);
 
-
+// export default Register;

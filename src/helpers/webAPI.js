@@ -1,13 +1,20 @@
 import React from "react";
 import axios from 'axios'
-import { Setting, ErrCode, ApiUrl } from "../config/config.js";
+import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNUPPAGE } from "../config/config.js";
 
-import { 
+import {
+    showLoading,
+    hideLoading,
+    setPage,
     authComplete,
     authError,
     completeLogout,
-    setUser
+    setUser,
+    getCaptcha,
 } from '../actions';
+
+import { message } from 'antd';
+
 
 import {store} from '../store/configureStore';
 
@@ -19,8 +26,7 @@ export default {
     },
 
     getCaptcha: async (dispatch) => {
-        
-        console.log('开始获取验证码redux');
+        // console.log('开始获取验证码redux');
         
         await axios.get(ApiUrl.captchaApi, {
 			width: 150,
@@ -34,11 +40,11 @@ export default {
                     dispatch(setUser({ key: 'captchaId', value: response.data.data.captcha_id }));
                     dispatch(setUser({ key: 'captchaImgBase64', value: 'data:image/jpeg;base64,' + response.data.data.captcha_data.jpegBase64 }));
                     //设置获取到验证码的标志位，在submit后要注意清除
-                    dispatch(setUser({ key: 'isCaptchaGotten', value: true }));
+                    // dispatch(setUser({ key: 'isCaptchaGotten', value: true }));
                 }
 			})
 			.catch((error) => {
-				// message.error('验证码获取失败')
+				message.error('验证码获取失败')
 				console.log(error);
 			})
 			.then(() => {
@@ -47,6 +53,93 @@ export default {
                 console.log(store.getState())
 			});
 
-        console.log('开始获取验证码redux end');
+        // console.log('开始获取验证码redux end');
+    },
+    verifyCaptcha: async (dispatch, captchaId, captchaInputValue) => {
+        console.log('开始验证验证码redux');
+
+		//验证码判断
+		await axios.get(ApiUrl.captchaApi +'/' + captchaId + '/submitResult', {
+			params: {
+				phrase: captchaInputValue
+			}
+		})
+			.then((response) => {
+				console.log(response.data);
+                if (response.data.errorCode === ErrCode.NO_ERROR) {
+                    //设置验证码的合法标志位
+                    dispatch(setUser({ key: 'captchaValidState', value: CAPTCHASTATE.OK }));
+					
+					console.log('验证通过')
+				}
+			})
+            .catch((error) => {
+                //设置验证码的合法标志位
+                dispatch(setUser({ key: 'captchaValidState', value: CAPTCHASTATE.INVALID }));
+                //验证码刷新重来
+                dispatch(getCaptcha(dispatch));
+				message.error('验证码有误')
+				console.log(error);
+			})
+			.then(() => {
+				//无论有没有成功都在执行完成后打印id看看
+				console.log(captchaId)
+			});
+    },
+    startSignUp: async (dispatch, username, email, password, captchaId) => {
+        //显示进度条
+        dispatch(showLoading());
+
+        //发送请求
+		await axios.post(ApiUrl.userApi, {
+			username: username,
+			password: password,
+			email: email,
+			captcha_id: captchaId
+		})
+			.then((response) => {
+				console.log(response.data);
+				if (response.data.errorCode === ErrCode.NO_ERROR) {
+					message.success('初步注册成功')
+                    console.log('初步注册成功，需进行邮箱验证');
+                    //继续填写信息
+                    dispatch(setPage({ key: 'page', value: SIGNUPPAGE.MORE_INFO }));
+				}
+			})
+			.catch((error) => {
+				console.log(error.response);
+				switch (error.response.data.errorCode) {
+					case ErrCode.ITEM_ALREADY_EXIST_ERROR: {
+						console.log('用户已存在');
+						message.error('用户已存在');
+						break;
+					}
+					case ErrCode.SENDER_SERVICE_ERROR: {
+						console.log('邮箱验证发送失败，请检查邮箱是否正确');
+						message.error('邮箱验证发送失败，请检查邮箱是否正确');
+						break;
+					}
+					case -1: {
+						//我赌老秋风这里没写验证
+						console.log('密码不规范');
+						message.error('密码不规范');
+						break;
+					}
+					case ErrCode.REQUEST_PARAM_FORMAT_ERROR: {
+						console.log('无法注册，请检查输入');
+						message.error('无法注册，请检查输入');
+						break;
+					}
+					default: {
+						message.error('未知错误，请联系开发者');
+					}
+				}
+			})
+			.then(() => {
+				//无论有没有成功都在执行完成后打印id看看
+				console.log(captchaId)
+            });
+        //隐藏进度条
+        dispatch(hideLoading());
     }
 };

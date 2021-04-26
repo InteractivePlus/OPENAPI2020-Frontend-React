@@ -1,27 +1,29 @@
 import { handleActions } from 'redux-actions';
-import { UiState } from '../models/models.js';
+import { UserSignUpState } from '../models/models.js';
 
 import {
     ACTIONTYPES
 } from '../config/config.js';
 
+const signUpReducers = handleActions({
+  // [ACTIONTYPES.SET_SIGNUP_PAGE]: (state) => (
+  //     state.merge({
+  //         page: state.get('page')
+  //     })
+  // ),
+    [ACTIONTYPES.SET_SIGNUP_PAGE]: (state) => (
+        state.merge({
+          page: 1
+        })
+    ),
+    [ACTIONTYPES.SET_PAGE]: (state, {payload}) => (
+        state.set('page', payload.value)
+    ),
+    // [ACTIONTYPES.SET_SIGNUP_FORM]: (state, {payload}) => (
+    //     state.set([form.payload.key], { payload.value })
+    // ),
 
-const uiReducers = handleActions({
-    [ACTIONTYPES.SHOW_SPINNER]: (state) => (
-      state.set( 'spinnerVisible', true )
-    ),
-    [ACTIONTYPES.HIDE_SPINNER]: (state) => (
-      state.set('spinnerVisible', false)
-    ),
-    [ACTIONTYPES.SHOW_LOADING]: (state) => (
-        state.set('loadingVisible', true)
-    ),
-    [ACTIONTYPES.HIDE_LOADING]: (state) => (
-        state.set('loadingVisible', false)
-    ),
-    [ACTIONTYPES.SET_UI]: (state, { payload }) => (
-      state.set(payload.key, payload.value)
-    ),
-  }, UiState);
+    
+}, UserSignUpState);
 
-export default uiReducers;
+export default signUpReducers;

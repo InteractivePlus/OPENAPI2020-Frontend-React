@@ -3,3 +3,4 @@ export { default as TabPanel } from './TabPanel';
 export { default as XsydCardContainer } from './XsydCardContainer';
 export { default as UserEntity } from './UserEntity';
 export { default as CodeInput } from './CodeInput';
+export { default as CardBottomBar } from './CardBottomBar';
