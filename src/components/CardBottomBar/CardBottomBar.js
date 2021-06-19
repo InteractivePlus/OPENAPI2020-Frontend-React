@@ -10,7 +10,7 @@ const CardBottomBar = ({ leftText,
 	return (
 		<Grid container justify="center" alignItems="center">
 			<Grid item xs={6}>
-				<Link href="" onClick={leftTextClickHandler}>
+				<Link onClick={leftTextClickHandler}>
 					{leftText}
 				</Link>
 			</Grid>

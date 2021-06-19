@@ -1,8 +1,13 @@
+/**
+ * @file OPENAPI注册页面
+ * @version v1.0
+ * 当开发者需要编辑其他页面时，请以该页面为参考模板
+ * 如果该页面有任何问题，请联系开发团队讨论交流，我们将第一时间解决
+ */
 import React from "react";
-import axios from 'axios'
 import { Container, CardContent, TextField, Link,
 	 Button, Grid, FormControlLabel, Checkbox,
-	  LinearProgress, Collapse } from "@material-ui/core";
+	  Collapse } from "@material-ui/core";
 import { FlexCard, XsydCardContainer,CodeInput,CardBottomBar } from "../../components";
 import {useViewSize} from "../../helpers/viewContext";
 import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNUPPAGE } from "../../config/config.js";
@@ -14,14 +19,11 @@ import { store } from '../../store/configureStore';
 import {
 	getCaptcha,
     verifyCaptcha,
-    startSignUp,
+    submitSignUp,
 	authStart,
 	setUser,
-	showLoading,
-	hideLoading,
 
-	setPage,
-	setSignUpForm
+	setSignUpPage
   } from '../../actions';
   
 
@@ -279,7 +281,7 @@ const Register = (props) => {
 								/>
 								<CardBottomBar
 									leftText='登录账号'
-									leftTextClickHandler={()=>{}}
+									leftTextClickHandler={handleGoLogin}
 									buttonText='下一步'
                                     buttonClickHandler={() => {
                                         if(handleCheckBasicInfo())
@@ -309,7 +311,7 @@ const Register = (props) => {
 								</div>
 								<CardBottomBar
 									leftText='返回'
-									leftTextClickHandler={()=>{}}
+									leftTextClickHandler={()=>{onTurnToPage(SIGNUPPAGE.INFO_FORM)}}
 									buttonText='下一步'
                                     buttonClickHandler={() => {
                                         hadnleDoSignUp();
@@ -327,7 +329,7 @@ const Register = (props) => {
 								</div> */}
 								<CardBottomBar
 									leftText='返回'
-									leftTextClickHandler={()=>{}}
+									leftTextClickHandler={()=>{onTurnToPage(SIGNUPPAGE.INFO_FORM)}}
 									buttonText='下一步'
 									buttonClickHandler={()=>{onTurnToPage(SIGNUPPAGE.MORE_INFO + 1)}}
 									buttonState={true}
@@ -369,7 +371,7 @@ export default connect(
 		//转到指定页
 		onTurnToPage: (pageIndex) => {
 			// dispatch(showLoading());
-			dispatch(setPage({ key: 'page', value: pageIndex }));
+			dispatch(setSignUpPage({ key: 'page', value: pageIndex }));
 		},
 		//获取验证码
 		onGetCaptcha: () => {
@@ -383,7 +385,7 @@ export default connect(
         },
         //开始正式注册
         onSignUp: (username, email, password, captchaId) => {
-            dispatch(startSignUp(dispatch, username, email, password, captchaId));
+            dispatch(submitSignUp(dispatch, username, email, password, captchaId));
         },
 		//输入改变
 		// onInputChange: (event) => {

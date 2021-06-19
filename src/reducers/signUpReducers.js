@@ -11,12 +11,12 @@ const signUpReducers = handleActions({
   //         page: state.get('page')
   //     })
   // ),
-    [ACTIONTYPES.SET_SIGNUP_PAGE]: (state) => (
+    [ACTIONTYPES.SET_SIGNUP_PAGE_START]: (state) => (
         state.merge({
           page: 1
         })
     ),
-    [ACTIONTYPES.SET_PAGE]: (state, {payload}) => (
+    [ACTIONTYPES.SET_SIGNUP_PAGE]: (state, {payload}) => (
         state.set('page', payload.value)
     ),
     // [ACTIONTYPES.SET_SIGNUP_FORM]: (state, {payload}) => (

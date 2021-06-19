@@ -15,5 +15,5 @@ export const startLogout = createAction(ACTIONTYPES.START_LOGOUT, WebAPI.logout)
 export const checkAuth = createAction(ACTIONTYPES.CHECK_AUTH);
 export const setUser = createAction(ACTIONTYPES.SET_USER);
 
-export const setPage = createAction(ACTIONTYPES.SET_PAGE);
-export const setSignUpPage = createAction(ACTIONTYPES.SET_SIGNUP_PAGE);
+//export const setPage = createAction(ACTIONTYPES.SET_PAGE);
+//export const setSignUpPage = createAction(ACTIONTYPES.SET_SIGNUP_PAGE);

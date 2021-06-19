@@ -97,10 +97,19 @@ export const ACTIONTYPES = {
 	UPDATE_RECIPE: 'UPDATE_RECIPE',
 	DELETE_RECIPE: 'DELETE_RECIPE',
 
-	SET_PAGE: 'SET_PAGE',
+	//设置注册页面页数
 	SET_SIGNUP_PAGE: 'SET_SIGNUP_PAGE',
-    SET_SIGNUP_FORM: 'SET_SIGNUP_FORM',
-    START_SIGNUP: 'START_SIGNUP'
+	//设置注册页面页数为起始页
+	SET_SIGNUP_PAGE_START: 'SET_SIGNUP_PAGE_START',
+	//提交注册请求
+	SUBMIT_SIGNUP: 'START_SIGNUP',
+	
+	//设置登录页面页数
+	SET_SIGNIN_PAGE: 'SET_SIGNUP_PAGE',
+	//设置登录页面页数为起始页
+	SET_SIGNIN_PAGE_START: 'SET_SIGNUP_PAGE_START',
+	//提交登录请求
+	SUBMIT_SIGNIN: 'START_SIGNIN',
 }
 
 
@@ -111,12 +120,21 @@ export const CAPTCHASTATE = {
 }
 
 export const SIGNUPPAGE = {
-	EMPTY_PAGE: 5,
+	EMPTY_PAGE: 0,
 	INFO_FORM: 1,
 	CAPTCHA: 2,
 	MORE_INFO: 3,
 	COMPLETE: 4,
 }
+
+export const SIGNINPAGE = {
+	EMPTY_PAGE: 0,
+	SININ_FORM: 1,
+	CAPTCHA: 2,
+	COMPLETE: 3,
+}
+
+
 
 
 //export default _Setting;

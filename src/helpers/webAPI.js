@@ -1,3 +1,7 @@
+/**
+ * @file WebAPI接口库
+ * @version v1.0
+ */
 import React from "react";
 import axios from 'axios'
 import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNUPPAGE } from "../config/config.js";
@@ -5,7 +9,7 @@ import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNUPPAGE } from "../config/co
 import {
     showLoading,
     hideLoading,
-    setPage,
+    setSignUpPage,
     authComplete,
     authError,
     completeLogout,
@@ -86,7 +90,7 @@ export default {
 				console.log(captchaId)
 			});
     },
-    startSignUp: async (dispatch, username, email, password, captchaId) => {
+    submitSignUp: async (dispatch, username, email, password, captchaId) => {
         //显示进度条
         dispatch(showLoading());
 
@@ -103,7 +107,7 @@ export default {
 					message.success('初步注册成功')
                     console.log('初步注册成功，需进行邮箱验证');
                     //继续填写信息
-                    dispatch(setPage({ key: 'page', value: SIGNUPPAGE.MORE_INFO }));
+                    dispatch(setSignUpPage({ key: 'page', value: SIGNUPPAGE.MORE_INFO }));
 				}
 			})
 			.catch((error) => {
@@ -141,5 +145,15 @@ export default {
             });
         //隐藏进度条
         dispatch(hideLoading());
-    }
+	},
+	
+	submitSignIn: async (dispatch, username, email, password, captchaId) => {
+		//显示进度条
+		dispatch(showLoading());
+		setTimeout(() => {
+			//隐藏进度条
+			dispatch(hideLoading());
+		}, 1000);
+		
+	}
 };

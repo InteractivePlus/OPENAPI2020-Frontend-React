@@ -1,3 +1,7 @@
+/**
+ * @file 通过hook实现响应式设计（屏幕长宽实时改变）
+ * @version v1.0
+ */
 import React from "react";
 
 const viewSizeContext = React.createContext({});
