@@ -3,8 +3,13 @@ import axios from 'axios'
 import SwipeableViews from "react-swipeable-views";
 import { Container, CardContent, TextField, Link,
 	 Button, Grid, FormControlLabel, Checkbox,
-	  LinearProgress, Collapse, Tabs, Tab } from "@material-ui/core";
-import { FlexCard, TabPanel, XsydCardContainer, CodeInput } from "../../components";
+	LinearProgress, Collapse, Tabs, Tab
+} from "@material-ui/core";
+
+import {
+	FlexCard, TabPanel, XsydCardContainer,
+	CodeInput, CardBottomBar
+} from "../../components";
 
 import {useViewSize} from "../../helpers/viewContext";
 import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNINPAGE } from "../../config/config.js";
@@ -18,12 +23,9 @@ import { connect } from 'react-redux';
 import {
 	getCaptcha,
     verifyCaptcha,
-    submitSignUp,
+    submitSignIn,
 	authStart,
 	setUser,
-	showLoading,
-	hideLoading,
-
 	setSignInPage
   } from '../../actions';
   
@@ -36,7 +38,7 @@ import "../../static/css/login.css";
 const Login=(props)=> {
 	//从props中引入状态和方法
 	const { page, captchaId, captchaImgBase64, captchaValidState } = props;
-	const { onTurnToPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignUp } = props;
+	const { onTurnToSignInPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignUp } = props;
 
 	//原准备获取客户端宽度，现直接拿isMobile
 	const { isMobile } = useViewSize();
@@ -121,11 +123,45 @@ const Login=(props)=> {
 		}, 1000);
 	};
 
+	//输入框改变事件
+	let handleInputChange = (event) => {
+		// String.prototype.trim.call(target.value);用于过滤
+		const value = event.target.value;
+		const field = event.target.name;
+		const newFieldObj = { value, invalid: false, error: '' };
+		// 重置指定文本框状态
+		// setForm({
+		// 	...form,
+		// 	[field]: newFieldObj
+		// });
+	};
+
+
+	//初步检查信息合法性
+    let handleCheckBasicInfo = () => {
+		return true;
+	};
+	
+	//开始注册
+    let hadnleDoSignIn = async () => {
+		//开始注册
+		// console.log(form.username.value);
+		// console.log(form.email.value);
+		// console.log(form.password2.value);
+		// console.log(form.captchaInput.value);
+		
+        // onSignIn(form.username.value, form.email.value, form.password2.value, captchaId);
+	};
+
+	let handleGoSignUp = (event) => {
+		props.history.push("/signup");
+	};
+
 	// 相当于componentDidMount
 	// 这里加一个从0跳转到第1页，用来触发动画
     React.useEffect(() => {
         //跳转到填写信息页
-        onTurnToPage(SIGNINPAGE.INFO_FORM);
+        onTurnToSignInPage(SIGNINPAGE.INFO_FORM);
         //获取验证码
 		onGetCaptcha();
 	}, []);
@@ -161,6 +197,45 @@ const Login=(props)=> {
 										</TabPanel>
 									</SwipeableViews>
 								</div>
+								<CardBottomBar
+									leftText='注册账号'
+									leftTextClickHandler={handleGoSignUp}
+									buttonText='下一步'
+                                    buttonClickHandler={() => {
+                                        if(handleCheckBasicInfo())
+                                            onTurnToSignInPage(SIGNINPAGE.INFO_FORM + 1)
+                                    }}
+									buttonState={true}
+								/>
+							</XsydCardContainer>
+						</CardContent>
+					</Collapse>
+					<Collapse in={page === SIGNINPAGE.CAPTCHA}>
+						<CardContent className={page === SIGNINPAGE.CAPTCHA ? "validation-card" : "validation-card-none"}>
+							<XsydCardContainer title="登录验证" subtitle="一个账号，畅享BlueAirLive所有服务">
+								<div className="space-justify-view">
+									
+									<div style={{ display: 'block' }}>
+										<img style={{ verticalAlign: "middle" }} className="captcha-img" src={captchaImgBase64} alt="captcha img" />
+									</div>
+									{/*指定数字属性 validator={(input, index) => {return /\d/.test(input); }} */}
+									<CodeInput type="text" length={5} onChange={userInput => {
+										handleInputChange({
+                                            target: {
+                                                name: 'captchaInput',
+												value: userInput
+										}});
+									}} />
+								</div>
+								<CardBottomBar
+									leftText='返回'
+									leftTextClickHandler={()=>{onTurnToSignInPage(SIGNINPAGE.INFO_FORM)}}
+									buttonText='下一步'
+                                    buttonClickHandler={() => {
+                                        hadnleDoSignIn();
+                                    }}
+									buttonState={captchaValidState===CAPTCHASTATE.OK}
+								/>
 							</XsydCardContainer>
 						</CardContent>
 					</Collapse>
@@ -172,7 +247,7 @@ const Login=(props)=> {
 
 export default connect(
 	(state) => ({
-		page: state.getIn(['userSignUp', 'page']),
+		page: state.getIn(['userSignIn', 'page']),
 		// form: state.getIn(['userSignUp', 'form']),
 		captchaId: state.getIn(['user', 'captchaId']),
 		captchaImgBase64: state.getIn(['user', 'captchaImgBase64']),
@@ -180,8 +255,7 @@ export default connect(
 	}),
 	(dispatch) => ({
 		//转到指定页
-		onTurnToPage: (pageIndex) => {
-			// dispatch(showLoading());
+		onTurnToSignInPage: (pageIndex) => {
 			dispatch(setSignInPage({ key: 'page', value: pageIndex }));
 		},
 		//获取验证码
@@ -195,8 +269,8 @@ export default connect(
 			dispatch(verifyCaptcha(dispatch, captchaId, captchaInputValue));
         },
         //开始正式注册
-        onSignUp: (username, email, password, captchaId) => {
-            dispatch(submitSignUp(dispatch, username, email, password, captchaId));
+        onSignIn: (username, email, password, captchaId) => {
+            dispatch(submitSignIn(dispatch, username, email, password, captchaId));
         },
 		//输入改变
 		// onInputChange: (event) => {

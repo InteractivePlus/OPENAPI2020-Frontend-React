@@ -129,7 +129,7 @@ export const SIGNUPPAGE = {
 
 export const SIGNINPAGE = {
 	EMPTY_PAGE: 0,
-	SININ_FORM: 1,
+	INFO_FORM: 1,
 	CAPTCHA: 2,
 	COMPLETE: 3,
 }

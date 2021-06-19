@@ -6,4 +6,4 @@ import {
 } from '../config/config.js';
 
 export const setSignInPage = createAction(ACTIONTYPES.SET_SIGNIN_PAGE);
-export const submitSignIn = createAction(ACTIONTYPES.SUBMIT_SIGNUP, WebAPI.submitSignIn);
+export const submitSignIn = createAction(ACTIONTYPES.SUBMIT_SIGNIN, WebAPI.submitSignIn);

@@ -22,7 +22,6 @@ import {
     submitSignUp,
 	authStart,
 	setUser,
-
 	setSignUpPage
   } from '../../actions';
   
@@ -235,9 +234,17 @@ const Register = (props) => {
 	// 这里加一个从0跳转到第1页，用来触发动画
     React.useEffect(() => {
         //跳转到填写信息页
+		//这里有一个问题，就是进断点之后会连续触发setsignuppage和setsigninpage
+		//导致注册页面和登录页面的开头动画无法播放（通过page状态切换，从emptypage到infoform）
+		//该问题有待解决
         onTurnToPage(SIGNUPPAGE.INFO_FORM);
         //获取验证码
 		onGetCaptcha();
+		// 相当于componentWillMount
+		return () => {
+			console.log('paolu')
+			onTurnToPage(SIGNUPPAGE.EMPTY_PAGE);
+        }
 	}, []);
 
 
@@ -370,7 +377,6 @@ export default connect(
 	(dispatch) => ({
 		//转到指定页
 		onTurnToPage: (pageIndex) => {
-			// dispatch(showLoading());
 			dispatch(setSignUpPage({ key: 'page', value: pageIndex }));
 		},
 		//获取验证码
