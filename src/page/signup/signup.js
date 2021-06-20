@@ -377,6 +377,11 @@ export default connect(
 	(dispatch) => ({
 		//转到指定页
 		onTurnToPage: (pageIndex) => {
+			//如果是跳转到验证码页要刷新一下
+			if (pageIndex === SIGNUPPAGE.CAPTCHA){
+				dispatch(getCaptcha(dispatch));
+			}
+			//跳转到指定页
 			dispatch(setSignUpPage({ key: 'page', value: pageIndex }));
 		},
 		//获取验证码

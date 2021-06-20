@@ -56,7 +56,9 @@ export default {
 				// console.log(captchaId)
                 console.log(store.getState())
 			});
-
+		
+		//设置验证码的合法标志位
+		dispatch(setUser({ key: 'captchaValidState', value: CAPTCHASTATE.INVALID }));
         // console.log('开始获取验证码redux end');
     },
     verifyCaptcha: async (dispatch, captchaId, captchaInputValue) => {
@@ -113,31 +115,35 @@ export default {
 			.catch((error) => {
 				console.log(error.response);
 				switch (error.response.data.errorCode) {
-					case ErrCode.ITEM_ALREADY_EXIST_ERROR: {
+					case ErrCode.ITEM_ALREADY_EXIST_ERROR:
 						console.log('用户已存在');
 						message.error('用户已存在');
 						break;
-					}
-					case ErrCode.SENDER_SERVICE_ERROR: {
+					case ErrCode.SENDER_SERVICE_ERROR:
 						console.log('邮箱验证发送失败，请检查邮箱是否正确');
 						message.error('邮箱验证发送失败，请检查邮箱是否正确');
 						break;
-					}
-					case -1: {
-						//我赌老秋风这里没写验证
-						console.log('密码不规范');
-						message.error('密码不规范');
+					case ErrCode.REQUEST_PARAM_FORMAT_ERROR:
+						let checkItem = '';
+						if(error.response.data.errorParam==='email')
+						{
+							checkItem = '邮箱';
+						}
+						else if(error.response.data.errorParam==='username')
+						{
+							checkItem = '用户名';
+						}
+						else if(error.response.data.errorParam==='password')
+						{
+							checkItem = '密码';
+						}
+						console.log('无法注册，请检查'+checkItem+'是否正确');
+						message.error('无法注册，请检查'+checkItem+'是否正确');
 						break;
-					}
-					case ErrCode.REQUEST_PARAM_FORMAT_ERROR: {
-						console.log('无法注册，请检查输入');
-						message.error('无法注册，请检查输入');
-						break;
-					}
-					default: {
+					default:
 						message.error('未知错误，请联系开发者');
-					}
 				}
+				dispatch(setSignUpPage({ key: 'page', value: SIGNUPPAGE.INFO_FORM }));
 			})
 			.then(() => {
 				//无论有没有成功都在执行完成后打印id看看
