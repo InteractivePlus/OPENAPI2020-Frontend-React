@@ -269,7 +269,7 @@ const Register = (props) => {
 									{/*注意要取消拼写检查*/}
 									<TextField name="username" error={form.username.invalid} spellCheck="false" className="input" label="用户名" onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
 									<TextField name="email" error={form.email.invalid} spellCheck="false" className="input" label="电子邮箱" onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
-									<p className="email-tip-text">您需要证实此电子邮件地址属于你</p>
+									<p className="email-tip-text">稍后您需要验证此邮箱</p>
 									<TextField name="password1" error={form.password2.invalid} ref={passwordInput1Ref} className="input" type="password" label="密码" onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
 									<TextField name="password2" error={form.password2.invalid} ref={passwordInput2Ref} className="input" type="password" label="确认密码"  onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
 									<p className="password-tip-text">
