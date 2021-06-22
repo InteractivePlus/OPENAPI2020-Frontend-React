@@ -242,7 +242,6 @@ const Register = (props) => {
 		onGetCaptcha();
 		// 相当于componentWillMount
 		return () => {
-			console.log('paolu')
 			onTurnToPage(SIGNUPPAGE.EMPTY_PAGE);
         }
 	}, []);

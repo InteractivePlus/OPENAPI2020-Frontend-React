@@ -52,6 +52,42 @@ const Login=(props)=> {
 	let [tabs, setTabs] = React.useState(0);
 
 
+	//用一个集合表示表单数据
+	let [form, setForm] = React.useState({
+		username: {
+			invalid: false,
+			value: '',
+			error: ''
+		},
+		//密码
+		//password1只有value有用，其他状态看password2
+		password1: {
+			invalid: false,
+			value: '',
+			error: ''
+		},
+		password2: {
+			invalid: false,
+			value: '',
+			error: ''
+		},
+		email: {
+			valid: false,
+			value: '',
+			error: ''
+		},
+		phone: {
+			invalid: false,
+			value: '',
+			error: ''
+		},
+		captchaInput: {
+			invalid: false,
+			value: '',
+			error: ''
+		}
+    });
+
 	let handleNextPage = (event) => {
 		// 验证表单
 
@@ -62,50 +98,6 @@ const Login=(props)=> {
 		// }, 1000);
 	};
 
-
-	let handlePreviousPage = (event) => {
-		//setPage(1);
-	};
-
-	// let hadnleDoSignIn = async () => {
-	// 	//验证码判定标志
-	// 	let flagCaptcha = false;
-	// 	//第一步注册通过标志
-	// 	let flagFirstSignUp = false;
-
-	// 	//登录
-	// 	await axios.post(ApiUrl.userSignInApi, {
-	// 		// username: form.username.value,
-	// 		password: form.password2.value,
-	// 		email: form.email.value,
-	// 		captcha_id: captchaId
-	// 	})
-	// 		.then((response) => {
-	// 			console.log(response.data);
-	// 			if (response.data.errorCode === ErrCode.NO_ERROR) {
-					
-	// 				console.log('登录成功')
-	// 				flagCaptcha = true;
-
-	// 			}
-	// 		})
-	// 		.catch((error) => {
-	// 			message.error('登录失败')
-	// 			console.log(error);
-	// 		})
-	// 		.then(() => {
-	// 			//无论有没有成功都在执行完成后打印id看看
-	// 			console.log(captchaId)
-	// 		});
-
-	// 	//如果没有通过验证，那么刷新重来
-	// 	if (flagCaptcha === false) {
-	// 		handleGetCaptcha();
-	// 		return;
-	// 	}
-
-	// 	return flagFirstSignUp;
-	// };
 
 	let handleChangeTab = (event, newValue) => {
 		setTabs(newValue);
@@ -130,10 +122,10 @@ const Login=(props)=> {
 		const field = event.target.name;
 		const newFieldObj = { value, invalid: false, error: '' };
 		// 重置指定文本框状态
-		// setForm({
-		// 	...form,
-		// 	[field]: newFieldObj
-		// });
+		setForm({
+			...form,
+			[field]: newFieldObj
+		});
 	};
 
 
@@ -142,9 +134,9 @@ const Login=(props)=> {
 		return true;
 	};
 	
-	//开始注册
+	//开始登录
     let hadnleDoSignIn = async () => {
-		//开始注册
+		//开始登录
 		// console.log(form.username.value);
 		// console.log(form.email.value);
 		// console.log(form.password2.value);
@@ -166,6 +158,14 @@ const Login=(props)=> {
 		onGetCaptcha();
 	}, []);
 
+	
+	//监听form.captchaInput的改变，当长度=配置中验证码长度触发验证
+	React.useEffect(() => {
+		if (form.captchaInput.value.length === 5) {
+			onVerifyCaptcha(captchaId, form.captchaInput.value);
+			console.log('验证码输入完成，触发验证',form.captchaInput.value);
+		}
+	}, [form.captchaInput]);
 
 	return (
 		<>

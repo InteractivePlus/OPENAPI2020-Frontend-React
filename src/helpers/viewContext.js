@@ -23,7 +23,7 @@ export const ViewSizeProvider = ({ children }) => {
         window.addEventListener("resize", handleWindowResize);
         //组件卸载前
         return () => {
-            console.log("remove");
+            // console.log("remove");
             window.removeEventListener("resize", handleWindowResize);
         };
     }, []); //带一个空参数，这样的useEffect相当于componentDidMount

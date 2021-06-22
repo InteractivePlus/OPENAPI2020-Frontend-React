@@ -10,3 +10,5 @@ export function getUrlParameter(name, url) {
     var results = regex.exec( url );
     return results == null ? null : results[1];
 }
+// import queryString from 'query-string';
+// const {name,id}=queryString.parse(this.props.location)
