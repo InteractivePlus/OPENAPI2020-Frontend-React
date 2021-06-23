@@ -94,6 +94,9 @@ function App(props) {
 		if (isEmpty(callBackUrl)) {
 			console.log('无回调url')
 		}
+		else {
+			console.log('回调url:',callBackUrl)
+		}
 		if (isEmpty(appId)) {
 			console.log('无appid')
 		}

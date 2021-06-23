@@ -1,3 +1,4 @@
+/* eslint-disable no-fallthrough */
 /**
  * @file OPENAPI注册页面
  * @version v1.0

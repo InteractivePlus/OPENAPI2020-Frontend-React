@@ -38,7 +38,7 @@ import "../../static/css/login.css";
 const Login=(props)=> {
 	//从props中引入状态和方法
 	const { page, captchaId, captchaImgBase64, captchaValidState } = props;
-	const { onTurnToSignInPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignUp } = props;
+	const { onTurnToSignInPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignIn } = props;
 
 	//原准备获取客户端宽度，现直接拿isMobile
 	const { isMobile } = useViewSize();
@@ -114,7 +114,19 @@ const Login=(props)=> {
 			props.history.push("/dashboard");
 		}, 1000);
 	};
-
+	
+	// 输入框获取焦点事件，这里只用来清除错误提示，为了美观
+	let handleInputFocus = async (event) => {
+		const value = event.target.value;
+		const field = event.target.name;
+		const newFieldObj = { value, invalid: false, error: '' };
+		// 重置指定文本框状态
+		setForm({
+			...form,
+			[field]: newFieldObj
+		});
+	};
+	
 	//输入框改变事件
 	let handleInputChange = (event) => {
 		// String.prototype.trim.call(target.value);用于过滤
@@ -138,11 +150,11 @@ const Login=(props)=> {
     let hadnleDoSignIn = async () => {
 		//开始登录
 		// console.log(form.username.value);
-		// console.log(form.email.value);
-		// console.log(form.password2.value);
-		// console.log(form.captchaInput.value);
+		console.log(form.email.value);
+		console.log(form.password2.value);
+		console.log(form.captchaInput.value);
 		
-        // onSignIn(form.username.value, form.email.value, form.password2.value, captchaId);
+        onSignIn(form.username.value, form.email.value, form.password2.value, captchaId);
 	};
 
 	let handleGoSignUp = (event) => {
@@ -188,8 +200,8 @@ const Login=(props)=> {
 									{/*这里是这个组件原本就有第一次动画无法播放的bug，参考https://github.com/oliviertassinari/react-swipeable-views/issues/599 */}
 									<SwipeableViews index={tabs} onChangeIndex={handleChangeIndex} containerStyle={{transition: 'transform 0.35s cubic-bezier(0.15, 0.3, 0.25, 1) 0s'}}>
 										<TabPanel value={tabs} index={0}>
-											<TextField className="input" label="邮箱或手机号码" />
-											<TextField className="input" type="password" label="密码" />
+											<TextField name="email" className="input" label="邮箱或手机号码" onFocus={handleInputFocus} onChange={handleInputChange} />
+											<TextField name="password2" className="input" type="password" label="密码" onFocus={handleInputFocus} onChange={handleInputChange} />
 										</TabPanel>
 										<TabPanel value={tabs} index={1}>
 											<TextField className="input" label="手机号码" />
@@ -236,6 +248,20 @@ const Login=(props)=> {
                                     }}
 									buttonState={captchaValidState===CAPTCHASTATE.OK}
 								/>
+							</XsydCardContainer>
+						</CardContent>
+					</Collapse>
+					<Collapse in={page === SIGNINPAGE.COMPLETE}>
+						<CardContent className={page === SIGNINPAGE.COMPLETE ? "register-card" : "register-card-none"}>
+							<XsydCardContainer title="登录成功" subtitle="一个账号，畅享BlueAirLive所有服务">
+								<div className="space-justify-view">
+									即将自动跳转到原网站或形随意动首页。
+								</div>
+								<Grid container justify="center" alignItems="center">
+									<Button variant="contained" color="primary" disableElevation>
+										返回
+									</Button>
+								</Grid>
 							</XsydCardContainer>
 						</CardContent>
 					</Collapse>

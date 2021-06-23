@@ -4,8 +4,10 @@
  */
 import React from "react";
 import axios from 'axios'
-import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNUPPAGE } from "../config/config.js";
+import { Setting, ErrCode, ApiUrl, URLPARAMETER, CAPTCHASTATE, SIGNUPPAGE, SIGNINPAGE } from "../config/config.js";
 
+import { getUrlParameter } from "../helpers/getUrlParameter";
+import {isEmpty,isUrl,isHttpUrl} from "../helpers/utils";
 import {
     showLoading,
     hideLoading,
@@ -156,10 +158,73 @@ export default {
 	submitSignIn: async (dispatch, username, email, password, captchaId) => {
 		//显示进度条
 		dispatch(showLoading());
-		setTimeout(() => {
-			//隐藏进度条
-			dispatch(hideLoading());
-		}, 1000);
 		
+        //发送请求
+		await axios.post(ApiUrl.userSignInApi, {
+			// username: username,
+			password: password,
+			email: email,
+			captcha_id: captchaId
+		})
+			.then((response) => {
+				console.log(response.data);
+				if (response.data.errorCode === ErrCode.NO_ERROR) {
+					// message.success('登录成功')
+					console.log('登录成功');
+					dispatch(setSignUpPage({ key: 'page', value: SIGNINPAGE.COMPLETE }));
+
+					setTimeout(() => {
+						//跳转链接
+						const callBackUrl = getUrlParameter(URLPARAMETER.CALLBACK);
+						console.log(isHttpUrl(callBackUrl))
+						if (isEmpty(callBackUrl) || !isHttpUrl(callBackUrl)) {
+							console.log('登录跳转无URL或不合法')
+							window.location.href = 'https://www.interactiveplus.org/';
+						}
+						else {
+							console.log('回调url:', callBackUrl)
+							window.location.href = callBackUrl;
+						}
+					}, 2000);
+				}
+			})
+			.catch((error) => {
+				console.log(error.response);
+				switch (error.response.data.errorCode) {
+					case ErrCode.ITEM_ALREADY_EXIST_ERROR:
+						console.log('用户已存在');
+						message.error('用户已存在');
+						break;
+					case ErrCode.SENDER_SERVICE_ERROR:
+						console.log('邮箱验证发送失败，请检查邮箱是否正确');
+						message.error('邮箱验证发送失败，请检查邮箱是否正确');
+						break;
+					case ErrCode.REQUEST_PARAM_FORMAT_ERROR:
+						let checkItem = '';
+						if(error.response.data.errorParam==='email')
+						{
+							checkItem = '邮箱';
+						}
+						else if(error.response.data.errorParam==='username')
+						{
+							checkItem = '用户名';
+						}
+						else if(error.response.data.errorParam==='password')
+						{
+							checkItem = '密码';
+						}
+						console.log('无法登录，请检查'+checkItem+'是否正确');
+						message.error('无法登录，请检查'+checkItem+'是否正确');
+						break;
+					default:
+						message.error('未知错误，请联系开发者');
+				}
+			})
+			.then(() => {
+				//无论有没有成功都在执行完成后打印id看看
+				console.log(captchaId)
+            });
+
+		dispatch(hideLoading());
 	}
 };
