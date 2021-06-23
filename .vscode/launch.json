@@ -12,6 +12,13 @@
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}",
             "runtimeArgs": ["--disable-web-security"]
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome Normally",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}"
         }
     ]
 }

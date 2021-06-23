@@ -114,35 +114,37 @@ export default {
 				}
 			})
 			.catch((error) => {
-				console.log(error.response);
-				switch (error.response.data.errorCode) {
-					case ErrCode.ITEM_ALREADY_EXIST_ERROR:
-						console.log('用户已存在');
-						message.error('用户已存在');
-						break;
-					case ErrCode.SENDER_SERVICE_ERROR:
-						console.log('邮箱验证发送失败，请检查邮箱是否正确');
-						message.error('邮箱验证发送失败，请检查邮箱是否正确');
-						break;
-					case ErrCode.REQUEST_PARAM_FORMAT_ERROR:
-						let checkItem = '';
-						if(error.response.data.errorParam==='email')
-						{
-							checkItem = '邮箱';
-						}
-						else if(error.response.data.errorParam==='username')
-						{
-							checkItem = '用户名';
-						}
-						else if(error.response.data.errorParam==='password')
-						{
-							checkItem = '密码';
-						}
-						console.log('无法注册，请检查'+checkItem+'是否正确');
-						message.error('无法注册，请检查'+checkItem+'是否正确');
-						break;
-					default:
-						message.error('未知错误，请联系开发者');
+				if (!isEmpty(error.response)) {
+					console.log(error.response);
+					switch (error.response.data.errorCode) {
+						case ErrCode.ITEM_ALREADY_EXIST_ERROR:
+							console.log('用户已存在');
+							message.error('用户已存在');
+							break;
+						case ErrCode.SENDER_SERVICE_ERROR:
+							console.log('邮箱验证发送失败，请检查邮箱是否正确');
+							message.error('邮箱验证发送失败，请检查邮箱是否正确');
+							break;
+						case ErrCode.REQUEST_PARAM_FORMAT_ERROR:
+							let checkItem = '';
+							if (error.response.data.errorParam === 'email') {
+								checkItem = '邮箱';
+							}
+							else if (error.response.data.errorParam === 'username') {
+								checkItem = '用户名';
+							}
+							else if (error.response.data.errorParam === 'password') {
+								checkItem = '密码';
+							}
+							console.log('无法注册，请检查' + checkItem + '是否正确');
+							message.error('无法注册，请检查' + checkItem + '是否正确');
+							break;
+						default:
+							message.error('未知错误，请联系开发者');
+					}
+				} else {
+					console.log('错误', error.message);
+					message.error('无法连接到服务器');
 				}
 				dispatch(setSignUpPage({ key: 'page', value: SIGNUPPAGE.INFO_FORM }));
 			})
@@ -188,35 +190,37 @@ export default {
 				}
 			})
 			.catch((error) => {
-				console.log(error.response);
-				switch (error.response.data.errorCode) {
-					case ErrCode.ITEM_ALREADY_EXIST_ERROR:
-						console.log('用户已存在');
-						message.error('用户已存在');
-						break;
-					case ErrCode.SENDER_SERVICE_ERROR:
-						console.log('邮箱验证发送失败，请检查邮箱是否正确');
-						message.error('邮箱验证发送失败，请检查邮箱是否正确');
-						break;
-					case ErrCode.REQUEST_PARAM_FORMAT_ERROR:
-						let checkItem = '';
-						if(error.response.data.errorParam==='email')
-						{
-							checkItem = '邮箱';
+				// console.log(error);
+				if(!isEmpty(error.response)){
+					console.log(error.response);
+					switch (error.response.data.errorCode) {
+						case ErrCode.ITEM_ALREADY_EXIST_ERROR:
+							console.log('用户已存在');
+							message.error('用户已存在');
+							break;
+						case ErrCode.REQUEST_PARAM_FORMAT_ERROR:
+							let checkItem = '';
+							if(error.response.data.errorParam==='email')
+							{
+								checkItem = '邮箱';
+							}
+							else if(error.response.data.errorParam==='username')
+							{
+								checkItem = '用户名';
+							}
+							else if(error.response.data.errorParam==='password')
+							{
+								checkItem = '密码';
+							}
+							console.log('无法登录，请检查'+checkItem+'是否正确');
+							message.error('无法登录，请检查'+checkItem+'是否正确');
+							break;
+						default:
+							message.error('未知错误，请联系开发者');
 						}
-						else if(error.response.data.errorParam==='username')
-						{
-							checkItem = '用户名';
-						}
-						else if(error.response.data.errorParam==='password')
-						{
-							checkItem = '密码';
-						}
-						console.log('无法登录，请检查'+checkItem+'是否正确');
-						message.error('无法登录，请检查'+checkItem+'是否正确');
-						break;
-					default:
-						message.error('未知错误，请联系开发者');
+				} else {
+					console.log('错误', error.message);
+					message.error('无法连接到服务器');
 				}
 			})
 			.then(() => {
