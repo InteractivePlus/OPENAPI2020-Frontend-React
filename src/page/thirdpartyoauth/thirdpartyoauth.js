@@ -1,6 +1,10 @@
 import React from "react";
 
-import { Container, CardContent, TextField, Link, Button, Grid, LinearProgress, Collapse } from "@material-ui/core";
+import {
+    Container, CardContent, TextField,
+    Link, Button, Grid, LinearProgress,
+    Collapse, Checkbox, FormControlLabel
+} from "@material-ui/core";
 
 import { FlexCard, XsydCardContainer } from "../../components";
 import "../../static/css/logcommon.css";
@@ -71,8 +75,16 @@ function ThirdPartyOAuth(props) {
                         <CardContent className={ !retrievingAppName && !authorizing ? "validation-card" : "validation-card-none"}>
                             <XsydCardContainer title="第三方应用授权" subtitle={'授权"' + appName + '"访问您的形随意动账号'} appImage={appIcon}>
                                 <div className="space-justify-view">
-                                    <TextField className="input" label="用户名或电子邮箱" />
-                                    <TextField className="input" type="password" label="密码" />
+                                <FormControlLabel
+									control={
+										<Checkbox defaultChecked size="small" name="protocol" color="primary" />
+									}
+									label={
+										<div style={{ fontSize: "0.8em" }}>
+											允许获取用户信息
+										</div>
+									}
+								/>
                                 </div>
 
                                 <div className="space-justify-view">
@@ -82,7 +94,7 @@ function ThirdPartyOAuth(props) {
                                         </Grid>
                                         <Grid item xs={6} className="options-right">
                                             <Button variant="contained" color="primary" onClick={handleContinue} disableElevation>
-                                                登录
+                                                授权
                                             </Button>
                                         </Grid>
                                     </Grid>

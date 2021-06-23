@@ -1,3 +1,9 @@
+@media (min-width: 600px){
+	.MuiContainer-root {
+		padding-left: 1rem !important;
+		padding-right: 1rem !important;
+	}
+}
 .container {
 	display        : flex !important;
 	height         : calc(100vh - 2*4px);
@@ -17,7 +23,7 @@
 	.register-card,
 	.validation-card {
 		width  : 100%;
-		padding: 2rem 1rem 2rem !important;
+		padding: 2rem 1.6rem 2rem !important;
 	}
 }
 
@@ -26,42 +32,58 @@
 	display: none;
 }
 
-.input {
-	width        : 100%;
-	margin-bottom: 0.3em !important;
-}
-
-.email-tip-text {
-	font-size    : 12px;
-	text-align   : left;
-	margin-bottom: 0.5em;
-}
-
-.password-tip-text {
-	font-size : 12px;
-	text-align: left;
-}
-
-.options-right {
-	text-align: right;
-}
-
-.options-left {
-	text-align: left;
-}
-
 .progress-hidden {
 	visibility: hidden;
 }
 
-/*有个老哥想让input更粗一点*/
+/* 调整间距 */
+.space-justify-view {
+    margin-top   : 0.5em;
+    margin-bottom: 1em;
+}
+
+/* 有个老哥想让input更粗一点
+不过现在换Outlined样式也用不上了
+换Outlined原因：
+https://medium.com/google-design/the-evolution-of-material-designs-text-fields-603688b3fe03 */
 .MuiInput-underline:before {
 	border-bottom: 1.4px solid rgba(0, 0, 0, 0.3) !important;
 }
 
-/*重置focus，不然感觉不好看*/
+/*重置Outlined输入框，不然感觉不好看*/
+.MyMuiInput {
+	width        : 100%;
+	margin-top: 0.5rem !important;
+	margin-bottom: 0.5rem !important;
+}
+
+.MuiFormLabel-root{
+	font-size: 0.9rem !important;
+}
+
+.MuiOutlinedInput-input{
+	padding: 10px !important;
+}
+/* 
+.MuiInputLabel-outlined{
+	transform: translate(14px, 0.8rem) scale(1) !important;
+}
+
+.MuiInputLabel-outlined.MuiInputLabel-shrink {
+    transform: translate(14px, -6px) scale(0.75) !important;
+} */
+
+.MuiOutlinedInput-root:not(.Mui-error):hover .MuiOutlinedInput-notchedOutline{
+	border-color:#1890FF !important ;
+}
+
+/*重置focus，不然感觉不好看 antd:#1890FF elementui:#409eff*/
 .MuiButton-containedPrimary:focus {
 	background-color: #1890FF !important;
+}
+
+.MuiButton-containedPrimary:hover {
+    background-color: #40a9ff !important;
 }
 
 /*加个进度条占位符，否则出现手机页面抖动*/

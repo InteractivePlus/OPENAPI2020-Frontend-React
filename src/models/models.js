@@ -1,7 +1,8 @@
 import Immutable from 'immutable';
 import {
-    Setting, ErrCode, ApiUrl, CAPTCHASTATE,
-    SIGNUPPAGE, SIGNINPAGE
+    CAPTCHASTATE,
+    SIGNUPPAGE,
+    SIGNINPAGE
 } from "../config/config.js";
 
 // initstate model
@@ -42,5 +43,4 @@ export const UserSignUpState = Immutable.fromJS({
 
 export const UserSignInState = Immutable.fromJS({
     page: SIGNINPAGE.EMPTY_PAGE,
-
 });

@@ -29,7 +29,6 @@ import {
 
 // eslint-disable-next-line
 import "../../static/css/logcommon.css";
-import "../../static/css/login.css";
 
 function Login(props) {
 	//从props中引入状态和方法

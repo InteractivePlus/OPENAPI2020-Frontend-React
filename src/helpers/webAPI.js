@@ -2,7 +2,6 @@
  * @file WebAPI接口库
  * @version v1.0
  */
-import React from "react";
 import axios from 'axios'
 import { Setting, ErrCode, ApiUrl, URLPARAMETER, CAPTCHASTATE, SIGNUPPAGE, SIGNINPAGE } from "../config/config.js";
 

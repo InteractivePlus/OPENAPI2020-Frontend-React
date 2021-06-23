@@ -8,7 +8,17 @@
 import React from "react";
 import { Container, CardContent, TextField, Link,
 	 Button, Grid, FormControlLabel, Checkbox,
-	  Collapse } from "@material-ui/core";
+	Collapse
+} from "@material-ui/core";
+	  
+import {
+	fade,
+	ThemeProvider,
+	withStyles,
+	makeStyles,
+	createMuiTheme,
+} from '@material-ui/core/styles';
+  
 import { FlexCard, XsydCardContainer,CodeInput,CardBottomBar } from "../../components";
 import {useViewSize} from "../../helpers/viewContext";
 import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNUPPAGE } from "../../config/config.js";
@@ -40,6 +50,7 @@ import "../../static/css/register.css";
 //指定按需加载，可避免样式污染，但是会没有动画
 //import message from 'antd/lib/message'
 //import 'antd/lib/message/style/index.css'
+
 
 //注意useState有异步问题，await无效，所以通过直接赋值（仅在函数内作用）来缓解
 const Register = (props) => {
@@ -226,8 +237,12 @@ const Register = (props) => {
     
 
 	let handleGoLogin = (event) => {
+		onTurnToPage(SIGNUPPAGE.EMPTY_PAGE);
 		props.history.push("/signin");
+		// window.location.href = "/#/signin";
 	};
+
+	
 
     
 
@@ -242,9 +257,9 @@ const Register = (props) => {
         //获取验证码
 		onGetCaptcha();
 		// 相当于componentWillMount
-		return () => {
-			onTurnToPage(SIGNUPPAGE.EMPTY_PAGE);
-        }
+		// return () => {
+		// 	onTurnToPage(SIGNUPPAGE.EMPTY_PAGE);
+        // }
 	}, []);
 
 
@@ -267,11 +282,11 @@ const Register = (props) => {
 							<XsydCardContainer title="注册您的形随意动账号" subtitle="一个账号，畅享BlueAirLive所有服务">
 								<div>
 									{/*注意要取消拼写检查*/}
-									<TextField name="username" error={form.username.invalid} spellCheck="false" className="input" label="用户名" onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
-									<TextField name="email" error={form.email.invalid} spellCheck="false" className="input" label="电子邮箱" onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
+									<TextField name="username" size="small" variant="outlined" error={form.username.invalid} spellCheck="false" className="MyMuiInput" label="用户名" onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
+									<TextField name="email" size="small" variant="outlined" error={form.email.invalid} spellCheck="false" className="MyMuiInput" label="电子邮箱" onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
 									<p className="email-tip-text">稍后您需要验证此邮箱</p>
-									<TextField name="password1" error={form.password2.invalid} ref={passwordInput1Ref} className="input" type="password" label="密码" onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
-									<TextField name="password2" error={form.password2.invalid} ref={passwordInput2Ref} className="input" type="password" label="确认密码"  onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
+									<TextField name="password1" size="small" variant="outlined" error={form.password2.invalid} ref={passwordInput1Ref} className="MyMuiInput" type="password" label="密码" onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
+									<TextField name="password2" size="small" variant="outlined" error={form.password2.invalid} ref={passwordInput2Ref} className="MyMuiInput" type="password" label="确认密码"  onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} />
 									<p className="password-tip-text">
 										使用{Setting.PASSWORD_MINLEN}个~{Setting.PASSWORD_MAXLEN}个字符（必须包含字母和数字）
 									</p>

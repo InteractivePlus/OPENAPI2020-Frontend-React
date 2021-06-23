@@ -33,7 +33,6 @@ import {
 
 // eslint-disable-next-line
 import "../../static/css/logcommon.css";
-import "../../static/css/login.css";
 
 const Login=(props)=> {
 	//从props中引入状态和方法
@@ -158,7 +157,9 @@ const Login=(props)=> {
 	};
 
 	let handleGoSignUp = (event) => {
+		onTurnToSignInPage(SIGNINPAGE.EMPTY_PAGE);
 		props.history.push("/signup");
+		// window.location.href = "/#/signup";
 	};
 
 	// 相当于componentDidMount
@@ -168,6 +169,9 @@ const Login=(props)=> {
         onTurnToSignInPage(SIGNINPAGE.INFO_FORM);
         //获取验证码
 		onGetCaptcha();
+		// return () => {
+		// 	onTurnToSignInPage(SIGNINPAGE.EMPTY_PAGE);
+        // }
 	}, []);
 
 	
@@ -181,11 +185,6 @@ const Login=(props)=> {
 
 	return (
 		<>
-			<div className="progress-placeholder">
-				<Collapse in={isLoading}>
-					<LinearProgress />
-				</Collapse>
-			</div>
 			<Container maxWidth={isMobile ? false : "xs"} className={isMobile ? "" : "container"}>
 				<FlexCard size={isMobile ? "small" : "large"}>
 					<Collapse in={page === SIGNINPAGE.EMPTY_PAGE}></Collapse>
@@ -197,17 +196,19 @@ const Login=(props)=> {
 									<Tab label="短信验证码登录" />
 								</Tabs>
 								<div className="space-justify-view">
-									{/*这里是这个组件原本就有第一次动画无法播放的bug，参考https://github.com/oliviertassinari/react-swipeable-views/issues/599 */}
-									<SwipeableViews index={tabs} onChangeIndex={handleChangeIndex} containerStyle={{transition: 'transform 0.35s cubic-bezier(0.15, 0.3, 0.25, 1) 0s'}}>
+									{/*这里是这个组件原本就有第一次动画无法播放的bug，参考https://github.com/oliviertassinari/react-swipeable-views/issues/599 *
+									containerStyle={{transition: 'transform 0.35s cubic-bezier(0.15, 0.3, 0.25, 1) 0s'}}*/}
+									{/* 因为该组件需要手动调整高度，暂时没有好办法，所以先取消了 */}
+									{/* <SwipeableViews index={tabs} onChangeIndex={handleChangeIndex} > */}
 										<TabPanel value={tabs} index={0}>
-											<TextField name="email" className="input" label="邮箱或手机号码" onFocus={handleInputFocus} onChange={handleInputChange} />
-											<TextField name="password2" className="input" type="password" label="密码" onFocus={handleInputFocus} onChange={handleInputChange} />
+											<TextField name="email" className="MyMuiInput" size="small" variant="outlined" label="邮箱或手机号码" onFocus={handleInputFocus} onChange={handleInputChange} />
+											<TextField name="password2" className="MyMuiInput" size="small" variant="outlined" type="password" label="密码" onFocus={handleInputFocus} onChange={handleInputChange} />
 										</TabPanel>
 										<TabPanel value={tabs} index={1}>
-											<TextField className="input" label="手机号码" />
-											<TextField className="input" label="验证码" />
+											<TextField className="MyMuiInput" size="small" variant="outlined" label="手机号码" />
+											<TextField className="MyMuiInput" size="small" variant="outlined" label="验证码" />
 										</TabPanel>
-									</SwipeableViews>
+									{/* </SwipeableViews> */}
 								</div>
 								<CardBottomBar
 									leftText='注册账号'

@@ -60,8 +60,9 @@ export const ErrCode = {
 	REQUEST_PARAM_FORMAT_ERROR: 20
 };
 
-//http://pdk.xsyds.cn:8899/
-const serviceRootUrl = 'http://81.71.84.198:8899/'
+//https://api.interactivepdk.com/
+// const serviceRootUrl = 'http://81.71.84.198:8899/'
+const serviceRootUrl = 'https://api.interactivepdk.com/'
 
 export const ApiUrl = {
 	captchaApi:serviceRootUrl+'captcha',				//验证码接口
