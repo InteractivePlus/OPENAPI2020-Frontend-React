@@ -37,7 +37,7 @@ import "../../static/css/logcommon.css";
 const Login=(props)=> {
 	//从props中引入状态和方法
 	const { page, captchaId, captchaImgBase64, captchaValidState } = props;
-	const { onTurnToSignInPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignIn } = props;
+	const { onTurnToPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignIn } = props;
 
 	//原准备获取客户端宽度，现直接拿isMobile
 	const { isMobile } = useViewSize();
@@ -157,7 +157,7 @@ const Login=(props)=> {
 	};
 
 	let handleGoSignUp = (event) => {
-		onTurnToSignInPage(SIGNINPAGE.EMPTY_PAGE);
+		onTurnToPage(SIGNINPAGE.EMPTY_PAGE);
 		props.history.push("/signup");
 		// window.location.href = "/#/signup";
 	};
@@ -166,11 +166,11 @@ const Login=(props)=> {
 	// 这里加一个从0跳转到第1页，用来触发动画
     React.useEffect(() => {
         //跳转到填写信息页
-        onTurnToSignInPage(SIGNINPAGE.INFO_FORM);
+        onTurnToPage(SIGNINPAGE.INFO_FORM);
         //获取验证码
 		onGetCaptcha();
 		// return () => {
-		// 	onTurnToSignInPage(SIGNINPAGE.EMPTY_PAGE);
+		// 	onTurnToPage(SIGNINPAGE.EMPTY_PAGE);
         // }
 	}, []);
 
@@ -213,10 +213,11 @@ const Login=(props)=> {
 								<CardBottomBar
 									leftText='注册账号'
 									leftTextClickHandler={handleGoSignUp}
+									centerText='忘记密码？'
 									buttonText='下一步'
                                     buttonClickHandler={() => {
                                         if(handleCheckBasicInfo())
-                                            onTurnToSignInPage(SIGNINPAGE.INFO_FORM + 1)
+                                            onTurnToPage(SIGNINPAGE.INFO_FORM + 1)
                                     }}
 									buttonState={true}
 								/>
@@ -242,7 +243,7 @@ const Login=(props)=> {
 								</div>
 								<CardBottomBar
 									leftText='返回'
-									leftTextClickHandler={()=>{onTurnToSignInPage(SIGNINPAGE.INFO_FORM)}}
+									leftTextClickHandler={()=>{onTurnToPage(SIGNINPAGE.INFO_FORM)}}
 									buttonText='下一步'
                                     buttonClickHandler={() => {
                                         hadnleDoSignIn();
@@ -282,7 +283,7 @@ export default connect(
 	}),
 	(dispatch) => ({
 		//转到指定页
-		onTurnToSignInPage: (pageIndex) => {
+		onTurnToPage: (pageIndex) => {
 			dispatch(setSignInPage({ key: 'page', value: pageIndex }));
 		},
 		//获取验证码

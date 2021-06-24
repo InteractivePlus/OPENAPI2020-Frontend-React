@@ -1,22 +1,29 @@
 import React from "react";
-import {Link, Button, Grid} from "@material-ui/core";
-
+import {Button, Grid} from "@material-ui/core";
+import {isEmpty} from "../../helpers/utils";
 import "./style/style.css";
 
 const CardBottomBar = ({
 	leftText,
 	leftTextClickHandler,
+	centerText,
+	centerTextClickHandler,
 	buttonText,
 	buttonClickHandler,
 	buttonState }) => {
 	return (
 		<Grid container justify="center" alignItems="center" className="card-bottom-bar">
-			<Grid item xs={6}>
-				<Button color="primary" onClick={leftTextClickHandler}>
+			<Grid item xs={8}>
+				{!isEmpty(leftText) && <Button color="primary" className='OptionBtn' onClick={leftTextClickHandler}>
 					{leftText}
 				</Button>
+				}
+				{!isEmpty(centerText) && <Button color="primary" className='OptionBtn' onClick={centerTextClickHandler}>
+					{centerText}
+				</Button>
+				}
 			</Grid>
-			<Grid item xs={6} className="options-right">
+			<Grid item xs={4} className="options-right">
 				<Button variant="contained" color="primary" onClick={buttonClickHandler} disabled={!buttonState} disableElevation>
 					{buttonText}
 				</Button>

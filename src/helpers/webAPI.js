@@ -32,6 +32,8 @@ export default {
 
     getCaptcha: async (dispatch) => {
         // console.log('开始获取验证码redux');
+		//显示进度条
+        dispatch(showLoading());
         
         await axios.get(ApiUrl.captchaApi, {
 			width: 150,
@@ -61,9 +63,13 @@ export default {
 		//设置验证码的合法标志位
 		dispatch(setUser({ key: 'captchaValidState', value: CAPTCHASTATE.INVALID }));
         // console.log('开始获取验证码redux end');
+		//隐藏进度条
+        dispatch(hideLoading());
     },
     verifyCaptcha: async (dispatch, captchaId, captchaInputValue) => {
-        console.log('开始验证验证码redux');
+		console.log('开始验证验证码redux');
+		//显示进度条
+        dispatch(showLoading());
 
 		//验证码判断
 		await axios.get(ApiUrl.captchaApi +'/' + captchaId + '/submitResult', {
@@ -92,6 +98,8 @@ export default {
 				//无论有没有成功都在执行完成后打印id看看
 				console.log(captchaId)
 			});
+		//隐藏进度条
+        dispatch(hideLoading());
     },
     submitSignUp: async (dispatch, username, email, password, captchaId) => {
         //显示进度条

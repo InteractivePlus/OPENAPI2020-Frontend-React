@@ -10,3 +10,7 @@
 .options-left {
 	text-align: left;
 }
+
+.card-bottom-bar .OptionBtn{
+	margin-right: 10px;
+}

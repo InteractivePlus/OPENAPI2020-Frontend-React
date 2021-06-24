@@ -64,14 +64,15 @@ https://medium.com/google-design/the-evolution-of-material-designs-text-fields-6
 .MuiOutlinedInput-input{
 	padding: 10px !important;
 }
-/* 
+
+/* 输入框文字位置校正 */
 .MuiInputLabel-outlined{
-	transform: translate(14px, 0.8rem) scale(1) !important;
+	transform: translate(14px, 0.81rem) scale(1) !important;
 }
 
 .MuiInputLabel-outlined.MuiInputLabel-shrink {
     transform: translate(14px, -6px) scale(0.75) !important;
-} */
+}
 
 .MuiOutlinedInput-root:not(.Mui-error):hover .MuiOutlinedInput-notchedOutline{
 	border-color:#1890FF !important ;
