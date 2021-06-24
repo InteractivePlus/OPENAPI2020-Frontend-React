@@ -5,6 +5,7 @@ import {
     ACTIONTYPES
 } from '../config/config.js';
 
+export const clearCaptcha = createAction(ACTIONTYPES.CLEAR_CAPTCHA);
 export const getCaptcha = createAction(ACTIONTYPES.GET_CAPTCHA, WebAPI.getCaptcha);
 export const verifyCaptcha = createAction(ACTIONTYPES.VERIFY_CAPTCHA, WebAPI.verifyCaptcha);
 

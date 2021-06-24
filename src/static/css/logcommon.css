@@ -98,8 +98,18 @@ https://medium.com/google-design/the-evolution-of-material-designs-text-fields-6
 
 .captcha-img{
 	margin: 12px auto;
-	/* margin-bottom: ; */
 	display: flex;
 	height: 40px;
 	width: 150px;
 }
+
+.captcha-container{
+	margin: 12px auto;
+	display: 'block'
+}
+
+.captcha-progress{
+	display: flex;
+	justify-content: center;
+}
+

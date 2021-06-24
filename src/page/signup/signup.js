@@ -8,17 +8,10 @@
 import React from "react";
 import { Container, CardContent, TextField, Link,
 	 Button, Grid, FormControlLabel, Checkbox,
-	Collapse
+	Collapse,CircularProgress
 } from "@material-ui/core";
 	  
-import {
-	fade,
-	ThemeProvider,
-	withStyles,
-	makeStyles,
-	createMuiTheme,
-} from '@material-ui/core/styles';
-  
+
 import { FlexCard, XsydCardContainer,CodeInput,CardBottomBar } from "../../components";
 import {useViewSize} from "../../helpers/viewContext";
 import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNUPPAGE } from "../../config/config.js";
@@ -27,8 +20,12 @@ import { connect } from 'react-redux';
 
 import { store } from '../../store/configureStore';
 
+import {isEmpty} from "../../helpers/utils";
+
+
 import {
 	getCaptcha,
+	clearCaptcha,
     verifyCaptcha,
     submitSignUp,
 	authStart,
@@ -56,7 +53,7 @@ import "../../static/css/register.css";
 const Register = (props) => {
 	//从props中引入状态和方法
 	const { page, captchaId, captchaImgBase64, captchaValidState } = props;
-	const { onTurnToPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignUp } = props;
+	const { onTurnToPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignUp,onClearCaptcha } = props;
     
 	//是否同意用户协议
 	let [protocol, setProtocol] = React.useState(false);
@@ -243,19 +240,13 @@ const Register = (props) => {
 	};
 
 	
-
-    
-
 	// 相当于componentDidMount
 	// 这里加一个从0跳转到第1页，用来触发动画
     React.useEffect(() => {
         //跳转到填写信息页
-		//这里有一个问题，就是进断点之后会连续触发setsignuppage和setsigninpage
-		//导致注册页面和登录页面的开头动画无法播放（通过page状态切换，从emptypage到infoform）
-		//该问题有待解决
-        onTurnToPage(SIGNUPPAGE.INFO_FORM);
-        //获取验证码
-		onGetCaptcha();
+		onTurnToPage(SIGNUPPAGE.INFO_FORM);
+		//清除验证码
+		onClearCaptcha();
 		// 相当于componentWillMount
 		// return () => {
 		// 	onTurnToPage(SIGNUPPAGE.EMPTY_PAGE);
@@ -318,9 +309,16 @@ const Register = (props) => {
 						<CardContent className={page === SIGNUPPAGE.CAPTCHA ? "validation-card" : "validation-card-none"}>
 							<XsydCardContainer title="注册验证" subtitle="一个账号，畅享BlueAirLive所有服务">
 								<div className="space-justify-view">
-									
-									<div style={{ display: 'block' }}>
-										<img style={{ verticalAlign: "middle" }} className="captcha-img" src={captchaImgBase64} alt="captcha img" />
+									<div className="captcha-container">
+									{
+										isEmpty(captchaImgBase64) ?
+											<div className="captcha-progress">
+												<CircularProgress />
+											</div>
+											:
+											<img style={{ verticalAlign: "middle" }} className="captcha-img" src={captchaImgBase64} alt="captcha img" />
+											
+									}
 									</div>
 									{/*指定数字属性 validator={(input, index) => {return /\d/.test(input); }} */}
 									<CodeInput type="text" length={5} onChange={userInput => {
@@ -402,6 +400,10 @@ export default connect(
 		//获取验证码
 		onGetCaptcha: () => {
 			dispatch(getCaptcha(dispatch));
+		},
+		//清除验证码
+		onClearCaptcha: () => {
+			dispatch(clearCaptcha(dispatch));
 		},
 		//验证验证码
 		onVerifyCaptcha: (captchaId, captchaInputValue) => {

@@ -7,6 +7,12 @@ import {
 } from '../config/config.js';
 
 const userReducers = handleActions({
+    [ACTIONTYPES.CLEAR_CAPTCHA]: (state) => (
+        state.merge({
+          captchaId: '',
+          captchaImgBase64: ''
+        })
+    ),
     [ACTIONTYPES.GET_CAPTCHA]: (state) => (
         state.merge({
           captchaId: state.get('captchaId'),

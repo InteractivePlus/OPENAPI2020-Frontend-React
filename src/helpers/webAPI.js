@@ -159,7 +159,9 @@ export default {
 			.then(() => {
 				//无论有没有成功都在执行完成后打印id看看
 				console.log(captchaId)
-            });
+			});
+		//删除验证码图片
+		dispatch(setUser({ key: 'captchaImgBase64', value: ''}));
         //隐藏进度条
         dispatch(hideLoading());
 	},
@@ -235,7 +237,9 @@ export default {
 				//无论有没有成功都在执行完成后打印id看看
 				console.log(captchaId)
             });
-
+		//删除验证码图片
+		dispatch(setUser({ key: 'captchaImgBase64', value: ''}));
+		//隐藏进度条
 		dispatch(hideLoading());
 	}
 };

@@ -2,8 +2,9 @@ import React from "react";
 import axios from 'axios'
 import SwipeableViews from "react-swipeable-views";
 import { Container, CardContent, TextField, Link,
-	 Button, Grid, FormControlLabel, Checkbox,
-	LinearProgress, Collapse, Tabs, Tab
+	Button, Grid, FormControlLabel, Checkbox,
+	Collapse, Tabs, Tab,
+	CircularProgress
 } from "@material-ui/core";
 
 import {
@@ -18,10 +19,12 @@ import { message } from 'antd';
 
 import { connect } from 'react-redux';
 
+import {isEmpty} from "../../helpers/utils";
 
 
 import {
 	getCaptcha,
+	clearCaptcha,
     verifyCaptcha,
     submitSignIn,
 	authStart,
@@ -37,7 +40,7 @@ import "../../static/css/logcommon.css";
 const Login=(props)=> {
 	//从props中引入状态和方法
 	const { page, captchaId, captchaImgBase64, captchaValidState } = props;
-	const { onTurnToPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignIn } = props;
+	const { onTurnToPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignIn,onClearCaptcha } = props;
 
 	//原准备获取客户端宽度，现直接拿isMobile
 	const { isMobile } = useViewSize();
@@ -166,12 +169,9 @@ const Login=(props)=> {
 	// 这里加一个从0跳转到第1页，用来触发动画
     React.useEffect(() => {
         //跳转到填写信息页
-        onTurnToPage(SIGNINPAGE.INFO_FORM);
-        //获取验证码
-		onGetCaptcha();
-		// return () => {
-		// 	onTurnToPage(SIGNINPAGE.EMPTY_PAGE);
-        // }
+		onTurnToPage(SIGNINPAGE.INFO_FORM);
+		//清除验证码
+		onClearCaptcha();
 	}, []);
 
 	
@@ -228,10 +228,19 @@ const Login=(props)=> {
 						<CardContent className={page === SIGNINPAGE.CAPTCHA ? "validation-card" : "validation-card-none"}>
 							<XsydCardContainer title="登录验证" subtitle="一个账号，畅享BlueAirLive所有服务">
 								<div className="space-justify-view">
-									
-									<div style={{ display: 'block' }}>
-										<img style={{ verticalAlign: "middle" }} className="captcha-img" src={captchaImgBase64} alt="captcha img" />
+									<div className="captcha-container">
+									{
+										isEmpty(captchaImgBase64) ?
+											<div className="captcha-progress">
+												<CircularProgress />
+											</div>
+											:
+											<img style={{ verticalAlign: "middle" }} className="captcha-img" src={captchaImgBase64} alt="captcha img" />
+									}
 									</div>
+									{/* <div style={{ display: 'block' }}>
+										<img style={{ verticalAlign: "middle" }} className="captcha-img" src={captchaImgBase64} alt="captcha img" />
+									</div> */}
 									{/*指定数字属性 validator={(input, index) => {return /\d/.test(input); }} */}
 									<CodeInput type="text" length={5} onChange={userInput => {
 										handleInputChange({
@@ -284,11 +293,19 @@ export default connect(
 	(dispatch) => ({
 		//转到指定页
 		onTurnToPage: (pageIndex) => {
+			//如果是跳转到验证码页要刷新一下
+			if (pageIndex === SIGNINPAGE.CAPTCHA){
+				dispatch(getCaptcha(dispatch));
+			}
 			dispatch(setSignInPage({ key: 'page', value: pageIndex }));
 		},
 		//获取验证码
 		onGetCaptcha: () => {
 			dispatch(getCaptcha(dispatch));
+		},
+		//清除验证码
+		onClearCaptcha: () => {
+			dispatch(clearCaptcha(dispatch));
 		},
 		//验证验证码
 		onVerifyCaptcha: (captchaId, captchaInputValue) => {
