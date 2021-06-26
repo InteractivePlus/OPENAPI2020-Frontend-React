@@ -218,8 +218,8 @@ const apiErrCodeMessageBuilder = (res) => {
 		[ErrCode.INNER_ARGUMENT_ERROR]: '',
 		[ErrCode.SENDER_SERVICE_ERROR]: '邮箱验证发送失败，请检查邮箱是否正确',
 		[ErrCode.ITEM_NOT_FOUND_ERROR]: '未找到',
-		[ErrCode.ITEM_ALREADY_EXIST_ERROR]: `${paramNameArray[res.data.errorParam]}已经存在`,
-		[ErrCode.ITEM_EXPIRED_OR_USED_ERROR]: '',
+		[ErrCode.ITEM_ALREADY_EXIST_ERROR]: `${paramNameArray[res.data.item]}已经存在`,
+		[ErrCode.ITEM_EXPIRED_OR_USED_ERROR]: '参数过期或被使用',
 		[ErrCode.PERMISSION_DENIED]: '权限不足',
 		[ErrCode.CREDENTIAL_NOT_MATCH]: '验证码错误',
 		[ErrCode.REQUEST_PARAM_FORMAT_ERROR]: `请检查${paramNameArray[res.data.errorParam]}`,
@@ -247,6 +247,7 @@ export default {
 		//获取验证码
 		//设置验证码的合法标志位
 		dispatch(setUser({ key: 'captchaValidState', value: CAPTCHASTATE.INVALID }));
+		dispatch(setUser({ key: 'isCaptchaGotten', value: false }));
 
 		return new Promise((resolve, reject) => {
 			apiAxios('get', ApiUrl.captchaApi, {
@@ -262,11 +263,12 @@ export default {
 						dispatch(setUser({ key: 'captchaId', value: response.data.data.captcha_id }));
 						dispatch(setUser({ key: 'captchaImgBase64', value: 'data:image/jpeg;base64,' + response.data.data.captcha_data.jpegBase64 }));
 						//设置获取到验证码的标志位，在submit后要注意清除
-						// dispatch(setUser({ key: 'isCaptchaGotten', value: true }));
+						dispatch(setUser({ key: 'isCaptchaGotten', value: true }));
 					}
 				},
 				(err) => {
 					message.error('验证码获取失败')
+					dispatch(setUser({ key: 'isCaptchaGotten', value: false }));
 					// console.log(err);
 				}
 			)
@@ -289,12 +291,14 @@ export default {
 					}
 				},
 				(err) => {
-					//设置验证码的合法标志位
-					dispatch(setUser({ key: 'captchaValidState', value: CAPTCHASTATE.INVALID }));
 					//验证码刷新重来
 					dispatch(getCaptcha(dispatch));
+					dispatch(setUser({ key: 'isCaptchaInputEnabled', value: false }));
 				}
-			)
+			).then(() => {
+				//通过状态切换触发重置
+				dispatch(setUser({ key: 'isCaptchaInputEnabled', value: true }));
+			})
 		});
 			
     },
@@ -321,10 +325,7 @@ export default {
 				(err) => {
 					dispatch(setSignUpPage({ key: 'page', value: SIGNUPPAGE.INFO_FORM }));
 				}
-			).then(() => {
-				//删除验证码图片
-				dispatch(setUser({ key: 'captchaImgBase64', value: '' }));
-			})
+			)
 		});
 	},
 	
@@ -340,7 +341,7 @@ export default {
 			}, dispatch).then(
 				(response) => {
 					if (response.data.errorCode === ErrCode.NO_ERROR) {
-						// message.success('登录成功')
+						message.success('登录成功')
 						console.log('登录成功');
 						dispatch(setSignUpPage({ key: 'page', value: SIGNINPAGE.COMPLETE }));
 	
@@ -363,10 +364,7 @@ export default {
 					message.info('若您刚注册，请检查账户是否通过验证', 6);
 					dispatch(setSignUpPage({ key: 'page', value: SIGNINPAGE.INFO_FORM }));
 				}
-			).then(() => {
-				//删除验证码图片
-				dispatch(setUser({ key: 'captchaImgBase64', value: '' }));
-			})
+			)
 		});
 	}
 

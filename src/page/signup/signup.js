@@ -14,13 +14,11 @@ import { Container, CardContent, TextField, Link,
 
 import { FlexCard, XsydCardContainer,CodeInput,CardBottomBar } from "../../components";
 import {useViewSize} from "../../utils";
-import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNUPPAGE } from "../../config/config.js";
+import { Setting, CAPTCHASTATE, SIGNUPPAGE } from "../../config/config.js";
 
 import { connect } from 'react-redux';
 
-import { store } from '../../store/configureStore';
-
-import {isEmpty} from "../../utils";
+import { isEmpty } from "../../utils";
 
 
 import {
@@ -46,8 +44,21 @@ import "../../static/css/register.css";
 //注意useState有异步问题，await无效，所以通过直接赋值（仅在函数内作用）来缓解
 const Register = (props) => {
 	//从props中引入状态和方法
-	const { page, captchaId, captchaImgBase64, captchaValidState } = props;
-	const { onTurnToPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignUp,onClearCaptcha } = props;
+	const {
+		page,
+		captchaId,
+		captchaImgBase64,
+		captchaValidState,
+		isCaptchaGotten,
+		isCaptchaInputEnabled
+	} = props;
+	const {
+		onTurnToPage,
+		onVerifyCaptcha,
+		onInputChange,
+		onSignUp,
+		onClearCaptcha
+	} = props;
     
 	//是否同意用户协议
 	let [protocol, setProtocol] = React.useState(false);
@@ -218,6 +229,7 @@ const Register = (props) => {
     //开始注册
     let hadnleDoSignUp = async () => {
 		//开始注册
+		console.log('开始注册');
 		console.log(form.username.value);
 		console.log(form.email.value);
 		console.log(form.password2.value);
@@ -305,23 +317,27 @@ const Register = (props) => {
 								<div className="space-justify-view">
 									<div className="captcha-container">
 									{
-										isEmpty(captchaImgBase64) ?
+										!isCaptchaGotten ?
 											<div className="captcha-progress">
 												<CircularProgress />
 											</div>
 											:
 											<img style={{ verticalAlign: "middle" }} className="captcha-img" src={captchaImgBase64} alt="captcha img" />
-											
 									}
 									</div>
 									{/*指定数字属性 validator={(input, index) => {return /\d/.test(input); }} */}
-									<CodeInput type="text" length={5} onChange={userInput => {
-										handleInputChange({
-                                            target: {
-                                                name: 'captchaInput',
-												value: userInput
-										}});
-									}} />
+									<CodeInput
+										enable={page === SIGNUPPAGE.CAPTCHA && isCaptchaInputEnabled}
+										type="text"
+										length={5}
+										onChange={userInput => {
+											handleInputChange({
+												target: {
+													name: 'captchaInput',
+													value: userInput
+											}});
+										}}
+									/>
 								</div>
 								<CardBottomBar
 									leftText='返回'
@@ -376,9 +392,11 @@ const Register = (props) => {
 export default connect(
 	(state) => ({
 		page: state.getIn(['userSignUp', 'page']),
+		isCaptchaInputEnabled: state.getIn(['user', 'isCaptchaInputEnabled']),
 		// form: state.getIn(['userSignUp', 'form']),
 		captchaId: state.getIn(['user', 'captchaId']),
 		captchaImgBase64: state.getIn(['user', 'captchaImgBase64']),
+		isCaptchaGotten: state.getIn(['user', 'isCaptchaGotten']),
 		captchaValidState: state.getIn(['user', 'captchaValidState'])
 	}),
 	(dispatch) => ({

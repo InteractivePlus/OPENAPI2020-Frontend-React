@@ -3,14 +3,14 @@ import axios from 'axios'
 import Routes from "./Routes";
 import {ViewSizeProvider,getUrlParameter} from "./utils";
 import {isEmpty} from "./utils/commonutils";
-import { Setting, ErrCode, ApiUrl, URLPARAMETER } from "./config/config.js";
+import { ErrCode, ApiUrl, URLPARAMETER } from "./config/config.js";
 
 
 import { Provider } from 'react-redux';
 
 
 
-import {configureStore, store} from './store/configureStore';
+import { store } from './store/configureStore';
 
 import { message } from 'antd';
 
@@ -36,8 +36,6 @@ const theme = createMuiTheme({
 
 
 function App(props) {
-
-	// const store = configureStore();
 
 	// 加载时就判断url参数
 	React.useEffect(() => {
@@ -66,7 +64,10 @@ function App(props) {
 						message.error('邮箱验证失败');
 						console.log('邮箱验证失败');
 						console.log(error);
-						window.location.href='/'
+						setTimeout(() => {
+							window.location.href='/'
+						}, 2000);
+						
 					})
 					.then(() => {
 					});

@@ -8,8 +8,10 @@ import {
 // initstate model
 export const UiState = Immutable.fromJS({
     spinnerVisible: false,
+    //进度条状态
     loadingVisible: false,
     isEdit: false,
+    
 });
 
 export const RecipeState = Immutable.fromJS({
@@ -31,16 +33,19 @@ export const UserState = Immutable.fromJS({
     captchaId: '',
     //图片验证码base64
     captchaImgBase64: '',
+    //用于判断当前验证码状态，指的是验证前验证码是否获得，和验证后无关
     isCaptchaGotten: false,
     captchaInputValue: '',
     captchaValidState: CAPTCHASTATE.INVALID,
+    //验证码输入框是否启用，当设置为false触发清除，然后需要再次设定为true
+    isCaptchaInputEnabled: true
 });
 
 export const UserSignUpState = Immutable.fromJS({
     page: SIGNUPPAGE.EMPTY_PAGE,
-
 });
 
 export const UserSignInState = Immutable.fromJS({
     page: SIGNINPAGE.EMPTY_PAGE,
+    
 });

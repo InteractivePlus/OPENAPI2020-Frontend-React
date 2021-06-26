@@ -3,7 +3,6 @@ import { UserState } from '../models/models.js';
 
 import {
     ACTIONTYPES,
-    SIGNUPPAGE
 } from '../config/config.js';
 
 const userReducers = handleActions({

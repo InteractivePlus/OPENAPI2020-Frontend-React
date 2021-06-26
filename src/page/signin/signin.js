@@ -1,8 +1,10 @@
+/* @file OPENAPI登录页面
+* @version v1.0
+*/
 import React from "react";
-import axios from 'axios'
 import SwipeableViews from "react-swipeable-views";
-import { Container, CardContent, TextField, Link,
-	Button, Grid, FormControlLabel, Checkbox,
+import { Container, CardContent, TextField, 
+	Button, Grid, FormControlLabel,
 	Collapse, Tabs, Tab,
 	CircularProgress
 } from "@material-ui/core";
@@ -13,9 +15,8 @@ import {
 } from "../../components";
 
 import {useViewSize} from "../../utils";
-import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNINPAGE } from "../../config/config.js";
+import { Setting, CAPTCHASTATE, SIGNINPAGE } from "../../config/config.js";
 
-import { message } from 'antd';
 
 import { connect } from 'react-redux';
 
@@ -39,18 +40,24 @@ import "../../static/css/logcommon.css";
 
 const Login=(props)=> {
 	//从props中引入状态和方法
-	const { page, captchaId, captchaImgBase64, captchaValidState } = props;
-	const { onTurnToPage, onGetCaptcha, onVerifyCaptcha, onInputChange, onSignIn,onClearCaptcha } = props;
+	const {
+		page,
+		captchaId,
+		captchaImgBase64,
+		captchaValidState,
+		isCaptchaGotten,
+		isCaptchaInputEnabled
+	} = props;
+	const {
+		onTurnToPage,
+		onVerifyCaptcha,
+		onSignIn,
+		onClearCaptcha
+	} = props;
 
 	//原准备获取客户端宽度，现直接拿isMobile
 	const { isMobile } = useViewSize();
-	//控制页面切换
-	//let [page, setPage] = React.useState(1);
-	//控制进度条显示
-	let [isLoading, setLoading] = React.useState(false);
-	//当前会话验证id
-	//let [captchaId, setCaptchaId] = React.useState('0');
-
+	//tab切换
 	let [tabs, setTabs] = React.useState(0);
 
 
@@ -90,17 +97,6 @@ const Login=(props)=> {
 		}
     });
 
-	let handleNextPage = (event) => {
-		// 验证表单
-
-		// setLoading(true);
-		// setTimeout(() => {
-		// 	setLoading(false);
-		// 	//setPage(2);
-		// }, 1000);
-	};
-
-
 	let handleChangeTab = (event, newValue) => {
 		setTabs(newValue);
 	};
@@ -109,13 +105,6 @@ const Login=(props)=> {
 		setTabs(index);
 	};
 
-	let handleEnterDashboard = (event) => {
-		setLoading(true);
-		setTimeout(() => {
-			setLoading(false);
-			props.history.push("/dashboard");
-		}, 1000);
-	};
 	
 	// 输入框获取焦点事件，这里只用来清除错误提示，为了美观
 	let handleInputFocus = async (event) => {
@@ -230,7 +219,7 @@ const Login=(props)=> {
 								<div className="space-justify-view">
 									<div className="captcha-container">
 									{
-										isEmpty(captchaImgBase64) ?
+										!isCaptchaGotten ?
 											<div className="captcha-progress">
 												<CircularProgress />
 											</div>
@@ -238,17 +227,19 @@ const Login=(props)=> {
 											<img style={{ verticalAlign: "middle" }} className="captcha-img" src={captchaImgBase64} alt="captcha img" />
 									}
 									</div>
-									{/* <div style={{ display: 'block' }}>
-										<img style={{ verticalAlign: "middle" }} className="captcha-img" src={captchaImgBase64} alt="captcha img" />
-									</div> */}
 									{/*指定数字属性 validator={(input, index) => {return /\d/.test(input); }} */}
-									<CodeInput type="text" length={5} onChange={userInput => {
-										handleInputChange({
-                                            target: {
-                                                name: 'captchaInput',
-												value: userInput
-										}});
-									}} />
+									<CodeInput
+										enable={page === SIGNINPAGE.CAPTCHA && isCaptchaInputEnabled}
+										type="text"
+										length={5}
+										onChange={userInput => {
+											handleInputChange({
+												target: {
+													name: 'captchaInput',
+													value: userInput
+											}});
+										}}
+									/>
 								</div>
 								<CardBottomBar
 									leftText='返回'
@@ -285,9 +276,11 @@ const Login=(props)=> {
 export default connect(
 	(state) => ({
 		page: state.getIn(['userSignIn', 'page']),
+		isCaptchaInputEnabled: state.getIn(['user', 'isCaptchaInputEnabled']),
 		// form: state.getIn(['userSignUp', 'form']),
 		captchaId: state.getIn(['user', 'captchaId']),
 		captchaImgBase64: state.getIn(['user', 'captchaImgBase64']),
+		isCaptchaGotten: state.getIn(['user', 'isCaptchaGotten']),
 		captchaValidState: state.getIn(['user', 'captchaValidState'])
 	}),
 	(dispatch) => ({
@@ -316,14 +309,6 @@ export default connect(
         //开始正式注册
         onSignIn: (username, email, password, captchaId) => {
             dispatch(submitSignIn(dispatch, username, email, password, captchaId));
-        },
-		//输入改变
-		// onInputChange: (event) => {
-		// 	const newvalue = event.target.value;
-		// 	const field = event.target.name;
-		// 	//更新状态
-		// 	// setSignUpForm({ key: field, value: newvalue });
-		// },
-		
+        }
 	}),
 )(Login);

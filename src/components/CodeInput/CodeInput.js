@@ -11,6 +11,7 @@ const CodeInput = (props) => {
 	//从props中引入状态和方法
 	//需要的参数有长度、输入框类型（是否为密码框）和过滤器
 	const {
+		enable,
 		length,
 		type,
 		validator
@@ -19,7 +20,7 @@ const CodeInput = (props) => {
 	//具体输入的值
 	let [code, setCode] = React.useState(new Array(length).fill(""));
 	//每个输入框的dom引用列表
-	let [dom, setDom] = React.useState(new Array(length));
+	let [dom, ] = React.useState(new Array(length));
 	
 
 	//hook版forceupdate实现
@@ -118,6 +119,15 @@ const CodeInput = (props) => {
 		//更好的办法有待探索
 		forceUpdate();
 	}
+
+	//监听enable的改变，决定是否重置输入框
+	React.useEffect(() => {
+		// console.log('enable change')
+		//重置code
+		setCode(new Array(length).fill(""));
+		//选中第一个（下标0）输入框
+		textSelect(dom[0]);
+	}, [enable]);
 
 	return (
 		<div className="codebox-container">
