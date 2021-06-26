@@ -5,7 +5,7 @@ import { Container, CardContent, TextField, Link,
 	  LinearProgress, Collapse } from "@material-ui/core";
 import { FlexCard, XsydCardContainer,CodeInput } from "../../components";
 
-import {useViewSize} from "../../helpers/viewContext";
+import {useViewSize} from "../../utils";
 
 import { Setting, ErrCode, ApiUrl } from "../../config/config.js";
 import "../../static/css/logcommon.css";

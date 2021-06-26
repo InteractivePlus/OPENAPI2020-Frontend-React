@@ -13,14 +13,14 @@ import { Container, CardContent, TextField, Link,
 	  
 
 import { FlexCard, XsydCardContainer,CodeInput,CardBottomBar } from "../../components";
-import {useViewSize} from "../../helpers/viewContext";
+import {useViewSize} from "../../utils";
 import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNUPPAGE } from "../../config/config.js";
 
 import { connect } from 'react-redux';
 
 import { store } from '../../store/configureStore';
 
-import {isEmpty} from "../../helpers/utils";
+import {isEmpty} from "../../utils";
 
 
 import {
@@ -41,12 +41,6 @@ import { message } from 'antd';
 
 import "../../static/css/logcommon.css";
 import "../../static/css/register.css";
-
-
-
-//指定按需加载，可避免样式污染，但是会没有动画
-//import message from 'antd/lib/message'
-//import 'antd/lib/message/style/index.css'
 
 
 //注意useState有异步问题，await无效，所以通过直接赋值（仅在函数内作用）来缓解

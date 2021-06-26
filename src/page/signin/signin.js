@@ -12,14 +12,14 @@ import {
 	CodeInput, CardBottomBar
 } from "../../components";
 
-import {useViewSize} from "../../helpers/viewContext";
+import {useViewSize} from "../../utils";
 import { Setting, ErrCode, ApiUrl, CAPTCHASTATE, SIGNINPAGE } from "../../config/config.js";
 
 import { message } from 'antd';
 
 import { connect } from 'react-redux';
 
-import {isEmpty} from "../../helpers/utils";
+import {isEmpty} from "../../utils";
 
 
 import {

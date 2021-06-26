@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Grid} from "@material-ui/core";
-import {isEmpty} from "../../helpers/utils";
+import {isEmpty} from "../../utils";
 import "./style/style.css";
 
 const CardBottomBar = ({

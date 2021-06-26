@@ -90,7 +90,7 @@ function ThirdPartyOAuth(props) {
                                 <div className="space-justify-view">
                                     <Grid container justify="center" alignItems="center">
                                         <Grid item xs={6} className="options-left">
-                                            <Link href="/#/signup">注册账号</Link>
+                                            <Link href="/signup">注册账号</Link>
                                         </Grid>
                                         <Grid item xs={6} className="options-right">
                                             <Button variant="contained" color="primary" onClick={handleContinue} disableElevation>

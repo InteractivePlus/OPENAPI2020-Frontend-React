@@ -1,6 +1,6 @@
 import React from "react";
 import { Router, Route } from "react-router";
-import { createHashHistory } from "history";
+import { createBrowserHistory } from "history";
 
 import { Home, SignIn, SignUp, ThirdPartyOAuth, Verify } from "./page";
 
@@ -8,7 +8,12 @@ import { LinearProgress, Collapse } from "@material-ui/core";
 import { connect } from 'react-redux';
 
 
-const appHistory = createHashHistory();
+/*nginx配置中需要加以下内容
+    location / {
+        try_files $uri $uri/ /index.html; 
+    }
+*/
+const appHistory = createBrowserHistory();
 
 const Routes = (props) => {
 	

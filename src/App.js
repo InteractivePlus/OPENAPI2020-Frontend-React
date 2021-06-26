@@ -1,15 +1,12 @@
 import React from "react";
 import axios from 'axios'
 import Routes from "./Routes";
-import {ViewSizeProvider} from "./helpers/viewContext";
-import {getUrlParameter} from "./helpers/getUrlParameter";
-import {isEmpty} from "./helpers/utils";
+import {ViewSizeProvider,getUrlParameter} from "./utils";
+import {isEmpty} from "./utils/commonutils";
 import { Setting, ErrCode, ApiUrl, URLPARAMETER } from "./config/config.js";
 
 
 import { Provider } from 'react-redux';
-
-import { fromJS } from 'immutable';
 
 
 
@@ -21,7 +18,7 @@ import "./App.css";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 //挂载 Mock
-import './mock/data2.js'
+// import './mock/data2.js'
 
 
 import { CssBaseline } from "@material-ui/core";
@@ -62,7 +59,7 @@ function App(props) {
 						if (response.data.errorCode === ErrCode.NO_ERROR) {
 							message.success('邮箱验证成功');
 							console.log('邮箱验证成功');
-							window.location.href = '/#/verify';
+							window.location.href = '/verify';
 						}
 					})
 					.catch((error) => {
