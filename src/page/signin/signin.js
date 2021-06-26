@@ -172,6 +172,14 @@ const Login=(props)=> {
 		}
 	}, [form.captchaInput]);
 
+	//监听captchaValidState的改变
+	React.useEffect(() => {
+		//加一个page判断，防止另一个流程验证通过后切换过来触发动作
+		if (captchaValidState === CAPTCHASTATE.OK && page === SIGNINPAGE.CAPTCHA) {
+			hadnleDoSignIn();
+		}
+	}, [captchaValidState]);
+
 	return (
 		<>
 			<Container maxWidth={isMobile ? false : "xs"} className={isMobile ? "" : "container"}>
@@ -244,7 +252,7 @@ const Login=(props)=> {
 								<CardBottomBar
 									leftText='返回'
 									leftTextClickHandler={()=>{onTurnToPage(SIGNINPAGE.INFO_FORM)}}
-									buttonText='下一步'
+									buttonText=''
                                     buttonClickHandler={() => {
                                         hadnleDoSignIn();
                                     }}

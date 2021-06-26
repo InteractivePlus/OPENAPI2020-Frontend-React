@@ -18,9 +18,9 @@ import {
     getCaptcha,
 } from '../actions';
 
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 
-
+const { confirm } = Modal;
 
 /**
  * 网络请求配置
@@ -144,7 +144,7 @@ export function put(url, data = {}) {
 }
 
 //统一接口处理，返回数据
-export function apiAxios(fecth, url, param, dispatch) {
+export const apiAxios = (fecth, url, param, dispatch) =>{
 	console.log("begin a request,and url:", url);
 	//显示进度条
 	dispatch(showLoading());
@@ -212,6 +212,13 @@ const paramNameArray = {
 };
 
 const apiErrCodeMessageBuilder = (res) => {
+	const credentialMessage = () => {
+		if (res.data.credential === 'password') {
+			return '账户或密码错误'
+		} else if (res.data.credential === 'phrase')  {
+			return '验证码错误'
+		}
+	}
 	const templateMessage = {
 		[ErrCode.UNKNOWN_INNER_ERROR]: '未知错误，请联系开发者',
 		[ErrCode.STORAGE_ENGINE_ERROR]: '',
@@ -221,7 +228,7 @@ const apiErrCodeMessageBuilder = (res) => {
 		[ErrCode.ITEM_ALREADY_EXIST_ERROR]: `${paramNameArray[res.data.item]}已经存在`,
 		[ErrCode.ITEM_EXPIRED_OR_USED_ERROR]: '参数过期或被使用',
 		[ErrCode.PERMISSION_DENIED]: '权限不足',
-		[ErrCode.CREDENTIAL_NOT_MATCH]: '验证码错误',
+		[ErrCode.CREDENTIAL_NOT_MATCH]: `${credentialMessage()}`,
 		[ErrCode.REQUEST_PARAM_FORMAT_ERROR]: `请检查${paramNameArray[res.data.errorParam]}`,
 	};
 	return templateMessage[res.data.errorCode];
@@ -236,7 +243,7 @@ const showAPIMessage = (err) => {
 
 
 
-export default {
+export const WebAPI= {
     logout: (dispatch) => {
         // document.cookie = 'token=; ' + 'expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         // dispatch(hideSpinner());  
@@ -285,9 +292,10 @@ export default {
 					resolve(response);
 					console.log(response.data);
 					if (response.data.errorCode === ErrCode.NO_ERROR) {
+						message.success('验证码正确')
+						console.log('验证码正确')
 						//设置验证码的合法标志位
 						dispatch(setUser({ key: 'captchaValidState', value: CAPTCHASTATE.OK }));
-						console.log('验证通过')
 					}
 				},
 				(err) => {
@@ -331,7 +339,6 @@ export default {
 	
 	submitSignIn: async (dispatch, username, email, password, captchaId) => {
 		//提交登录
-
 		return new Promise((resolve, reject) => {
 			apiAxios('post', ApiUrl.userSignInApi, {
 				// username: username,
@@ -361,11 +368,40 @@ export default {
 					}
 				},
 				(err) => {
-					message.info('若您刚注册，请检查账户是否通过验证', 6);
+					if (err.response.data.errorCode === ErrCode.PERMISSION_DENIED) {
+						// message.info('若您刚注册，请检查账户是否通过验证', 6);
+						confirm({
+							title: '提示',
+							content: '您的账号无法登陆，可能是因为没有通过验证，请检查邮箱是否收到过验证邮件，或点击下方按钮，我们将为您重新发送验证码。',
+							okText: '重新发送',
+							cancelText: '取消',
+							onOk:()=> {
+								WebAPI.resendEmail(dispatch, email, captchaId);
+							}
+						  });
+					}
+					
 					dispatch(setSignUpPage({ key: 'page', value: SIGNINPAGE.INFO_FORM }));
 				}
 			)
 		});
-	}
+	},
 
+	resendEmail: async (dispatch, email, captchaId) => {
+		//重新发送验证邮件
+
+		return new Promise((resolve, reject) => {
+			apiAxios('post', ApiUrl.resendEmailApi, {
+				email: email,
+				captcha_id: captchaId
+			}, dispatch).then(
+				(response) => {
+					message.success('发送成功');
+				},
+				(err) => {
+					message.error('发送失败')
+				}
+			)
+		});
+	},
 };

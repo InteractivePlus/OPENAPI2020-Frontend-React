@@ -24,9 +24,11 @@ const CardBottomBar = ({
 				}
 			</Grid>
 			<Grid item xs={4} className="options-right">
-				<Button variant="contained" color="primary" onClick={buttonClickHandler} disabled={!buttonState} disableElevation>
+				{!isEmpty(buttonText) && <Button variant="contained" color="primary" onClick={buttonClickHandler} disabled={!buttonState} disableElevation>
 					{buttonText}
 				</Button>
+				}
+				
 			</Grid>
 		</Grid>
 	)

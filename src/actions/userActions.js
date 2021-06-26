@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import WebAPI from '../utils/webAPI';
+import {WebAPI} from '../utils/webAPI';
 
 import {
     ACTIONTYPES

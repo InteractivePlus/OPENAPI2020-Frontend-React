@@ -68,8 +68,8 @@ export const ApiUrl = {
 	captchaApi:serviceRootUrl+'captcha',				//验证码接口
 	userApi: serviceRootUrl + 'user', 					//用户接口
 	userSignInApi: serviceRootUrl + 'user/token', 		//用户登录接口
-	verifyEmailApi: serviceRootUrl +'vericodes/verifyEmailResult' //邮箱验证接口
-	
+	verifyEmailApi: serviceRootUrl +'vericodes/verifyEmailResult', //邮箱验证接口
+	resendEmailApi: serviceRootUrl + 'vericodes/sendAnotherVerifyEmailRequest' //重新发送验证邮件接口
 }
 
 export const URLPARAMETER = {

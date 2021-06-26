@@ -268,6 +268,13 @@ const Register = (props) => {
 		}
 	}, [form.captchaInput]);
 
+	//监听captchaValidState的改变
+	React.useEffect(() => {
+		//加一个page判断，防止另一个流程验证通过后切换过来触发动作
+		if (captchaValidState === CAPTCHASTATE.OK && page === SIGNUPPAGE.CAPTCHA) {
+			hadnleDoSignUp();
+		}
+	}, [captchaValidState]);
 
 	return (
 		<>
@@ -342,7 +349,7 @@ const Register = (props) => {
 								<CardBottomBar
 									leftText='返回'
 									leftTextClickHandler={()=>{onTurnToPage(SIGNUPPAGE.INFO_FORM)}}
-									buttonText='下一步'
+									buttonText=''
                                     buttonClickHandler={() => {
                                         hadnleDoSignUp();
                                     }}
