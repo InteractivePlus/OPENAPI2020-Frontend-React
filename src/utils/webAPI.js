@@ -358,7 +358,7 @@ export const WebAPI= {
 							console.log(isHttpUrl(callBackUrl))
 							if (isEmpty(callBackUrl) || !isHttpUrl(callBackUrl)) {
 								console.log('登录跳转无URL或不合法')
-								window.location.href = 'https://www.interactiveplus.org/';
+								window.location.href = 'https://www.baidu.com/';
 							}
 							else {
 								console.log('回调url:', callBackUrl)
