@@ -2,9 +2,9 @@
 * @version v1.0
 */
 import React from "react";
-import SwipeableViews from "react-swipeable-views";
+// import SwipeableViews from "react-swipeable-views";
 import { Container, CardContent, TextField, 
-	Button, Grid, FormControlLabel,
+	Button, Grid, 
 	Collapse, Tabs, Tab,
 	CircularProgress
 } from "@material-ui/core";
