@@ -268,15 +268,23 @@ module.exports = function(webpackEnv) {
       // https://twitter.com/wSokra/status/969633336732905474
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
       splitChunks: {
-        chunks: 'all',
-        name: false,
+        // chunks: 'all',
+        // name: true,
+        // chunks: "async",// all async initial
+        //   minSize: 1024,
+        //   maxSize: 0,
+        //   minChunks: 1,
+        //   maxAsyncRequests: 5,
+        //   maxInitialRequests: 3,
+        //   // automaticNameDelimiter: "~",
+        //   name: true,
         // cacheGroups: {
-        //   uicommonant: {
-        //     name: "uicommonant",
-        //     test: /[\\/]node_modules[\\/](@ant-design|antd)[\\/]/,
-        //     chunks: "all",
-        //     priority: 10 // 优先级
-        //   },
+          // uicommonant: {
+          //   name: "uicommonant",
+          //   test: /[\\/]node_modules[\\/](@ant-design|antd)[\\/]/,
+          //   chunks: "all",
+          //   priority: 10 // 优先级
+          // },
         //   uicommonmat: {
         //     name: "uicommonmat",
         //     test: /[\\/]node_modules[\\/](@material-ui)[\\/]/,
@@ -303,6 +311,63 @@ module.exports = function(webpackEnv) {
         //       priority: 5
         //   }
         // }
+          // chunks: "async",// all async initial
+          // minSize: 30000,
+          // maxSize: 0,
+          // minChunks: 1,
+          // maxAsyncRequests: 5,
+          // maxInitialRequests: 3,
+          // automaticNameDelimiter: "~",
+          // name: true,
+          // chunks: "all",
+        cacheGroups: {
+          // loadash: {
+          //   name: "loadash",
+          //   test: /[\\/]node_modules[\\/](loadash)[\\/]/,
+          //   chunks: "all",
+          //   priority: 20 // 优先级
+          // },
+          // erroroverlay: {
+          //   name: "erroroverlay",
+          //   test: /[\\/]node_modules[\\/]react-error-overlay[\\/]/,
+          //   chunks: "all",
+          //   priority: 11 // 优先级
+          // },
+          // uianticon: {
+          //   name: "uianticon",
+          //   test: /[\\/]node_modules[\\/]@ant-design[\\/](icons|icons-svg)[\\/]/,
+          //   chunks: "all",
+          //   priority: 11 // 优先级
+          // },
+          uiant: {
+                name: "uiant",
+                test: /[\\/]node_modules[\\/](@ant-design|antd)[\\/]/,
+                chunks: "all",
+                priority: 10 // 优先级
+              },
+          //     uicommonmat: {
+          //       name: "uicommonmat",
+          //       test: /[\\/]node_modules[\\/](@material-ui)[\\/]/,
+          //       chunks: "all",
+          //       priority: 9 // 优先级
+          //     },
+          runtimevendor: {
+                name: "runtimevendor",
+                test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+                chunks: "all",
+                priority: 8 // 优先级
+              },
+              vendors: {
+                  test: /[\\/]node_modules[\\/]/,
+                priority: -10,
+                chunks: "all",
+              },
+              default: {
+                  minChunks: 2,
+                  priority: -20,
+                  reuseExistingChunk: true
+              }
+          }
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985

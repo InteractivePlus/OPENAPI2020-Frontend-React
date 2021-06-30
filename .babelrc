@@ -9,9 +9,14 @@
       {
         "libraryName": "antd",
         "libraryDirectory": "es",
-        "style": "css"
+        "style": 'css'
       }
     ],
+    ["import", {
+      "libraryName": "@ant-design/icons",
+      "libraryDirectory": "es/icons",
+      "camel2DashComponentName": false
+    }, "ant-design-icons"],
     [
       "@babel/plugin-transform-runtime",
       {

@@ -3,20 +3,16 @@ import React, { Suspense, lazy } from 'react';
 import { createBrowserHistory } from "history";
 
 import { Route, Switch, BrowserRouter  as Router } from 'react-router-dom';
-// import {
-// 	Home,
-// 	// SignIn,
-// 	// SignUp,
-// 	// ThirdPartyOAuth,
-// 	// Verify
-// } from "./page";
 
-import { LinearProgress, Collapse } from "@material-ui/core";
+// import { Skeleton } from 'antd';
+import { CircularProgress, LinearProgress, Collapse } from "@material-ui/core";
 import { connect } from 'react-redux';
+
 
 //路由页面，主页分开写
 const Home = React.lazy(() => import('./page/home'));
-
+//必须加载页面，如果有非必须加载，请动态加载，例如enable?<Route .../>:<Redirect to='' />
+//具体应用：登录后才能访问的页面
 const RouterList = [
 	{ component: lazy(()=>import('./page/signin')), pathname: '/signin' },
 	{ component: lazy(()=>import('./page/signup')), pathname: '/signup' },
@@ -44,7 +40,23 @@ const Routes = (props) => {
 			</div>
 
 			{/* 接下来是路由 */}
-		    <React.Suspense fallback={<div></div>}>
+			<React.Suspense fallback=
+				{
+				// 显示页面骨架
+				<div style={{
+					width: '100%',
+					height: '100%',
+					margin: 'auto',
+					paddingTop: 50,
+					textAlign: 'center',
+				  }}>
+					{/* <Skeleton active /> */}
+					<CircularProgress />
+					{/* <div>loading</div> */}
+					{/* https://zhuanlan.zhihu.com/p/37148975 */}
+				</div>
+				}
+			>
 				<Router history={appHistory}>
 					<Switch>
 						<Route exact path="/" component={Home} />
