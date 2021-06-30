@@ -25,6 +25,13 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
+//添加分析
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+//添加压缩，npm i compression-webpack-plugin@5.0.1 注意版本
+const CompressionPlugin = require("compression-webpack-plugin");
+//添加js压缩
+// const TerserPlugin = require("terser-webpack-plugin");
+
 const postcssNormalize = require('postcss-normalize');
 
 const appPackageJson = require(paths.appPackageJson);
@@ -263,6 +270,39 @@ module.exports = function(webpackEnv) {
       splitChunks: {
         chunks: 'all',
         name: false,
+        // cacheGroups: {
+        //   uicommonant: {
+        //     name: "uicommonant",
+        //     test: /[\\/]node_modules[\\/](@ant-design|antd)[\\/]/,
+        //     chunks: "all",
+        //     priority: 10 // 优先级
+        //   },
+        //   uicommonmat: {
+        //     name: "uicommonmat",
+        //     test: /[\\/]node_modules[\\/](@material-ui)[\\/]/,
+        //     chunks: "all",
+        //     priority: 10 // 优先级
+        //   },
+        //   runtimevendor: {
+        //     name: "runtimevendor",
+        //     test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+        //     chunks: "all",
+        //     priority: 10 // 优先级
+        //   },
+        //   vendor: {
+        //       name: "vendor",
+        //       test: /[\\/]node_modules[\\/]/,
+        //       chunks: "all",
+        //       priority: 9 // 优先级
+        //   },
+        //   common: {
+        //       name: "common",
+        //       test: /[\\/]src[\\/]/,
+        //       minSize: 512,
+        //       chunks: "all",
+        //       priority: 5
+        //   }
+        // }
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
@@ -508,13 +548,30 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      //添加js压缩，普通开发时注意关闭
+      // new UglifyJsPlugin(),
+      // 开启压缩 // compression-webpack-plugin 因为版本问题，2.x将 asset 改为了 filename
+      new CompressionPlugin({
+        filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
+        algorithm: 'gzip', // 算法       
+        test: new RegExp('\\.(js|css)$'), // 压缩 js 与 css
+        threshold: 10240, // 只处理比这个值大的资源。按字节计算
+        minRatio: 0.8 // 只有压缩率比这个值小的资源才会被处理
+      }),
+      // 开启打包分析 BundleAnalyzerPlugin 
+      new BundleAnalyzerPlugin(),
+      
+
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
-          {},
+          {
+            // chunks: [ "main.0c2a398f.chunk.js", "manifest", "vendors", "common" ]
+          },
           {
             inject: true,
             template: paths.appHtml,
+            
           },
           isEnvProduction
             ? {

@@ -14,7 +14,7 @@
 .register-card,
 .validation-card {
 	width  : 100% !important;
-	padding: 2rem 2.5rem 2rem !important;
+	padding: 1.8rem 2.5rem 1.2rem !important;
 }
 
 /*调整一下手机版的左右边框*/
@@ -23,7 +23,7 @@
 	.register-card,
 	.validation-card {
 		width  : 100%;
-		padding: 2rem 1.6rem 2rem !important;
+		padding: 2.2rem 1.6rem 2rem !important;
 	}
 }
 
@@ -113,3 +113,12 @@ https://medium.com/google-design/the-evolution-of-material-designs-text-fields-6
 	justify-content: center;
 }
 
+.center-text{
+	text-align: center;
+}
+
+.userprotocol-tip-text{
+	margin-top: 1rem;
+	font-size: 12px;
+	color: rgba(0, 0, 0, 0.4);
+}

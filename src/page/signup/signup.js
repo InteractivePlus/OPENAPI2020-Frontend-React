@@ -6,9 +6,15 @@
  * 如果该页面有任何问题，请联系开发团队讨论交流，我们将第一时间解决
  */
 import React from "react";
-import { Container, CardContent, TextField, Link,
-	 Button, Grid, FormControlLabel, Checkbox,
-	Collapse,CircularProgress
+import {
+	Container,
+	CardContent,
+	TextField,
+	Link,
+	Button,
+	Grid,
+	Collapse,
+	CircularProgress
 } from "@material-ui/core";
 	  
 
@@ -17,8 +23,6 @@ import {useViewSize} from "../../utils";
 import { Setting, CAPTCHASTATE, SIGNUPPAGE } from "../../config/config.js";
 
 import { connect } from 'react-redux';
-
-import { isEmpty } from "../../utils";
 
 
 import {
@@ -60,8 +64,7 @@ const Register = (props) => {
 		onClearCaptcha
 	} = props;
     
-	//是否同意用户协议
-	let [protocol, setProtocol] = React.useState(false);
+
 	//原准备获取客户端宽度，现直接拿isMobile
 	const { isMobile } = useViewSize();
 	
@@ -116,11 +119,6 @@ const Register = (props) => {
 	//使用：forceUpdate();
 	const [,updateState]=React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
-	
-	//同意协议，就直接处理了
-	let handleProtocolChange = (event) => {
-		setProtocol(event.target.checked);
-    };
     
     // 获取MUI输入区域的值，dom出奇迹，输入参数是ref
     let getValueFromMUIField = (target) => {
@@ -295,16 +293,7 @@ const Register = (props) => {
 										使用{Setting.PASSWORD_MINLEN}个~{Setting.PASSWORD_MAXLEN}个字符（必须包含字母和数字）
 									</p>
 								</div>
-								<FormControlLabel
-									control={
-										<Checkbox checked={protocol} size="small" onChange={handleProtocolChange} name="protocol" color="primary" />
-									}
-									label={
-										<div style={{ fontSize: "0.8em" }}>
-											我已阅读并同意<Link href="#">《用户协议》</Link>
-										</div>
-									}
-								/>
+								
 								<CardBottomBar
 									leftText='登录账号'
 									leftTextClickHandler={handleGoLogin}
@@ -313,8 +302,11 @@ const Register = (props) => {
                                         if(handleCheckBasicInfo())
                                             onTurnToPage(SIGNUPPAGE.INFO_FORM + 1)
                                     }}
-									buttonState={protocol}
+									buttonState={true}
 								/>
+								<div className="space-justify-view center-text userprotocol-tip-text ">
+									登录/注册即代表您同意<Link href="#">《用户协议》</Link>
+								</div>
 							</XsydCardContainer>
 						</CardContent>
 					</Collapse>

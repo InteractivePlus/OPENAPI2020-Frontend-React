@@ -1,12 +1,29 @@
-import React from "react";
-import { Router, Route } from "react-router";
+import React, { Suspense, lazy } from 'react';
+// import { Router, Route } from "react-router";
 import { createBrowserHistory } from "history";
 
-import { Home, SignIn, SignUp, ThirdPartyOAuth, Verify } from "./page";
+import { Route, Switch, BrowserRouter  as Router } from 'react-router-dom';
+// import {
+// 	Home,
+// 	// SignIn,
+// 	// SignUp,
+// 	// ThirdPartyOAuth,
+// 	// Verify
+// } from "./page";
 
 import { LinearProgress, Collapse } from "@material-ui/core";
 import { connect } from 'react-redux';
 
+//路由页面，主页分开写
+const Home = React.lazy(() => import('./page/home'));
+
+const RouterList = [
+	{ component: lazy(()=>import('./page/signin')), pathname: '/signin' },
+	{ component: lazy(()=>import('./page/signup')), pathname: '/signup' },
+	{ component: lazy(() => import('./page/thirdpartyoauth')), pathname: '/thirdpartyoauth'  },
+	{ component: lazy(() => import('./page/verify')), pathname: '/verify'  },
+  ];
+  
 
 /*nginx配置中需要加以下内容
     location / {
@@ -25,14 +42,25 @@ const Routes = (props) => {
 					<LinearProgress />
 				</Collapse>
 			</div>
-		
-			<Router history={appHistory}>
-				<Route exact path="/" component={Home} />
-				<Route path="/signin" component={SignIn} />
-				<Route path="/signup" component={SignUp} />
-				<Route path="/thirdpartyoauth" component={ThirdPartyOAuth} />
-				<Route path="/verify" component={Verify} />
-			</Router>
+
+			{/* 接下来是路由 */}
+		    <React.Suspense fallback={<div></div>}>
+				<Router history={appHistory}>
+					<Switch>
+						<Route exact path="/" component={Home} />
+						{
+							RouterList.map((s, i) => {
+							let PageModule = s.component;  // 给匿名组件取个名字，便于下面用
+							return <Route key={'router' + i}
+								path={s.pathname}
+								exact
+								render={(props) => <PageModule {...props} />}  // 这里用 render
+							/>
+							})
+						}
+					</Switch>
+				</Router>
+			</React.Suspense>
 		</div>
 	);
 };
