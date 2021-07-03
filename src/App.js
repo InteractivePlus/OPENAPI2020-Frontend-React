@@ -41,43 +41,7 @@ function App(props) {
 	React.useEffect(() => {
 		let callBackUrl = '';
 		let appId = '';
-		let vericode = '';
-
-		vericode = getUrlParameter(URLPARAMETER.VERIFY);
-		// console.log(veriCode);
-		if (!isEmpty(vericode)) {
-			console.log("注册验证码：", vericode);
-			
-			//验证邮箱
-			let handleVerifyEmail = async (event) => {
-				await axios.get(ApiUrl.verifyEmailApi +'/' + vericode, {
-				})
-					.then((response) => {
-						console.log(response.data);
-						if (response.data.errorCode === ErrCode.NO_ERROR) {
-							message.success('邮箱验证成功');
-							console.log('邮箱验证成功');
-							window.location.href = '/verify';
-						}
-					})
-					.catch((error) => {
-						message.error('邮箱验证失败');
-						console.log('邮箱验证失败');
-						console.log(error);
-						setTimeout(() => {
-							window.location.href='/'
-						}, 2000);
-						
-					})
-					.then(() => {
-					});
-			};
-			handleVerifyEmail();
-
-			return;
-		}
-		else
-			console.log('无注册验证');
+		
 		
 		//获取第三方授权参数
 		callBackUrl = getUrlParameter(URLPARAMETER.CALLBACK);

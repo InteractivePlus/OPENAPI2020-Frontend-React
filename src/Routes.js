@@ -17,7 +17,8 @@ const RouterList = [
 	{ component: lazy(()=>import('./page/signin')), pathname: '/signin' },
 	{ component: lazy(()=>import('./page/signup')), pathname: '/signup' },
 	{ component: lazy(() => import('./page/thirdpartyoauth')), pathname: '/thirdpartyoauth'  },
-	{ component: lazy(() => import('./page/verify')), pathname: '/verify'  },
+	{ component: lazy(() => import('./page/verify')), pathname: '/verify' },
+	{ component: lazy(() => import('./page/resetpwd')), pathname: '/resetpwd'},
   ];
   
 

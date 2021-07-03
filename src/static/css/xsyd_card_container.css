@@ -1,3 +1,8 @@
+.xsyd-card-container {
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+}
 
 .xsyd-card-container-tip {
 	text-align: center;
@@ -16,3 +21,6 @@
 	font-size: 14px;
 }
 
+.xsyd-card-container-content {
+	flex: 1;
+}

@@ -8,7 +8,6 @@ import {
 
 import { FlexCard, XsydCardContainer } from "../../components";
 import "../../static/css/logcommon.css";
-import "../../static/css/register.css";
 
 function ThirdPartyOAuth(props) {
     let [clientWidth, setClientWidth] = React.useState(document.body.clientWidth);

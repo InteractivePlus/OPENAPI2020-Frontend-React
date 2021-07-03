@@ -3,14 +3,26 @@
  * @version v1.0
  */
 import axios from 'axios'
-import { Setting, ErrCode, ApiUrl, URLPARAMETER, CAPTCHASTATE, SIGNUPPAGE, SIGNINPAGE } from "../config/config.js";
+import {
+    Setting,
+    ErrCode,
+    ApiUrl,
+    URLPARAMETER,
+    CAPTCHASTATE,
+    SIGNUPPAGE,
+    SIGNINPAGE,
+	VERIFYPAGE,
+	RESETPWDPAGE
+} from "../config/config.js";
 
 
-import {isEmpty,isUrl,isHttpUrl,getUrlParameter} from "../utils";
+import { isEmpty, isUrl, isHttpUrl, getUrlParameter } from "../utils";
 import {
     showLoading,
     hideLoading,
-    setSignUpPage,
+	setSignUpPage,
+	setVerifyPage,
+	setResetPwdPage,
     authComplete,
     authError,
     completeLogout,
@@ -178,6 +190,34 @@ export const apiAxios = (fecth, url, param, dispatch) =>{
 						dispatch(hideLoading());
 					});
 				break;
+				case "put":
+					put(url, param)
+						.then((response) =>  {
+							resolve(response);
+						})
+						.catch((error) => {
+							console.log("get request PUT failed.", error);
+							reject(error);
+						})
+						.then(() => {
+							//隐藏进度条
+							dispatch(hideLoading());
+						});
+				break;
+				case "patch":
+					patch(url, param)
+						.then((response) =>  {
+							resolve(response);
+						})
+						.catch((error) => {
+							console.log("get request PATCH failed.", error);
+							reject(error);
+						})
+						.then(() => {
+							//隐藏进度条
+							dispatch(hideLoading());
+						});
+					break;
 			default:
 				break;
 		}
@@ -208,7 +248,9 @@ const paramNameArray = {
 	'email': '邮箱',
 	'username': '用户名',
 	'password':'密码',
-	'username|email|phone':'账户名称'
+	'username|email|phone': '账户名称',
+	'veriCode': '验证码',
+	'new_password': '新密码'
 };
 
 const apiErrCodeMessageBuilder = (res) => {
@@ -226,7 +268,7 @@ const apiErrCodeMessageBuilder = (res) => {
 		[ErrCode.SENDER_SERVICE_ERROR]: '邮箱验证发送失败，请检查邮箱是否正确',
 		[ErrCode.ITEM_NOT_FOUND_ERROR]: '未找到',
 		[ErrCode.ITEM_ALREADY_EXIST_ERROR]: `${paramNameArray[res.data.item]}已经存在`,
-		[ErrCode.ITEM_EXPIRED_OR_USED_ERROR]: '参数过期或被使用',
+		[ErrCode.ITEM_EXPIRED_OR_USED_ERROR]: `${paramNameArray[res.data.item]}过期或被使用`,
 		[ErrCode.PERMISSION_DENIED]: '权限不足',
 		[ErrCode.CREDENTIAL_NOT_MATCH]: `${credentialMessage()}`,
 		[ErrCode.REQUEST_PARAM_FORMAT_ERROR]: `请检查${paramNameArray[res.data.errorParam]}`,
@@ -250,8 +292,9 @@ export const WebAPI= {
         // browserHistory.push('/'); 
     },
 
+	//获取验证码
 	getCaptcha: async (dispatch) => {
-		//获取验证码
+		
 		//设置验证码的合法标志位
 		dispatch(setUser({ key: 'captchaValidState', value: CAPTCHASTATE.INVALID }));
 		dispatch(setUser({ key: 'isCaptchaGotten', value: false }));
@@ -282,8 +325,8 @@ export const WebAPI= {
 		});
 	},
 	
+	//验证码判断
     verifyCaptcha: async (dispatch, captchaId, captchaInputValue) => {
-		//验证码判断
 		return new Promise((resolve, reject) => {
 			apiAxios('get', ApiUrl.captchaApi + '/' + captchaId + '/submitResult', {
 				phrase: captchaInputValue
@@ -309,10 +352,10 @@ export const WebAPI= {
 			})
 		});
 			
-    },
-    submitSignUp: async (dispatch, username, email, password, captchaId) => {
-		//提交注册
+	},
 
+	//提交注册
+    submitSignUp: async (dispatch, username, email, password, captchaId) => {
 		return new Promise((resolve, reject) => {
 			apiAxios('post', ApiUrl.userApi, {
 				username: username,
@@ -337,8 +380,8 @@ export const WebAPI= {
 		});
 	},
 	
+	//提交登录
 	submitSignIn: async (dispatch, username, email, password, captchaId) => {
-		//提交登录
 		return new Promise((resolve, reject) => {
 			apiAxios('post', ApiUrl.userSignInApi, {
 				// username: username,
@@ -387,9 +430,8 @@ export const WebAPI= {
 		});
 	},
 
+	//重新发送验证邮件
 	resendEmail: async (dispatch, email, captchaId) => {
-		//重新发送验证邮件
-
 		return new Promise((resolve, reject) => {
 			apiAxios('post', ApiUrl.resendEmailApi, {
 				email: email,
@@ -404,4 +446,67 @@ export const WebAPI= {
 			)
 		});
 	},
+
+	//获得重设密码的验证码
+	getResetPwdVCode: async (dispatch, username, email, password, captchaId) => {
+		return new Promise((resolve, reject) => {
+			apiAxios('post', ApiUrl.getResetPwdVCodeApi, {
+				email: email,
+				captcha_id: captchaId
+			}, dispatch).then(
+				(response) => {
+					message.success('发送成功');
+					dispatch(setResetPwdPage({ key: 'page', value: RESETPWDPAGE.COMPLETE_SENDVCODE }));
+				},
+				(err) => {
+					message.error('发送失败')
+				}
+			)
+		});
+	},
+
+	//重设密码
+	submitResetPwd: async (dispatch, vericode, newPassword) => {
+		return new Promise((resolve, reject) => {
+			apiAxios('patch', ApiUrl.resetPwdApi, {
+				veriCode: vericode,
+				new_password: newPassword
+			}, dispatch).then(
+				(response) => {
+					message.success('重设成功');
+					dispatch(setResetPwdPage({ key: 'page', value: RESETPWDPAGE.COMPLETE_RESET }));
+				},
+				(err) => {
+					message.error('重设失败')
+					console.log(err.response.data)
+				}
+			)
+		});
+	},
+
+	//验证账号
+	verifyAccount: async (dispatch, vericode) => {
+		return new Promise((resolve, reject) => {
+			apiAxios('get', ApiUrl.verifyEmailApi +'/' + vericode, {
+			}, dispatch).then(
+				(response) => {
+					console.log(response.data);
+					if (response.data.errorCode === ErrCode.NO_ERROR) {
+						message.success('邮箱验证成功');
+						console.log('邮箱验证成功');
+						dispatch(setVerifyPage({ key: 'page', value: VERIFYPAGE.COMPLETE }));
+					}
+				},
+				(err) => {
+					message.error('邮箱验证失败');
+					console.log('邮箱验证失败');
+					console.log(err);
+					setTimeout(() => {
+						window.location.href = '/signin';
+					}, 2000);
+				}
+			)
+		});
+	},
+	
 };

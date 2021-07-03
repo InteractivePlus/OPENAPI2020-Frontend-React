@@ -69,7 +69,9 @@ export const ApiUrl = {
 	userApi: serviceRootUrl + 'user', 					//用户接口
 	userSignInApi: serviceRootUrl + 'user/token', 		//用户登录接口
 	verifyEmailApi: serviceRootUrl +'vericodes/verifyEmailResult', //邮箱验证接口
-	resendEmailApi: serviceRootUrl + 'vericodes/sendAnotherVerifyEmailRequest' //重新发送验证邮件接口
+	resendEmailApi: serviceRootUrl + 'vericodes/sendAnotherVerifyEmailRequest', //重新发送验证邮件接口
+	getResetPwdVCodeApi: serviceRootUrl + 'vericodes/changePasswordRequest', //获得重设密码的验证码接口
+	resetPwdApi: serviceRootUrl + 'user/password', //重设密码的接口
 }
 
 export const URLPARAMETER = {
@@ -108,10 +110,20 @@ export const ACTIONTYPES = {
 	
 	//设置登录页面页数
 	SET_SIGNIN_PAGE: 'SET_SIGNUP_PAGE',
-	//设置登录页面页数为起始页
-	SET_SIGNIN_PAGE_START: 'SET_SIGNUP_PAGE_START',
 	//提交登录请求
 	SUBMIT_SIGNIN: 'START_SIGNIN',
+
+	//设置验证账号页面页数
+	SET_VERIFY_PAGE: 'SET_VERIFY_PAGE',
+	//提交验证账号请求
+	SUBMIT_VERIFY: 'SUBMIT_VERIFY',
+
+	//设置忘记密码页面页数
+	SET_RESETPWD_PAGE: 'SET_RESETPWD_PAGE',
+	//提交获取忘记密码验证码请求
+	SUBMIT_RESETPWD_VCODE: 'SUBMIT_RESETPWD_VCODE',
+	//提交获取忘记密码验证码请求
+	SUBMIT_RESETPWD_NEW: 'SUBMIT_RESETPWD_NEW',
 }
 
 
@@ -136,6 +148,21 @@ export const SIGNINPAGE = {
 	COMPLETE: 3,
 }
 
+
+export const VERIFYPAGE = {
+	EMPTY_PAGE: 0,
+	WAIT_PAGE: 1,
+	COMPLETE: 2,
+}
+
+export const RESETPWDPAGE = {
+	EMPTY_PAGE: 0,
+	INFO_FORM: 1,
+	CAPTCHA: 2,
+	COMPLETE_SENDVCODE: 3,
+	NEW_PWD: 4,
+	COMPLETE_RESET: 5,
+}
 
 
 

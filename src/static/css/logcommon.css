@@ -4,6 +4,7 @@
 		padding-right: 1rem !important;
 	}
 }
+
 .container {
 	display        : flex !important;
 	height         : calc(100vh - 2*4px);
@@ -11,26 +12,7 @@
 	align-items    : center;
 }
 
-.register-card,
-.validation-card {
-	width  : 100% !important;
-	padding: 1.8rem 2.5rem 1.2rem !important;
-}
 
-/*调整一下手机版的左右边框*/
-@media screen and (max-width: 600px) {
-
-	.register-card,
-	.validation-card {
-		width  : 100%;
-		padding: 2.2rem 1.6rem 2rem !important;
-	}
-}
-
-.register-card-none,
-.validation-card-none {
-	display: none;
-}
 
 .progress-hidden {
 	visibility: hidden;
@@ -38,9 +20,62 @@
 
 /* 调整间距 */
 .space-justify-view {
-    margin-top   : 0.5em;
-    margin-bottom: 1em;
+    margin-top   : 0.5rem;
+    margin-bottom: 0.6rem;
 }
+
+/*加个进度条占位符，否则出现手机页面抖动*/
+.progress-placeholder {
+	/*进度条高度*/
+	height  : 4px;
+	/*虽然这个属性ie不支持，但是只会用ie也不是目标用户*/
+	position: sticky;
+	top: 0;
+}
+
+.captcha-img{
+	margin: 12px auto;
+	display: flex;
+	height: 40px;
+	width: 150px;
+}
+
+.captcha-container{
+	margin: 12px auto;
+	display: 'block'
+}
+
+.captcha-progress{
+	display: flex;
+	justify-content: center;
+}
+
+.center-text{
+	text-align: center;
+}
+
+.userprotocol-tip-text{
+	margin-top: 1rem;
+	font-size: 12px;
+	color: rgba(0, 0, 0, 0.4);
+}
+
+.email-tip-text {
+	font-size    : 12px;
+	text-align   : left;
+	margin-bottom: 0.5em;
+	color: rgba(0, 0, 0, 0.45);
+}
+
+.password-tip-text {
+	font-size : 12px;
+	text-align: left;
+	color: rgba(0, 0, 0, 0.45);
+}
+
+
+
+/* Material-UI样式调整 */
 
 /* 有个老哥想让input更粗一点
 不过现在换Outlined样式也用不上了
@@ -85,40 +120,4 @@ https://medium.com/google-design/the-evolution-of-material-designs-text-fields-6
 
 .MuiButton-containedPrimary:hover {
     background-color: #40a9ff !important;
-}
-
-/*加个进度条占位符，否则出现手机页面抖动*/
-.progress-placeholder {
-	/*进度条高度*/
-	height  : 4px;
-	/*虽然这个属性ie不支持，但是只会用ie也不是目标用户*/
-	position: sticky;
-	top: 0;
-}
-
-.captcha-img{
-	margin: 12px auto;
-	display: flex;
-	height: 40px;
-	width: 150px;
-}
-
-.captcha-container{
-	margin: 12px auto;
-	display: 'block'
-}
-
-.captcha-progress{
-	display: flex;
-	justify-content: center;
-}
-
-.center-text{
-	text-align: center;
-}
-
-.userprotocol-tip-text{
-	margin-top: 1rem;
-	font-size: 12px;
-	color: rgba(0, 0, 0, 0.4);
 }

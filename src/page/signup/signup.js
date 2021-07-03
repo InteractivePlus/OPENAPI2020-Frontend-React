@@ -42,7 +42,6 @@ import {
 import { message } from 'antd';
 
 import "../../static/css/logcommon.css";
-import "../../static/css/register.css";
 
 
 //注意useState有异步问题，await无效，所以通过直接赋值（仅在函数内作用）来缓解

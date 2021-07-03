@@ -2,7 +2,9 @@ import Immutable from 'immutable';
 import {
     CAPTCHASTATE,
     SIGNUPPAGE,
-    SIGNINPAGE
+    SIGNINPAGE,
+    VERIFYPAGE,
+    RESETPWDPAGE
 } from "../config/config.js";
 
 // initstate model
@@ -48,4 +50,12 @@ export const UserSignUpState = Immutable.fromJS({
 export const UserSignInState = Immutable.fromJS({
     page: SIGNINPAGE.EMPTY_PAGE,
     
+});
+
+export const UserVerifyState = Immutable.fromJS({
+    page: VERIFYPAGE.EMPTY_PAGE,
+});
+
+export const UserResetPwdState = Immutable.fromJS({
+    page: RESETPWDPAGE.EMPTY_PAGE,
 });

@@ -6,11 +6,6 @@ import {
 } from '../config/config.js';
 
 const signInReducers = handleActions({
-    [ACTIONTYPES.SET_SIGNIN_PAGE_START]: (state) => (
-        state.merge({
-          page: 1
-        })
-    ),
     [ACTIONTYPES.SET_SIGNIN_PAGE]: (state, {payload}) => (
         state.set('page', payload.value)
     ),

@@ -12,23 +12,25 @@ function XsydCardContainer(props) {
 	const { children, title, subtitle, appImage, ...other } = props;
 
 	return (
-		<div>
+		<div className="xsyd-card-container">
 			<div className="xsyd-card-container-tip" {...other}>
-				<img style={{verticalAlign: "middle"}} className="logo" src={Logo} alt="Logo" />
+				<img style={{ verticalAlign: "middle" }} className="logo" src={Logo} alt="Logo" />
 				{
 					appImage ? (
 						<span>
-							<InsertLinkIcon fontSize="large" style={{verticalAlign: "middle", margin: "0 5px"}}></InsertLinkIcon>
-							<img style={{verticalAlign: "middle"}} className="logo" src={appImage} alt="App Icon" />
+							<InsertLinkIcon fontSize="large" style={{ verticalAlign: "middle", margin: "0 5px" }}></InsertLinkIcon>
+							<img style={{ verticalAlign: "middle" }} className="logo" src={appImage} alt="App Icon" />
 						</span>
-					): <></>
+					) : <></>
 				}
 				<Typography className="xsyd-card-container-title" variant="h1">
 					{title}
 				</Typography>
 				<p className="xsyd-card-container-subtitle">{subtitle}</p>
 			</div>
-			{children}
+			<div className="xsyd-card-container-content">
+				{children}
+			</div>
 		</div>
 	);
 }
